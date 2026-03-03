@@ -23,7 +23,6 @@ import { cn } from "@/shared/application/utils/cn";
 import { tid } from "@/shared/application/utils/tid";
 import { SECTION_IDS } from "@/features/convention/domain/constants";
 import moonfestLogo from "@/shared/presentation/assets/moonfest-logo.svg";
-import { LanguageToggle } from "./LanguageToggle";
 
 const NAV_GROUPS = [
   {
@@ -49,8 +48,8 @@ const NAV_GROUPS = [
     ],
   },
   {
-    key: "convention.nav.guests",
-    items: [{ id: SECTION_IDS.GUESTS, key: "convention.nav.guests" }],
+    key: "convention.nav.community",
+    items: [{ id: SECTION_IDS.GUESTS, key: "convention.nav.community" }],
   },
   {
     key: "convention.nav.news",
@@ -322,23 +321,6 @@ function DesktopNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
           })()
         )
       )}
-      <LanguageToggle />
-      <Button
-        asChild
-        variant="ghost"
-        className="ml-1 rounded-full bg-accent px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground shadow-[0_0_18px_-4px_rgba(201,168,76,0.55)] transition-all duration-200 hover:bg-[#d4b85c] hover:shadow-[0_0_26px_-2px_rgba(201,168,76,0.85)] hover:scale-[1.02]"
-      >
-        <Link
-          to={getSectionHref(SECTION_IDS.REGISTRATION)}
-          data-funnel-step="view_pricing"
-          data-cta-id="desktop_nav_reserve"
-          data-cta-variant="desktop_nav"
-          data-content-section="navigation"
-          data-content-id="desktop_nav_reserve"
-        >
-          {t("convention.nav.reserve")}
-        </Link>
-      </Button>
     </div>
   );
 }
@@ -348,7 +330,6 @@ function MobileNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
 
   return (
     <div className="flex items-center gap-3 md:hidden">
-      <LanguageToggle />
       <Sheet>
         <SheetTrigger asChild>
           <Button
@@ -393,25 +374,6 @@ function MobileNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
                   </Button>
                 </SheetClose>
               </div>
-              <SheetClose asChild>
-                <Button
-                  asChild
-                  variant="ghost"
-                  className="mt-5 w-full rounded-full bg-accent text-xs font-semibold uppercase tracking-[0.28em] text-accent-foreground shadow-[0_16px_30px_-22px_rgba(201,168,76,0.7)] transition-all duration-200 hover:bg-[#d4b85c] hover:shadow-[0_16px_36px_-18px_rgba(201,168,76,0.9)]"
-                >
-                  <Link
-                    to={getSectionHref(SECTION_IDS.REGISTRATION)}
-                    data-funnel-step="view_pricing"
-                    data-cta-id="mobile_nav_registration"
-                    data-cta-variant="mobile_nav"
-                    data-content-section="navigation"
-                    data-content-id="mobile_nav_registration"
-                    data-content-interaction="open"
-                  >
-                    {t("convention.hero.cta")}
-                  </Link>
-                </Button>
-              </SheetClose>
             </div>
             <div className="flex-1 overflow-y-auto px-5 pb-8 pt-5">
               <div className="flex flex-col gap-3">
@@ -485,17 +447,14 @@ function MobileNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
   );
 }
 
-/** Sticky top navigation bar with desktop dropdown menus, mobile slide-out sheet, and a language toggle. */
+/** Sticky top navigation bar with desktop dropdown menus and mobile slide-out sheet. */
 export function NavigationBar() {
   const { t } = useTranslation();
 
   return (
     <nav
       data-anchor-nav="true"
-      className={cn(
-        "fixed top-0 right-0 left-0 z-50",
-        "border-b border-white/10 bg-gradient-to-r from-background/95 via-background/85 to-background/95 backdrop-blur-xl"
-      )}
+      className="fixed top-0 right-0 left-0 z-50 bg-background"
       {...tid("navigation-bar")}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
