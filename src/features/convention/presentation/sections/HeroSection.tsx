@@ -36,8 +36,7 @@ function HeroBathPicture({ className = "" }: { readonly className?: string }) {
 
 const useHeroClipOverlap = (
   bathLayerRef: React.RefObject<HTMLDivElement | null>,
-  textLayerRef: React.RefObject<HTMLDivElement | null>,
-  decorLayerRef: React.RefObject<HTMLDivElement | null>
+  textLayerRef: React.RefObject<HTMLDivElement | null>
 ) => {
   useEffect(() => {
     let frame = 0;
@@ -68,7 +67,6 @@ const useHeroClipOverlap = (
       const nextTop = nextSection.getBoundingClientRect().top;
       applyClipFromOverlap(bathLayerRef.current, nextTop);
       applyClipFromOverlap(textLayerRef.current, nextTop);
-      applyClipFromOverlap(decorLayerRef.current, nextTop);
     };
 
     const onScrollOrResize = () => {
@@ -90,50 +88,48 @@ const useHeroClipOverlap = (
       window.removeEventListener("resize", onScrollOrResize);
       window.removeEventListener("orientationchange", onScrollOrResize);
     };
-  }, [bathLayerRef, textLayerRef, decorLayerRef]);
+  }, [bathLayerRef, textLayerRef]);
 };
 
-function HeroCrescentLayer({
-  layerRef,
-}: {
-  readonly layerRef: React.RefObject<HTMLDivElement | null>;
-}) {
+function HeroCrescent() {
   return (
-    <div
-      ref={layerRef}
+    <svg
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
+      viewBox="0 0 500 500"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="pointer-events-none absolute"
+      style={{
+        height: "260%",
+        aspectRatio: "1",
+        left: "-14%",
+        top: "50%",
+        transform: "translateY(-48%)",
+        zIndex: 0,
+      }}
     >
-      <svg
-        viewBox="0 0 500 500"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        style={{
-          width: "min(820px, 92vw, 88vh)",
-          height: "min(820px, 92vw, 88vh)",
-        }}
-      >
-        <defs>
-          <mask id="hero-crescent-mask">
-            <circle cx="250" cy="250" r="220" fill="white" />
-            <circle cx="345" cy="215" r="170" fill="black" />
-          </mask>
-        </defs>
-        <circle
-          cx="250"
-          cy="250"
-          r="220"
-          fill="rgba(155,180,240,0.28)"
-          mask="url(#hero-crescent-mask)"
-        />
-      </svg>
-    </div>
+      <defs>
+        <mask id="hero-crescent-mask">
+          <circle cx="250" cy="250" r="220" fill="white" />
+          <circle cx="318" cy="240" r="192" fill="black" />
+        </mask>
+      </defs>
+      <circle
+        cx="250"
+        cy="250"
+        r="220"
+        fill="#252d52"
+        mask="url(#hero-crescent-mask)"
+      />
+    </svg>
   );
 }
 
 function HeroTextContent({
+  showCrescent,
   layerRef,
 }: {
+  readonly showCrescent: boolean;
   readonly layerRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const { t } = useTranslation();
@@ -146,8 +142,9 @@ function HeroTextContent({
         {t("convention.hero.eyebrow")}
       </p>
       <div className="relative inline-block">
+        {showCrescent && <HeroCrescent />}
         <h1
-          className="hero-title text-[4.5rem] font-bold leading-none text-white md:text-[7rem] lg:text-[9rem] xl:text-[10rem] 2xl:text-[12rem]"
+          className="hero-title relative z-[1] text-[4.5rem] font-bold leading-none text-white md:text-[7rem] lg:text-[9rem] xl:text-[10rem] 2xl:text-[12rem]"
           style={heroTextShadow}
         >
           {t("convention.hero.title")}
@@ -220,14 +217,12 @@ export function HeroSection() {
   const isMobileViewport = useIsMobileViewport();
   const bathLayerRef = useRef<HTMLDivElement | null>(null);
   const textLayerRef = useRef<HTMLDivElement | null>(null);
-  /** Crescent moon decoration; clips away on scroll independently of the text layer. */
-  const decorLayerRef = useRef<HTMLDivElement | null>(null);
   const variant = useExperiment(
     EXPERIMENT_ID,
     VARIANTS,
     "pattern"
   ) as HeroVariant;
-  useHeroClipOverlap(bathLayerRef, textLayerRef, decorLayerRef);
+  useHeroClipOverlap(bathLayerRef, textLayerRef);
 
   return (
     <section
@@ -235,9 +230,6 @@ export function HeroSection() {
       className="relative flex min-h-screen items-center justify-center overflow-hidden"
       {...tid("section-hero")}
     >
-      {/* Crescent moon — own layer so clip-path doesn't cut it at text-div bounds */}
-      {variant !== "control" && <HeroCrescentLayer layerRef={decorLayerRef} />}
-
       {/* Bath illustration anchored to the bottom — clips away on scroll */}
       <div
         ref={bathLayerRef}
@@ -250,7 +242,10 @@ export function HeroSection() {
         </div>
       </div>
 
-      <HeroTextContent layerRef={textLayerRef} />
+      <HeroTextContent
+        showCrescent={variant !== "control"}
+        layerRef={textLayerRef}
+      />
     </section>
   );
 }
