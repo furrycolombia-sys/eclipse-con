@@ -100,25 +100,26 @@ function HeroCrescent() {
       xmlns="http://www.w3.org/2000/svg"
       className="pointer-events-none absolute"
       style={{
-        height: "260%",
+        height: "270%",
         aspectRatio: "1",
-        left: "-14%",
+        left: "12%",
         top: "50%",
-        transform: "translateY(-48%)",
+        transform: "translateY(-43%)",
         zIndex: 0,
       }}
     >
       <defs>
         <mask id="hero-crescent-mask">
           <circle cx="250" cy="250" r="220" fill="white" />
-          <circle cx="318" cy="240" r="192" fill="black" />
+          <circle cx="285" cy="238" r="190" fill="black" />
         </mask>
       </defs>
       <circle
         cx="250"
         cy="250"
         r="220"
-        fill="#252d52"
+        fill="#2a3358"
+        opacity="0.99"
         mask="url(#hero-crescent-mask)"
       />
     </svg>
@@ -136,7 +137,7 @@ function HeroTextContent({
   return (
     <div ref={layerRef} className="relative z-30 px-4 text-center">
       <p
-        className="mb-1 text-sm font-bold italic uppercase tracking-[0.35em] text-white/90 md:text-base"
+        className="-mb-4 text-lg font-bold italic uppercase tracking-[0.35em] text-white/90 md:-mb-7 md:text-xl lg:-mb-9 lg:text-2xl"
         style={heroTextShadow}
       >
         {t("convention.hero.eyebrow")}
@@ -144,17 +145,17 @@ function HeroTextContent({
       <div className="relative inline-block">
         {showCrescent && <HeroCrescent />}
         <h1
-          className="hero-title relative z-[1] text-[4.5rem] font-bold leading-none text-white md:text-[7rem] lg:text-[9rem] xl:text-[10rem] 2xl:text-[12rem]"
+          className="hero-title relative z-[1] text-[4.5rem] leading-none text-white md:text-[7rem] lg:text-[9rem] xl:text-[10rem] 2xl:text-[12rem]"
           style={heroTextShadow}
         >
           {t("convention.hero.title")}
         </h1>
-        {/* Sparkle decorations */}
+        {/* Sparkle decorations — two stars at upper-right */}
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute -right-2 top-0 text-white/80 md:-right-4 lg:-right-6"
+          className="pointer-events-none absolute -right-3 -top-1 z-[1] text-white/90 md:-right-5 lg:-right-7"
           style={{
-            fontSize: "clamp(1rem, 2.5vw, 2rem)",
+            fontSize: "clamp(1.2rem, 2.8vw, 2.4rem)",
             filter: "drop-shadow(0 0 6px rgba(255,255,255,0.6))",
           }}
         >
@@ -162,7 +163,7 @@ function HeroTextContent({
         </span>
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute -right-5 bottom-2 text-white/50 md:-right-8 lg:-right-10"
+          className="pointer-events-none absolute -right-6 -top-6 z-[1] text-white/60 md:-right-10 lg:-right-14"
           style={{
             fontSize: "clamp(0.6rem, 1.2vw, 1rem)",
             filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
@@ -170,19 +171,9 @@ function HeroTextContent({
         >
           ✦
         </span>
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute right-4 -top-2 text-white/30 md:right-6 lg:right-8"
-          style={{
-            fontSize: "clamp(0.4rem, 0.8vw, 0.7rem)",
-            filter: "drop-shadow(0 0 3px rgba(255,255,255,0.3))",
-          }}
-        >
-          ✦
-        </span>
       </div>
       <p
-        className="mt-5 text-sm font-semibold uppercase tracking-[0.35em] text-white/90 md:text-base"
+        className="mt-24 text-sm font-semibold uppercase tracking-[0.35em] text-white/90 md:mt-32 md:text-base lg:mt-40"
         style={heroTextShadow}
       >
         {t("convention.hero.date")}

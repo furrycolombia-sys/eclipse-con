@@ -198,8 +198,8 @@ body {
 .hero-title {
   font-family: var(--font-hero);
   font-style: italic;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.95))
     drop-shadow(0 4px 16px rgba(0, 0, 0, 0.75));
 }
