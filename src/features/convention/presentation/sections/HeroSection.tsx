@@ -78,59 +78,13 @@ function subscribeToScrollUpdates(
 }
 
 /**
- * Drives the `--bath-clip` custom property on the bath wrapper so the
- * CSS `clip-path: inset(0 0 var(--bath-clip) 0)` hides the illustration
- * as the next section scrolls over it. Uses percentage-based values and
- * `@property` registration for efficient browser interpolation.
- * The element is GPU-promoted via CSS (`translateZ(0)`, `contain`, `will-change`).
- */
-const useHeroClipOverlap = (
-  wrapperRef: React.RefObject<HTMLDivElement | null>
-) => {
-  useEffect(() => {
-    const element = wrapperRef.current;
-    if (!element) {
-      return;
-    }
-
-    let lastPct = "";
-
-    return subscribeToScrollUpdates(
-      () => {
-        const nextSection = document.getElementById(SECTION_IDS.ABOUT);
-        if (!nextSection) {
-          if (lastPct !== "0%") {
-            lastPct = "0%";
-            element.style.setProperty("--bath-clip", "0%");
-          }
-          return;
-        }
-
-        const nextTop = nextSection.getBoundingClientRect().top;
-        const bounds = element.getBoundingClientRect();
-        const ratio = Math.max(
-          0,
-          Math.min(1, (bounds.bottom - nextTop) / bounds.height)
-        );
-        const pct = `${(ratio * 100).toFixed(1)}%`;
-        if (pct !== lastPct) {
-          lastPct = pct;
-          element.style.setProperty("--bath-clip", pct);
-        }
-      },
-      { resize: true }
-    );
-  }, [wrapperRef]);
-};
-
-/**
  * Applies scroll-based fade directly to the hero text and button elements.
  * Bypasses React state to avoid re-render lag on fast scroll-back.
  * Fading begins only after the next section covers the hero.
  */
 function useHeroScrollFade(
   textRef: React.RefObject<HTMLDivElement | null>,
-  buttonRef: React.RefObject<HTMLElement | null>
+  buttonRef: React.RefObject<HTMLButtonElement | null>
 ) {
   useEffect(() => {
     return subscribeToScrollUpdates(
@@ -203,7 +157,7 @@ function HeroCrescent() {
 function HeroTextContent({ showCrescent }: { readonly showCrescent: boolean }) {
   const { t } = useTranslation();
   const textRef = useRef<HTMLDivElement | null>(null);
-  const buttonRef = useRef<HTMLElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   useHeroScrollFade(textRef, buttonRef);
 
   return (
@@ -275,19 +229,48 @@ function HeroTextContent({ showCrescent }: { readonly showCrescent: boolean }) {
   );
 }
 
+/**
+ * Hides the bath illustration once the content box scrolls over it.
+ * Compares the content wrapper's top edge against the bath's top edge —
+ * as soon as the content covers the bath area, it becomes hidden.
+ */
+function useHideBathOnScroll(bathRef: React.RefObject<HTMLDivElement | null>) {
+  useEffect(() => {
+    return subscribeToScrollUpdates(
+      () => {
+        const bath = bathRef.current;
+        if (!bath) {
+          return;
+        }
+        const stickyWrapper =
+          document.querySelector<HTMLElement>(".hero-sticky");
+        const contentBox =
+          stickyWrapper?.nextElementSibling as HTMLElement | null;
+        if (!contentBox) {
+          return;
+        }
+        const bathTop = bath.getBoundingClientRect().top;
+        const contentTop = contentBox.getBoundingClientRect().top;
+        bath.style.visibility = contentTop <= bathTop ? "hidden" : "";
+      },
+      { resize: true }
+    );
+  }, [bathRef]);
+}
+
 /** Renders the full-screen Hero section with title, tagline, CTA, animated starry-sky background,
- * and mirrored bath illustration. The pattern variant adds a crescent moon decoration above the
- * bath layer. Every visual layer clips away cleanly as the next section scrolls into view.
+ * and mirrored bath illustration. The next section naturally scrolls over the bath image, and
+ * visibility is toggled off once the hero is fully behind the content.
  */
 export function HeroSection() {
   const isMobileViewport = useIsMobileViewport();
-  const bathWrapperRef = useRef<HTMLDivElement | null>(null);
+  const bathRef = useRef<HTMLDivElement | null>(null);
   const variant = useExperiment(
     EXPERIMENT_ID,
     VARIANTS,
     "pattern"
   ) as HeroVariant;
-  useHeroClipOverlap(bathWrapperRef);
+  useHideBathOnScroll(bathRef);
 
   return (
     <section
@@ -295,10 +278,10 @@ export function HeroSection() {
       className="relative flex min-h-screen items-center justify-center overflow-hidden"
       {...tid("section-hero")}
     >
-      {/* Bath illustration anchored to the bottom — slides away on scroll */}
+      {/* Bath illustration anchored to the bottom — hidden by next section scrolling over */}
       <div
-        ref={bathWrapperRef}
-        className="hero-bath-layer absolute bottom-0 left-0 right-0 z-20 overflow-hidden"
+        ref={bathRef}
+        className="absolute bottom-0 left-0 right-0 z-20 overflow-hidden"
       >
         <div className="relative z-0 mx-auto flex h-[390px] items-center justify-center gap-0 sm:h-[460px] md:h-[560px] lg:h-[680px]">
           {!isMobileViewport && <HeroBathPicture className="scale-x-[-1]" />}

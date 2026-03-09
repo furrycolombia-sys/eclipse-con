@@ -798,22 +798,6 @@ body {
   top: 0;
 }
 
-/* --- Hero bath clip (GPU-promoted, JS-driven via --bath-clip) --- */
-
-@property --bath-clip {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
-}
-
-.hero-bath-layer {
-  --bath-clip: 0%;
-  clip-path: inset(0 0 var(--bath-clip) 0);
-  will-change: clip-path;
-  transform: translateZ(0);
-  contain: layout paint;
-}
-
 /* --- Glow button shimmer --- */
 
 .btn-glow::before {

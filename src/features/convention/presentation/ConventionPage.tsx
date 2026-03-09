@@ -1,6 +1,6 @@
 import { tid } from "@/shared/application/utils/tid";
 import { SECTION_IDS } from "@/features/convention/domain/constants";
-import { Suspense, lazy, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { NavigationBar } from "./components/NavigationBar";
@@ -11,31 +11,14 @@ import { FooterSection } from "./sections/FooterSection";
 import { AmenitiesSection } from "./sections/AmenitiesSection";
 import { TravelSection } from "./sections/TravelSection";
 import { SectionGroupIntro } from "./sections/SectionGroupIntro";
-
-const AboutSection = lazy(async () => ({
-  default: (await import("./sections/AboutSection")).AboutSection,
-}));
-const EventsSection = lazy(async () => ({
-  default: (await import("./sections/EventsSection")).EventsSection,
-}));
-const VenueSection = lazy(async () => ({
-  default: (await import("./sections/VenueSection")).VenueSection,
-}));
-const RegistrationSection = lazy(async () => ({
-  default: (await import("./sections/RegistrationSection")).RegistrationSection,
-}));
-const TicketingSection = lazy(async () => ({
-  default: (await import("./sections/TicketingSection")).TicketingSection,
-}));
-const FaqSection = lazy(async () => ({
-  default: (await import("./sections/FaqSection")).FaqSection,
-}));
-const NewsSection = lazy(async () => ({
-  default: (await import("./sections/NewsSection")).NewsSection,
-}));
-const GuestsSection = lazy(async () => ({
-  default: (await import("./sections/GuestsSection")).GuestsSection,
-}));
+import { AboutSection } from "./sections/AboutSection";
+import { EventsSection } from "./sections/EventsSection";
+import { VenueSection } from "./sections/VenueSection";
+import { RegistrationSection } from "./sections/RegistrationSection";
+import { TicketingSection } from "./sections/TicketingSection";
+import { FaqSection } from "./sections/FaqSection";
+import { NewsSection } from "./sections/NewsSection";
+import { GuestsSection } from "./sections/GuestsSection";
 
 const SCROLL_INTENT_KEYS = new Set([
   "ArrowDown",
@@ -303,28 +286,24 @@ export function Component() {
         <div className="hero-sticky">
           <HeroSection />
         </div>
-        <Suspense
-          fallback={<div className="px-4 py-20 md:py-28" aria-busy="true" />}
-        >
-          <AboutSection />
-          <EventsSection />
-          <RegistrationSection />
-          <TicketingSection />
-          <VenueSection />
-          <SectionGroupIntro
-            id={SECTION_IDS.PLACE_GROUP}
-            titleKey="convention.groups.place.title"
-            subtitleKey="convention.groups.place.subtitle"
-            descriptionKey="convention.groups.place.description"
-            noteKey="convention.groups.place.note"
-            accent="red"
-          />
-          <AmenitiesSection />
-          <TravelSection />
-          <NewsSection />
-          <GuestsSection />
-          <FaqSection />
-        </Suspense>
+        <AboutSection />
+        <EventsSection />
+        <RegistrationSection />
+        <TicketingSection />
+        <VenueSection />
+        <SectionGroupIntro
+          id={SECTION_IDS.PLACE_GROUP}
+          titleKey="convention.groups.place.title"
+          subtitleKey="convention.groups.place.subtitle"
+          descriptionKey="convention.groups.place.description"
+          noteKey="convention.groups.place.note"
+          accent="red"
+        />
+        <AmenitiesSection />
+        <TravelSection />
+        <NewsSection />
+        <GuestsSection />
+        <FaqSection />
         <FooterSection />
       </div>
     </div>
