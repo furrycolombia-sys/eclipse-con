@@ -24,7 +24,8 @@ export function TicketingSection() {
         <Button
           disabled
           size="lg"
-          className="mt-8 h-auto cursor-not-allowed rounded-full bg-gradient-to-r from-accent via-primary to-primary px-10 py-3.5 text-base font-bold text-white opacity-60"
+          variant="glow-muted"
+          className="mt-8 h-auto px-10 py-3.5 text-base"
           {...tid("ticketing-cta")}
         >
           {t("convention.ticketing.cta")}

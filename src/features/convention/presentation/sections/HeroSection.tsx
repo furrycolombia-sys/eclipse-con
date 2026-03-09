@@ -34,62 +34,136 @@ function HeroBathPicture({ className = "" }: { readonly className?: string }) {
   );
 }
 
+/**
+ * Subscribes to scroll (and optionally resize) events, dispatching an
+ * `updater` callback via `requestAnimationFrame` to avoid layout thrashing.
+ * Returns a cleanup function that removes all listeners and cancels pending frames.
+ */
+function subscribeToScrollUpdates(
+  updater: () => void,
+  options: { resize?: boolean; scrollend?: boolean } = {}
+): () => void {
+  let frame = 0;
+
+  const schedule = () => {
+    if (!frame) {
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        updater();
+      });
+    }
+  };
+
+  updater();
+  window.addEventListener("scroll", schedule, { passive: true });
+  if (options.resize) {
+    window.addEventListener("resize", schedule);
+  }
+  if (options.scrollend) {
+    window.addEventListener("scrollend", updater);
+  }
+
+  return () => {
+    if (frame) {
+      cancelAnimationFrame(frame);
+    }
+    window.removeEventListener("scroll", schedule);
+    if (options.resize) {
+      window.removeEventListener("resize", schedule);
+    }
+    if (options.scrollend) {
+      window.removeEventListener("scrollend", updater);
+    }
+  };
+}
+
+/**
+ * Drives the `--bath-clip` custom property on the bath wrapper so the
+ * CSS `clip-path: inset(0 0 var(--bath-clip) 0)` hides the illustration
+ * as the next section scrolls over it. Uses percentage-based values and
+ * `@property` registration for efficient browser interpolation.
+ * The element is GPU-promoted via CSS (`translateZ(0)`, `contain`, `will-change`).
+ */
 const useHeroClipOverlap = (
-  bathLayerRef: React.RefObject<HTMLDivElement | null>,
-  textLayerRef: React.RefObject<HTMLDivElement | null>
+  wrapperRef: React.RefObject<HTMLDivElement | null>
 ) => {
   useEffect(() => {
-    let frame = 0;
+    const element = wrapperRef.current;
+    if (!element) {
+      return;
+    }
 
-    const applyClipFromOverlap = (
-      element: HTMLDivElement | null,
-      coverTop: number
-    ) => {
-      if (!element) {
-        return;
-      }
+    let lastPct = "";
 
-      const bounds = element.getBoundingClientRect();
-      const hiddenByCover = Math.max(0, bounds.bottom - coverTop);
-      const cutPx = Math.min(bounds.height, hiddenByCover);
-      const clipValue = `inset(0 0 ${cutPx.toFixed(2)}px 0)`;
-      element.style.clipPath = clipValue;
-      element.style.setProperty("-webkit-clip-path", clipValue);
-    };
+    return subscribeToScrollUpdates(
+      () => {
+        const nextSection = document.getElementById(SECTION_IDS.ABOUT);
+        if (!nextSection) {
+          if (lastPct !== "0%") {
+            lastPct = "0%";
+            element.style.setProperty("--bath-clip", "0%");
+          }
+          return;
+        }
 
-    const updateClipping = () => {
-      frame = 0;
-      const nextSection = document.getElementById(SECTION_IDS.ABOUT);
-      if (!nextSection) {
-        return;
-      }
-
-      const nextTop = nextSection.getBoundingClientRect().top;
-      applyClipFromOverlap(bathLayerRef.current, nextTop);
-      applyClipFromOverlap(textLayerRef.current, nextTop);
-    };
-
-    const onScrollOrResize = () => {
-      if (frame) {
-        return;
-      }
-      frame = window.requestAnimationFrame(updateClipping);
-    };
-
-    updateClipping();
-    window.addEventListener("scroll", onScrollOrResize, { passive: true });
-    window.addEventListener("resize", onScrollOrResize);
-    window.addEventListener("orientationchange", onScrollOrResize);
-    return () => {
-      if (frame) {
-        window.cancelAnimationFrame(frame);
-      }
-      window.removeEventListener("scroll", onScrollOrResize);
-      window.removeEventListener("resize", onScrollOrResize);
-      window.removeEventListener("orientationchange", onScrollOrResize);
-    };
-  }, [bathLayerRef, textLayerRef]);
+        const nextTop = nextSection.getBoundingClientRect().top;
+        const bounds = element.getBoundingClientRect();
+        const ratio = Math.max(
+          0,
+          Math.min(1, (bounds.bottom - nextTop) / bounds.height)
+        );
+        const pct = `${(ratio * 100).toFixed(1)}%`;
+        if (pct !== lastPct) {
+          lastPct = pct;
+          element.style.setProperty("--bath-clip", pct);
+        }
+      },
+      { resize: true }
+    );
+  }, [wrapperRef]);
 };
+
+/**
+ * Applies scroll-based fade directly to the hero text and button elements.
+ * Bypasses React state to avoid re-render lag on fast scroll-back.
+ * Fading begins only after the next section covers the hero.
+ */
+function useHeroScrollFade(
+  textRef: React.RefObject<HTMLDivElement | null>,
+  buttonRef: React.RefObject<HTMLElement | null>
+) {
+  useEffect(() => {
+    return subscribeToScrollUpdates(
+      () => {
+        const stickyWrapper =
+          document.querySelector<HTMLElement>(".hero-sticky");
+        const vh = window.innerHeight;
+        const stickyOverflow = stickyWrapper
+          ? stickyWrapper.offsetHeight - vh
+          : 0;
+        const fadeStart = Math.max(0, stickyOverflow) + vh * 0.95;
+        const fadeDistance = vh * 0.25;
+        const scrolled = window.scrollY - fadeStart;
+        const progress = Math.min(1, Math.max(0, scrolled / fadeDistance));
+
+        const textOpacity = Math.max(0.08, 1 - progress * 1.2);
+        const buttonOpacity = Math.max(0, 1 - progress * 2);
+
+        if (textRef.current) {
+          textRef.current.style.opacity = String(textOpacity);
+        }
+        if (buttonRef.current) {
+          buttonRef.current.style.opacity = String(buttonOpacity);
+          buttonRef.current.style.pointerEvents =
+            buttonOpacity <= 0 ? "none" : "";
+          buttonRef.current.style.visibility =
+            buttonOpacity <= 0 ? "hidden" : "";
+        }
+      },
+      { scrollend: true }
+    );
+  }, [textRef, buttonRef]);
+}
 
 function HeroCrescent() {
   return (
@@ -100,7 +174,7 @@ function HeroCrescent() {
       xmlns="http://www.w3.org/2000/svg"
       className="pointer-events-none absolute"
       style={{
-        height: "270%",
+        height: "250%",
         aspectRatio: "1",
         left: "12%",
         top: "50%",
@@ -118,70 +192,72 @@ function HeroCrescent() {
         cx="250"
         cy="250"
         r="220"
-        fill="#2a3358"
-        opacity="0.99"
+        fill="white"
+        opacity="0.5"
         mask="url(#hero-crescent-mask)"
       />
     </svg>
   );
 }
 
-function HeroTextContent({
-  showCrescent,
-  layerRef,
-}: {
-  readonly showCrescent: boolean;
-  readonly layerRef: React.RefObject<HTMLDivElement | null>;
-}) {
+function HeroTextContent({ showCrescent }: { readonly showCrescent: boolean }) {
   const { t } = useTranslation();
+  const textRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLElement | null>(null);
+  useHeroScrollFade(textRef, buttonRef);
+
   return (
-    <div ref={layerRef} className="relative z-30 px-4 text-center">
-      <p
-        className="-mb-4 text-lg font-bold italic uppercase tracking-[0.35em] text-white/90 md:-mb-7 md:text-xl lg:-mb-9 lg:text-2xl"
-        style={heroTextShadow}
-      >
-        {t("convention.hero.eyebrow")}
-      </p>
-      <div className="relative inline-block">
-        {showCrescent && <HeroCrescent />}
-        <h1
-          className="hero-title relative z-[1] text-[4.5rem] leading-none text-white md:text-[7rem] lg:text-[9rem] xl:text-[10rem] 2xl:text-[12rem]"
+    <div className="relative z-30 px-4 text-center">
+      <div ref={textRef}>
+        <p
+          className="-mb-4 text-xl font-bold italic uppercase tracking-[0.35em] text-white/90 md:-mb-6 md:text-2xl lg:-mb-8 lg:text-3xl"
           style={heroTextShadow}
         >
-          {t("convention.hero.title")}
-        </h1>
-        {/* Sparkle decorations — two stars at upper-right */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-3 -top-1 z-[1] text-white/90 md:-right-5 lg:-right-7"
-          style={{
-            fontSize: "clamp(1.2rem, 2.8vw, 2.4rem)",
-            filter: "drop-shadow(0 0 6px rgba(255,255,255,0.6))",
-          }}
+          {t("convention.hero.eyebrow")}
+        </p>
+        <div className="relative inline-block">
+          {showCrescent && <HeroCrescent />}
+          <h1
+            className="hero-title relative z-[1] text-[4.5rem] leading-none text-white md:text-[7rem] lg:text-[9rem] xl:text-[10rem] 2xl:text-[12rem]"
+            style={heroTextShadow}
+          >
+            {t("convention.hero.title")}
+          </h1>
+          {/* Sparkle decorations — two stars at upper-right */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-3 -top-1 z-[1] text-white/90 md:-right-5 lg:-right-7"
+            style={{
+              fontSize: "clamp(1.2rem, 2.8vw, 2.4rem)",
+              filter: "drop-shadow(0 0 6px rgba(255,255,255,0.6))",
+            }}
+          >
+            ✦
+          </span>
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-6 -top-6 z-[1] text-white/60 md:-right-10 lg:-right-14"
+            style={{
+              fontSize: "clamp(0.6rem, 1.2vw, 1rem)",
+              filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
+            }}
+          >
+            ✦
+          </span>
+        </div>
+        <p
+          className="mt-24 text-sm font-semibold uppercase tracking-[0.35em] text-white/90 md:mt-32 md:text-base lg:mt-40"
+          style={heroTextShadow}
         >
-          ✦
-        </span>
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-6 -top-6 z-[1] text-white/60 md:-right-10 lg:-right-14"
-          style={{
-            fontSize: "clamp(0.6rem, 1.2vw, 1rem)",
-            filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
-          }}
-        >
-          ✦
-        </span>
+          {t("convention.hero.date")}
+        </p>
       </div>
-      <p
-        className="mt-24 text-sm font-semibold uppercase tracking-[0.35em] text-white/90 md:mt-32 md:text-base lg:mt-40"
-        style={heroTextShadow}
-      >
-        {t("convention.hero.date")}
-      </p>
       <Button
+        ref={buttonRef}
         asChild
+        variant="glow"
         size="lg"
-        className="group relative mt-8 h-auto rounded-full bg-gradient-to-r from-[#f07c3a] to-[#d9531a] px-10 py-3.5 text-base font-bold text-white shadow-[0_8px_28px_-8px_rgba(240,100,40,0.7)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_36px_-6px_rgba(240,100,40,0.9)]"
+        className="mt-8 h-auto px-10 py-3.5 text-base"
       >
         <Link
           to={`?section=${encodeURIComponent(SECTION_IDS.REGISTRATION)}`}
@@ -192,8 +268,7 @@ function HeroTextContent({
           data-content-id="hero_primary_cta"
           data-content-interaction="open"
         >
-          <span className="pointer-events-none absolute -inset-2 -z-10 rounded-full bg-[radial-gradient(circle,rgba(240,100,40,0.45),transparent_60%)] opacity-70 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
-          <span className="relative">{t("convention.hero.cta")}</span>
+          {t("convention.hero.cta")}
         </Link>
       </Button>
     </div>
@@ -206,14 +281,13 @@ function HeroTextContent({
  */
 export function HeroSection() {
   const isMobileViewport = useIsMobileViewport();
-  const bathLayerRef = useRef<HTMLDivElement | null>(null);
-  const textLayerRef = useRef<HTMLDivElement | null>(null);
+  const bathWrapperRef = useRef<HTMLDivElement | null>(null);
   const variant = useExperiment(
     EXPERIMENT_ID,
     VARIANTS,
     "pattern"
   ) as HeroVariant;
-  useHeroClipOverlap(bathLayerRef, textLayerRef);
+  useHeroClipOverlap(bathWrapperRef);
 
   return (
     <section
@@ -221,10 +295,10 @@ export function HeroSection() {
       className="relative flex min-h-screen items-center justify-center overflow-hidden"
       {...tid("section-hero")}
     >
-      {/* Bath illustration anchored to the bottom — clips away on scroll */}
+      {/* Bath illustration anchored to the bottom — slides away on scroll */}
       <div
-        ref={bathLayerRef}
-        className="absolute bottom-0 left-0 right-0 z-20 overflow-hidden"
+        ref={bathWrapperRef}
+        className="hero-bath-layer absolute bottom-0 left-0 right-0 z-20 overflow-hidden"
       >
         <div className="relative z-0 mx-auto flex h-[390px] items-center justify-center gap-0 sm:h-[460px] md:h-[560px] lg:h-[680px]">
           {!isMobileViewport && <HeroBathPicture className="scale-x-[-1]" />}
@@ -233,10 +307,7 @@ export function HeroSection() {
         </div>
       </div>
 
-      <HeroTextContent
-        showCrescent={variant !== "control"}
-        layerRef={textLayerRef}
-      />
+      <HeroTextContent showCrescent={variant !== "control"} />
     </section>
   );
 }

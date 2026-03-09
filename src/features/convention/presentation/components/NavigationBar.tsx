@@ -23,6 +23,7 @@ import { cn } from "@/shared/application/utils/cn";
 import { tid } from "@/shared/application/utils/tid";
 import { SECTION_IDS } from "@/features/convention/domain/constants";
 import moonfestLogo from "@/shared/presentation/assets/moonfest-logo.svg";
+import { LanguageToggle } from "./LanguageToggle";
 
 const NAV_GROUPS = [
   {
@@ -361,18 +362,21 @@ function MobileNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
                     {t("convention.hero.date")}
                   </p>
                 </SheetHeader>
-                <SheetClose asChild>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="h-9 w-9 rounded-full border border-white/10 bg-surface/40 text-foreground/70 hover:bg-surface/70 hover:text-foreground"
-                    aria-label={t("convention.nav.mobileToggle")}
-                    data-nav-menu-action="close"
-                  >
-                    <X size={16} />
-                  </Button>
-                </SheetClose>
+                <div className="flex items-center gap-2">
+                  <LanguageToggle />
+                  <SheetClose asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="h-9 w-9 rounded-full border border-white/10 bg-surface/40 text-foreground/70 hover:bg-surface/70 hover:text-foreground"
+                      aria-label={t("convention.nav.mobileToggle")}
+                      data-nav-menu-action="close"
+                    >
+                      <X size={16} />
+                    </Button>
+                  </SheetClose>
+                </div>
               </div>
             </div>
             <div className="flex-1 overflow-y-auto px-5 pb-8 pt-5">
@@ -477,7 +481,10 @@ export function NavigationBar() {
             loading="lazy"
           />
         </Link>
-        <DesktopNav groups={NAV_GROUPS} />
+        <div className="hidden items-center gap-3 md:flex">
+          <DesktopNav groups={NAV_GROUPS} />
+          <LanguageToggle />
+        </div>
         <MobileNav groups={NAV_GROUPS} />
       </div>
     </nav>

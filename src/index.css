@@ -798,6 +798,62 @@ body {
   top: 0;
 }
 
+/* --- Hero bath clip (GPU-promoted, JS-driven via --bath-clip) --- */
+
+@property --bath-clip {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+.hero-bath-layer {
+  --bath-clip: 0%;
+  clip-path: inset(0 0 var(--bath-clip) 0);
+  will-change: clip-path;
+  transform: translateZ(0);
+  contain: layout paint;
+}
+
+/* --- Glow button shimmer --- */
+
+.btn-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--glow-angle, 220deg),
+    transparent 40%,
+    var(--color-accent) 50%,
+    transparent 60%
+  );
+  opacity: 0;
+  z-index: -1;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  padding: 1px;
+  transition: opacity 0.4s ease;
+}
+
+.btn-glow:hover::before {
+  opacity: 0.6;
+  animation: glow-spin 3s linear infinite;
+}
+
+@keyframes glow-spin {
+  to {
+    --glow-angle: 580deg;
+  }
+}
+
+@property --glow-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 220deg;
+}
+
 /* --- News rail scrollbar styling --- */
 .news-rail-scroll {
   scrollbar-color: rgba(201, 168, 76, 0.55) rgba(255, 255, 255, 0.08);
