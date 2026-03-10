@@ -217,7 +217,7 @@ function useSectionUrlSync() {
       window.history.replaceState(
         { __sectionSync: true },
         "",
-        `${location.pathname}${query ? "?" + query : ""}`
+        `${window.location.pathname}${query ? "?" + query : ""}`
       );
     };
 
