@@ -161,7 +161,7 @@ function HeroTextContent({ showCrescent }: { readonly showCrescent: boolean }) {
           <HeroSparkles />
         </div>
         <p
-          className="mt-24 text-sm font-semibold uppercase tracking-[0.35em] text-white/90 md:mt-32 md:text-base lg:mt-40"
+          className="mt-24 text-base font-semibold uppercase tracking-[0.35em] text-white/90 md:mt-32 md:text-lg lg:mt-40 lg:text-xl"
           style={heroTextShadow}
         >
           {t("convention.hero.date")}
@@ -172,7 +172,7 @@ function HeroTextContent({ showCrescent }: { readonly showCrescent: boolean }) {
         asChild
         variant="glow"
         size="lg"
-        className="mt-8 h-auto px-10 py-3.5 text-base"
+        className="mt-14 h-auto px-10 py-3.5 text-base md:mt-16"
       >
         <Link
           to={`?section=${encodeURIComponent(SECTION_IDS.REGISTRATION)}`}
