@@ -86,7 +86,7 @@ const DEFAULT_DESKTOP_GROUP_ACCENT: DesktopGroupAccent = {
   menuHeader: "text-muted-foreground",
   itemHover:
     "hover:bg-transparent hover:text-foreground focus:bg-transparent focus:text-foreground",
-  itemArrow: "text-foreground/35",
+  itemArrow: "text-foreground/70",
 };
 
 const DESKTOP_GROUP_ACCENTS: Partial<Record<string, DesktopGroupAccent>> = {
@@ -477,8 +477,9 @@ export function NavigationBar() {
           <img
             src={moonfestLogo}
             alt={t("convention.hero.logoAlt")}
+            width={135}
+            height={36}
             className="h-8 w-auto sm:h-9"
-            loading="lazy"
           />
         </Link>
         <div className="hidden items-center gap-3 md:flex">

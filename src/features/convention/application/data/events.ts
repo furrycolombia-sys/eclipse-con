@@ -39,6 +39,12 @@ export const EVENTS: readonly ConventionEvent[] = [
     icon: "ShoppingBag",
   },
   {
+    id: "breakfast",
+    titleKey: "convention.events.breakfast.title",
+    descriptionKey: "convention.events.breakfast.description",
+    icon: "UtensilsCrossed",
+  },
+  {
     id: "mainEvent",
     titleKey: "convention.events.mainEvent.title",
     descriptionKey: "convention.events.mainEvent.description",

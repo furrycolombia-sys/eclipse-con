@@ -9,6 +9,8 @@ const AMENITY_IMAGE_BY_KEY = {
   spa: "https://www.estelarpaipa.com/media/uploads/fotoservicio/servicio-spa-paipa.webp?q=pr%3Asharp%2Frs%3Afill%2Fw%3A1200%2Fh%3A600%2Fg%3Ace%2Ff%3Ajpg",
   dining:
     "https://www.estelarpaipa.com/media/uploads/fotoservicio/LR_35_de_85-12_1.jpg?q=pr%3Asharp%2Frs%3Afill%2Fw%3A1200%2Fh%3A600%2Fg%3Ace%2Ff%3Ajpg",
+  nautical:
+    "https://www.estelarpaipa.com/media/uploads/galeriahoteles/estelar-paipa-panoe.webp?q=pr%3Asharp%2Frs%3Afill%2Fw%3A1200%2Fh%3A600%2Fg%3Ace%2Ff%3Ajpg",
   stables:
     "https://www.estelarpaipa.com/media/uploads/fotoservicio/DUF_8717_U_OK.jpg?q=pr%3Asharp%2Frs%3Afill%2Fw%3A1200%2Fh%3A600%2Fg%3Ace%2Ff%3Ajpg",
   farm: "https://www.estelarpaipa.com/media/uploads/fotoservicio/DUF_9537_U_OK.jpg?q=pr%3Asharp%2Frs%3Afill%2Fw%3A1200%2Fh%3A600%2Fg%3Ace%2Ff%3Ajpg",
@@ -19,6 +21,7 @@ const AMENITY_IMAGE_BY_KEY = {
 const AMENITY_CARD_KEYS = [
   "spa",
   "dining",
+  "nautical",
   "stables",
   "farm",
   "family",
@@ -44,8 +47,9 @@ const buildAmenityCard = (
   description: t(`convention.amenities.cards.${key}.description`),
   price: t(`convention.amenities.cards.${key}.price`),
   priceApprox: t(`convention.amenities.cards.${key}.priceApprox`),
-  priceNote:
-    key === "family" ? t(`convention.amenities.cards.${key}.priceNote`) : "",
+  priceNote: t(`convention.amenities.cards.${key}.priceNote`, {
+    defaultValue: "",
+  }),
   linkLabel: t(`convention.amenities.cards.${key}.linkLabel`),
   linkUrl: t(`convention.amenities.cards.${key}.linkUrl`),
   imageAlt: t(`convention.amenities.cards.${key}.imageAlt`),
@@ -209,11 +213,21 @@ export function AmenitiesSection() {
           rel="noreferrer"
           className="underline decoration-dashed underline-offset-4 transition hover:text-foreground"
           data-content-section="amenities"
-          data-content-id="footer_source"
+          data-content-id="footer_activities_pdf"
         >
           {t("convention.amenities.footerLinkLabel")}
         </a>
-        .
+        {" · "}
+        <a
+          href={t("convention.amenities.footerSpaUrl")}
+          target="_blank"
+          rel="noreferrer"
+          className="underline decoration-dashed underline-offset-4 transition hover:text-foreground"
+          data-content-section="amenities"
+          data-content-id="footer_spa_pdf"
+        >
+          {t("convention.amenities.footerSpaLabel")}
+        </a>
       </p>
     </SectionWrapper>
   );

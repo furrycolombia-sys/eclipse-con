@@ -88,6 +88,10 @@
       "mainEvent": {
         "title": "Evento principal",
         "description": "Disfruta de una fiesta latina y un rave."
+      },
+      "breakfast": {
+        "title": "Desayuno buffet incluido",
+        "description": "Desayuno tipo buffet cada mañana en horario establecido, incluido en el paquete."
       }
     },
     "eventOverview": {
@@ -101,9 +105,11 @@
       "title": "¿Qué hay en el hotel?",
       "subtitle": "Servicios y experiencias del hotel. Varios tienen costo adicional.",
       "priceLabel": "Precio aprox.",
-      "footerNote": "Tarifas exactas se consultan en el hotel. Algunas referencias externas pueden variar. Fuente externa:",
-      "footerLinkLabel": "Paipa en Bici (precios)",
-      "footerLinkUrl": "https://paipaecoturismosas.wixsite.com/website",
+      "footerNote": "Precios incluyen IVA. Servicios sujetos a disponibilidad y reserva en Caja de actividades. Cancelaciones mínimo 4 horas antes.",
+      "footerLinkLabel": "Ver carta de actividades (PDF)",
+      "footerLinkUrl": "/Carta Actividades-Es Paipa-Impresa.pdf",
+      "footerSpaLabel": "Ver carta de SPA (PDF)",
+      "footerSpaUrl": "/Carta SPA Es Paipa-Impresa.pdf",
       "restaurants": {
         "eyebrow": "Gastronomía",
         "title": "Restaurantes del hotel",
@@ -136,48 +142,61 @@
       "cards": {
         "spa": {
           "title": "Spa & bienestar",
-          "description": "Zona de relajación con spa, masajes, sauna, jacuzzi y piscina para recargar energía.",
-          "price": "Costo adicional",
-          "priceApprox": "Consultar en el hotel",
-          "linkLabel": "Ver servicio",
-          "linkUrl": "https://www.estelarpaipa.com/es/servicios/",
+          "description": "Circuito de hidroterapia, masajes, rituales, sauna, baño turco, piscina y jacuzzi de aguas termominerales.",
+          "price": "$39k – $455k",
+          "priceApprox": "Piscina / jacuzzi / sauna: $39.000 · Circuito Arkhé (70 min): $169.000 · Masajes: desde $119.000 · Ritual Fuego (100 min): $270.000",
+          "priceNote": "Piscina, jacuzzi, sauna y gimnasio incluidos para huéspedes. Visitantes: $39.000 por servicio.",
+          "linkLabel": "Ver carta de SPA",
+          "linkUrl": "/Carta SPA Es Paipa-Impresa.pdf",
           "imageAlt": "Spa del hotel"
         },
         "dining": {
           "title": "Gastronomía y bar",
           "description": "Tres opciones de restaurante (local, internacional e italiana) y bar de vinos.",
           "price": "Consumo adicional",
-          "priceApprox": "Consultar en el hotel",
+          "priceApprox": "Consultar menús en la web del hotel",
           "linkLabel": "Ver restaurantes",
           "linkUrl": "https://www.estelarpaipa.com/es/restaurantes/",
           "imageAlt": "Restaurante del hotel"
         },
+        "nautical": {
+          "title": "Náutica y lago",
+          "description": "Deportes acuáticos en el lago Sochagota: kayak, lancha, esquí náutico, bicicleta acuática, sofá acuático y crucero con música en vivo.",
+          "price": "$12k – $250k",
+          "priceApprox": "Bici acuática: desde $12.000 · Kayak: desde $18.000 · Crucero diurno: $25.000 · Lancha: desde $95.000 · Esquí: desde $130.000",
+          "priceNote": "Horario: 8:30 a.m. a 4:00 p.m. Chaleco salvavidas obligatorio en embarcaciones menores.",
+          "linkLabel": "Ver actividades",
+          "linkUrl": "/Carta Actividades-Es Paipa-Impresa.pdf",
+          "imageAlt": "Actividades náuticas en el lago Sochagota"
+        },
         "stables": {
-          "title": "Caballerizas",
-          "description": "Paseos a caballo y actividades guiadas para disfrutar el entorno natural.",
-          "price": "Costo adicional",
-          "priceApprox": "Consultar en el hotel",
-          "linkLabel": "Ver servicio",
-          "linkUrl": "https://www.estelarpaipa.com/es/servicios/",
-          "imageAlt": "Caballerizas del hotel"
+          "title": "Cabalgatas",
+          "description": "Paseos a caballo guiados por los alrededores del hotel. Modalidad de guianza con sillas individuales.",
+          "price": "$45k – $65k",
+          "priceApprox": "Cabalgata ecológica (40 min): $65.000 · Cabestro para menores de 10 (15–20 min): $45.000",
+          "priceNote": "No disponible los miércoles. Sujeto a disponibilidad y condiciones climáticas.",
+          "linkLabel": "Ver actividades",
+          "linkUrl": "/Carta Actividades-Es Paipa-Impresa.pdf",
+          "imageAlt": "Cabalgatas del hotel"
         },
         "farm": {
-          "title": "Granja Noé",
-          "description": "Experiencia familiar con animales y espacios al aire libre.",
-          "price": "Costo adicional",
-          "priceApprox": "Consultar en el hotel",
-          "linkLabel": "Ver servicio",
-          "linkUrl": "https://www.estelarpaipa.com/es/servicios/",
-          "imageAlt": "Granja Noé del hotel"
+          "title": "Granja Munay",
+          "description": "Experiencia de aprendizaje y conexión con la naturaleza, el campo y los animales. Recorridos guiados en horarios establecidos.",
+          "price": "$30k – $35k",
+          "priceApprox": "Niños: $30.000 · Adultos: $35.000",
+          "priceNote": "El alimento para los animales no está incluido y se adquiere en la granja.",
+          "linkLabel": "Ver actividades",
+          "linkUrl": "/Carta Actividades-Es Paipa-Impresa.pdf",
+          "imageAlt": "Granja Munay del hotel"
         },
         "family": {
-          "title": "Actividades al aire libre",
-          "description": "Bicicletas, senderos y planes pensados para disfrutar Paipa.",
-          "price": "Costo adicional",
-          "priceApprox": "$13.000–$55.000 COP",
-          "priceNote": "Referencia externa en Paipa (no del hotel): alquiler de bicicletas.",
-          "linkLabel": "Ver servicio",
-          "linkUrl": "https://www.estelarpaipa.com/es/servicios/",
+          "title": "Más actividades",
+          "description": "Bicicletas, canchas de tenis, casita infantil (uso libre), gimnasio y hotel canino Cani Suite para mascotas.",
+          "price": "$12k – $60k",
+          "priceApprox": "Bicicletas: desde $15.000 · Tenis: $36.000/hora · Gimnasio: $39.000 visitantes · Cani Suite: $36.000/noche",
+          "priceNote": "Casita infantil de 8:00 a.m. a 5:00 p.m. (uso libre). Gimnasio incluido para huéspedes.",
+          "linkLabel": "Ver actividades",
+          "linkUrl": "/Carta Actividades-Es Paipa-Impresa.pdf",
           "imageAlt": "Actividades al aire libre"
         }
       }

@@ -147,12 +147,16 @@ export function VenueSection() {
           <img
             src="https://www.estelarpaipa.com/media/uploads/cms/estelar-paipa-hotel-1_ps6qOHg.webp?q=pr%3Asharp%2Frs%3Afill%2Fmw%3A100%2Fh%3A500%2Fg%3Ace%2Ff%3Ajpg"
             alt={t("convention.venue.imageAlt")}
+            width={900}
+            height={500}
             className="relative w-full rounded-2xl border border-white/10 object-cover shadow-xl"
             loading="lazy"
           />
           <img
             src="https://www.estelarpaipa.com/media/uploads/galeriahoteles/estelar-paipa-piscinac.webp?q=pr%3Asharp%2Frs%3Afill%2Fw%3A900%2Fh%3A540%2Ff%3Ajpg"
             alt={t("convention.venue.imageAltSecondary")}
+            width={900}
+            height={540}
             className="mt-4 w-full rounded-2xl border border-white/10 object-cover shadow-xl"
             loading="lazy"
           />

@@ -6,6 +6,7 @@ import {
   Palette,
   Star,
   ShoppingBag,
+  UtensilsCrossed,
 } from "lucide-react";
 
 import {
@@ -26,6 +27,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
   Palette,
   Star,
   ShoppingBag,
+  UtensilsCrossed,
 };
 
 interface EventCardProps {

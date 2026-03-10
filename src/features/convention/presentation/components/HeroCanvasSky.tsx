@@ -64,9 +64,9 @@ export function HeroCanvasSky({
     const midStars: Star[] = [];
     const brightStars: Star[] = [];
     const shootingStars: ShootingStar[] = [];
-    const farStarCount = isMobileViewport ? 1500 : 4500;
-    const midStarCount = isMobileViewport ? 650 : 1800;
-    const brightStarCount = isMobileViewport ? 250 : 720;
+    const farStarCount = isMobileViewport ? 800 : 2400;
+    const midStarCount = isMobileViewport ? 350 : 900;
+    const brightStarCount = isMobileViewport ? 140 : 400;
     const quickFarStarCount = isMobileViewport ? 300 : 700;
     const quickMidStarCount = isMobileViewport ? 160 : 360;
     const quickBrightStarCount = isMobileViewport ? 80 : 160;
@@ -531,12 +531,19 @@ export function HeroCanvasSky({
       }
     };
 
+    let isVisible = true;
+
     const animate = (timestamp: number) => {
       const now = timestamp || performance.now();
       const deltaSeconds = lastTimestamp
         ? clamp((now - lastTimestamp) / 1000, 0, 0.05)
         : 0.016;
       lastTimestamp = now;
+
+      if (!isVisible) {
+        animationFrameId = window.requestAnimationFrame(animate);
+        return;
+      }
 
       if (!hasValidSize) {
         resize();
@@ -593,11 +600,19 @@ export function HeroCanvasSky({
     window.addEventListener("resize", resize);
     window.addEventListener("orientationchange", resize);
 
+    /* Pause the canvas draw loop once the user scrolls past 1.5 viewports
+       (the hero + post-hero area). Resume when they scroll back up. */
+    const onScroll = () => {
+      isVisible = window.scrollY < window.innerHeight * 1.5;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => {
       window.cancelAnimationFrame(animationFrameId);
       resizeObserver?.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("orientationchange", resize);
+      window.removeEventListener("scroll", onScroll);
       window.clearTimeout(fullStarTimer);
     };
   }, [isMobileViewport, prefersReducedMotion]);
@@ -614,6 +629,8 @@ export function HeroCanvasSky({
         display: "block",
         background:
           "linear-gradient(to bottom, #01020a 0%, #040824 18%, #09133a 44%, #060c26 72%, #02040d 100%)",
+        willChange: "transform",
+        contain: "strict",
       }}
       aria-hidden="true"
     />

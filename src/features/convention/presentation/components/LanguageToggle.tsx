@@ -20,9 +20,9 @@ export function LanguageToggle() {
       role="switch"
       aria-checked={isEnglish}
       aria-describedby={currentLanguageId}
-      aria-label={t("convention.language.toggleAria", {
+      aria-label={`EN / ES — ${t("convention.language.toggleAria", {
         language: activeLanguageLabel,
-      })}
+      })}`}
       onClick={toggleLanguage}
       data-cta-id="language_toggle"
       data-content-id="language_toggle"
@@ -30,9 +30,9 @@ export function LanguageToggle() {
       className={cn(
         "group relative inline-flex h-8 w-[68px] cursor-pointer select-none rounded-full p-0.5",
         "border border-accent/20 bg-background",
-        "shadow-[inset_0_0_18px_rgba(201,168,76,0.05)]",
+        "shadow-[inset_0_0_18px_rgba(224,117,58,0.05)]",
         "transition-all duration-200",
-        "hover:border-accent/50 hover:shadow-[inset_0_0_18px_rgba(201,168,76,0.12),0_0_18px_rgba(201,168,76,0.16)]",
+        "hover:border-accent/50 hover:shadow-[inset_0_0_18px_rgba(224,117,58,0.12),0_0_18px_rgba(224,117,58,0.16)]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-1 focus-visible:ring-offset-background"
       )}
       {...tid("language-toggle")}
@@ -54,7 +54,7 @@ export function LanguageToggle() {
         className={cn(
           "absolute top-0.5 h-7 w-[30px] rounded-full",
           "bg-[radial-gradient(ellipse_at_42%_28%,#fff5cc,#e8c44a_40%,#c9a84c_68%,#9a7325)]",
-          "shadow-[0_0_10px_rgba(201,168,76,0.65),0_0_22px_rgba(201,168,76,0.22),inset_0_1px_0_rgba(255,248,200,0.5)]",
+          "shadow-[0_0_10px_rgba(224,117,58,0.65),0_0_22px_rgba(224,117,58,0.22),inset_0_1px_0_rgba(255,248,200,0.5)]",
           "transition-[left] duration-300 ease-out",
           isEnglish ? "left-0.5" : "left-[36px]"
         )}
@@ -67,7 +67,7 @@ export function LanguageToggle() {
             "flex w-1/2 items-center justify-center text-[9.5px] font-black tracking-[0.06em] transition-colors duration-300",
             isEnglish
               ? "text-background"
-              : "text-foreground/35 group-hover:text-foreground/60"
+              : "text-foreground/70 group-hover:text-foreground/90"
           )}
         >
           EN
@@ -77,7 +77,7 @@ export function LanguageToggle() {
             "flex w-1/2 items-center justify-center text-[9.5px] font-black tracking-[0.06em] transition-colors duration-300",
             !isEnglish
               ? "text-background"
-              : "text-foreground/35 group-hover:text-foreground/60"
+              : "text-foreground/70 group-hover:text-foreground/90"
           )}
         >
           ES
