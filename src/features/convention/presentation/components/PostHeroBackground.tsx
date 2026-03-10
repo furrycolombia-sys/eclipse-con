@@ -1,5 +1,7 @@
 import { useTranslation } from "react-i18next";
 
+import { HeroCanvasSky } from "./HeroCanvasSky";
+
 const textShadow = {
   filter:
     "drop-shadow(0 2px 4px rgba(0,0,0,0.95)) drop-shadow(0 4px 16px rgba(0,0,0,0.75))",
@@ -16,9 +18,10 @@ export function PostHeroBackground() {
 
   return (
     <div
-      className="pointer-events-none sticky top-0 z-[1] flex h-screen items-center justify-center bg-surface"
+      className="pointer-events-none sticky top-0 z-[1] flex h-screen items-center justify-center will-change-transform"
       aria-hidden="true"
     >
+      <HeroCanvasSky className="z-0" />
       <div className="flex flex-col items-center opacity-40">
         <p
           className="-mb-4 text-xl font-bold italic uppercase tracking-[0.35em] text-white/90 md:-mb-6 md:text-2xl lg:-mb-8 lg:text-3xl"

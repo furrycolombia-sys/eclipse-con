@@ -25,6 +25,8 @@ function HeroBathPicture({ className = "" }: { readonly className?: string }) {
       src={heroBathSingle}
       alt=""
       aria-hidden="true"
+      width={1810}
+      height={922}
       className={`h-full w-auto select-none object-cover brightness-80 ${className}`}
       loading="eager"
       fetchPriority="high"
@@ -157,7 +159,7 @@ export function HeroSection() {
   return (
     <section
       id="section-hero"
-      className="sticky top-0 z-0 flex min-h-screen items-center justify-center overflow-hidden"
+      className="sticky top-0 z-0 flex min-h-screen items-center justify-center overflow-hidden will-change-transform"
       {...tid("section-hero")}
     >
       {/* Bath illustration anchored to the bottom — covered naturally by content sections */}

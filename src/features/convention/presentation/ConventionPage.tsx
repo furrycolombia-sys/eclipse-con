@@ -73,7 +73,7 @@ const scrollToSection = (sectionId: string) => {
   if (!section) {
     return false;
   }
-  section.scrollIntoView();
+  section.scrollIntoView({ behavior: "instant" });
   return true;
 };
 
@@ -153,6 +153,21 @@ const registerSectionSyncListeners = ({
   };
 };
 
+/**
+ * Returns `true` when the current page context is a full browser load or
+ * reload (as opposed to an in-app React Router navigation). Used to decide
+ * whether persisted `location.state` should be trusted.
+ */
+const isFullPageLoad = () =>
+  typeof performance !== "undefined" &&
+  performance
+    .getEntriesByType("navigation")
+    .some(
+      (entry) =>
+        (entry as PerformanceNavigationTiming).type === "reload" ||
+        (entry as PerformanceNavigationTiming).type === "navigate"
+    );
+
 function useSectionUrlSync() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -167,7 +182,11 @@ function useSectionUrlSync() {
     const sectionSyncState = location.state as {
       __sectionSync?: boolean;
     } | null;
-    const isSectionSyncNavigation = !!sectionSyncState?.__sectionSync;
+    /* __sectionSync is set by in-app URL updates (navigate with replace).
+       On a full page load/reload, history.state may still carry this flag
+       from the previous session — ignore it so the initial scroll works. */
+    const isSectionSyncNavigation =
+      !isFullPageLoad() && !!sectionSyncState?.__sectionSync;
     let activeSectionId: string | null = null;
     let frame = 0;
     let autoScrollTargetId: string | null = null;
