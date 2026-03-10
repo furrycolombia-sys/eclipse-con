@@ -372,21 +372,21 @@
       "priceNote": "(El precio depende de la cantidad de personas que están quedándose en la habitación)",
       "trio": {
         "name": "Habitación para 3 personas",
-        "price": "$1.700.000 COP c/u"
+        "price": "$779.053 COP c/u"
       },
       "quad": {
         "name": "Habitación para 4 personas",
-        "price": "$1.000.000 COP c/u"
+        "price": "$673.540 COP c/u"
       },
       "soloDuo": {
         "name": "Habitación para 1 o 2 personas",
-        "price": "$2.400.000 COP total"
+        "price": "$990.080 COP c/u"
       },
       "cta": "Reservar",
       "reserveLink": "Reservar hotel",
       "tutorialLink": "Abrir tutorial de registro",
       "ticketLink": "Comprar boleta (próximamente)",
-      "devNote": "Los precios de habitación compartida son por persona. La habitación para 1 o 2 personas tiene precio total fijo.",
+      "devNote": "Todos los precios son por persona.",
       "noteServices": "Los servicios adicionales del hotel (spa, termales, bar, etc.) no están incluidos en el paquete.",
       "note": "Dudas: furrycolombia@gmail.com",
       "highlight": "¿Quieres asistir? Reserva hoy y asegura tu lugar en este evento inolvidable."

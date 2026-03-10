@@ -234,6 +234,18 @@ const main = async () => {
   const vite = run("vite", ["build", "--mode", "static"]);
   await optimizeStaticImages();
   fs.rmSync(staticPublicDir, { recursive: true, force: true });
+
+  if (vite.status === 0) {
+    const artifact = path.join(root, "dist-static", "index.html");
+    const networkDest = "P:\\Public Folder\\index.html";
+    if (fs.existsSync("P:\\")) {
+      fs.copyFileSync(artifact, networkDest);
+      console.log(`[static] Deployed to ${networkDest}`);
+    } else {
+      console.log("[static] P: drive not found — skipping network copy");
+    }
+  }
+
   process.exit(vite.status ?? 1);
 };
 

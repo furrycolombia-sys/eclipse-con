@@ -372,21 +372,21 @@
       "priceNote": "(Price depends on the number of people staying in the room)",
       "trio": {
         "name": "Room for 3 people",
-        "price": "$1,700,000 COP each"
+        "price": "$779,053 COP each"
       },
       "quad": {
         "name": "Room for 4 people",
-        "price": "$1,000,000 COP each"
+        "price": "$673,540 COP each"
       },
       "soloDuo": {
         "name": "Room for 1 or 2 people",
-        "price": "$2,400,000 COP total"
+        "price": "$990,080 COP each"
       },
       "cta": "Reserve",
       "reserveLink": "Reserve hotel",
       "tutorialLink": "Open registration tutorial",
       "ticketLink": "Buy ticket (coming soon)",
-      "devNote": "Shared rooms are priced per person. The room for 1 or 2 people has a fixed total price.",
+      "devNote": "All prices are per person.",
       "noteServices": "Additional hotel services (spa, thermal pools, bar, etc.) are not included in the package.",
       "note": "Questions: furrycolombia@gmail.com",
       "highlight": "Want to attend? Reserve today and secure your place at this unforgettable event."

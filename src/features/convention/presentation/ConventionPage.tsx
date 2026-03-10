@@ -168,6 +168,36 @@ const isFullPageLoad = () =>
         (entry as PerformanceNavigationTiming).type === "navigate"
     );
 
+/**
+ * Writes the active section ID into the hash query string via `replaceState`,
+ * preserving the full URL (pathname, search, and hash-router route).
+ */
+const writeSectionToHash = (
+  nextSectionId: string,
+  sectionIdSet: Set<string>
+) => {
+  const currentQuerySection = getSectionIdFromUrl(
+    window.location.search + window.location.hash,
+    sectionIdSet
+  );
+  if (currentQuerySection === nextSectionId) {
+    return;
+  }
+  const rawHashPath = window.location.hash.replace(/^#/, "").split("?")[0];
+  const hashPath = rawHashPath === "" ? "/" : rawHashPath;
+  const params = new URLSearchParams(
+    window.location.hash.includes("?")
+      ? window.location.hash.slice(window.location.hash.indexOf("?"))
+      : ""
+  );
+  params.set("section", nextSectionId);
+  window.history.replaceState(
+    { __sectionSync: true },
+    "",
+    `${window.location.pathname}${window.location.search}#${hashPath}?${params.toString()}`
+  );
+};
+
 function useSectionUrlSync() {
   const location = useLocation();
   const lastAutoScrolledSectionRef = useRef<string | null>(null);
@@ -201,24 +231,7 @@ function useSectionUrlSync() {
         return;
       }
       activeSectionId = nextSectionId;
-      const params = new URLSearchParams(window.location.search);
-      const currentQuerySection = getSectionIdFromUrl(
-        window.location.search,
-        sectionIdSet
-      );
-      if (currentQuerySection === nextSectionId) {
-        return;
-      }
-      params.set("section", nextSectionId);
-      const query = params.toString();
-      /* Use replaceState directly to avoid React Router re-renders.
-         navigate() would change location.search → trigger effect cleanup
-         → re-register listeners → reset state, causing scroll jank. */
-      window.history.replaceState(
-        { __sectionSync: true },
-        "",
-        `${window.location.pathname}${query ? "?" + query : ""}`
-      );
+      writeSectionToHash(nextSectionId, sectionIdSet);
     };
 
     const update = () => {
