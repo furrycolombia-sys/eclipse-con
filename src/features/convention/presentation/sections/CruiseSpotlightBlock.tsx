@@ -179,7 +179,7 @@ const OptionCards = ({ t }: Readonly<{ t: TFunction }>) => (
 );
 
 const MediaPanel = ({ t }: Readonly<{ t: TFunction }>) => (
-  <div className="relative min-h-[320px] overflow-hidden border-t border-white/10 lg:min-h-full lg:border-l lg:border-t-0">
+  <div className="relative flex min-h-[320px] items-end overflow-hidden border-t border-white/10 lg:min-h-full lg:border-l lg:border-t-0">
     <img
       src={CRUISE_SPOTLIGHT_IMAGE}
       alt={t("convention.amenities.cruiseSpotlight.imageAlt")}
@@ -187,12 +187,12 @@ const MediaPanel = ({ t }: Readonly<{ t: TFunction }>) => (
       loading="lazy"
     />
     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,14,25,0.12),rgba(7,14,25,0.78)),linear-gradient(135deg,rgba(8,47,73,0.12),rgba(8,47,73,0.6))]" />
-    <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-      <div className="rounded-[1.75rem] border border-white/12 bg-slate-950/44 p-5 backdrop-blur-md">
+    <div className="relative z-10 w-full p-4 sm:p-6 lg:p-8">
+      <div className="min-w-0 rounded-[1.75rem] border border-white/12 bg-slate-950/44 p-5 backdrop-blur-md">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-100/72">
           {t("convention.amenities.cruiseSpotlight.panelEyebrow")}
         </p>
-        <p className="mt-3 text-lg font-semibold text-white">
+        <p className="mt-3 break-words text-lg font-semibold text-white">
           {t("convention.amenities.cruiseSpotlight.panelTitle")}
         </p>
         <p className="mt-2 text-sm leading-6 text-cyan-50/74">
@@ -253,16 +253,6 @@ export const CruiseSpotlightBlock = ({ t }: Readonly<{ t: TFunction }>) => (
               data-content-id="cruise_spotlight_pdf"
             >
               {t("convention.amenities.cruiseSpotlight.primaryLinkLabel")}
-            </a>
-            <a
-              href={t("convention.amenities.cruiseSpotlight.secondaryLinkUrl")}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-cyan-100 underline decoration-dashed underline-offset-4 transition hover:text-white"
-              data-content-section="amenities"
-              data-content-id="cruise_spotlight_gallery"
-            >
-              {t("convention.amenities.cruiseSpotlight.secondaryLinkLabel")}
             </a>
           </div>
           <p className="mt-5 max-w-2xl text-xs leading-6 text-cyan-100/68">
