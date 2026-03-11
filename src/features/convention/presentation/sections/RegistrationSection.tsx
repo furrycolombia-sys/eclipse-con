@@ -35,8 +35,12 @@ const PRICE_TIERS = [
     priceKey: "convention.registration.trio.price",
   },
   {
-    nameKey: "convention.registration.soloDuo.name",
-    priceKey: "convention.registration.soloDuo.price",
+    nameKey: "convention.registration.duo.name",
+    priceKey: "convention.registration.duo.price",
+  },
+  {
+    nameKey: "convention.registration.solo.name",
+    priceKey: "convention.registration.solo.price",
   },
 ] as const;
 

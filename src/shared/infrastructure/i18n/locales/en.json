@@ -543,9 +543,13 @@
         "name": "Room for 4 people",
         "price": "$673,540 COP each"
       },
-      "soloDuo": {
-        "name": "Room for 1 or 2 people",
+      "duo": {
+        "name": "Room for 2 people",
         "price": "$990,080 COP each"
+      },
+      "solo": {
+        "name": "Room for 1 person",
+        "price": "$1,980,160 COP"
       },
       "cta": "Reserve",
       "reserveLink": "Reserve hotel",

@@ -543,9 +543,13 @@
         "name": "Habitación para 4 personas",
         "price": "$673.540 COP c/u"
       },
-      "soloDuo": {
-        "name": "Habitación para 1 o 2 personas",
+      "duo": {
+        "name": "Habitación para 2 personas",
         "price": "$990.080 COP c/u"
+      },
+      "solo": {
+        "name": "Habitación para 1 persona",
+        "price": "$1.980.160 COP"
       },
       "cta": "Reservar",
       "reserveLink": "Reservar hotel",
