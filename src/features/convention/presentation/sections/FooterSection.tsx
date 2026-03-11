@@ -1,19 +1,11 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { LucideIcon } from "lucide-react";
 import { Globe } from "lucide-react";
-import { useNavigate } from "react-router";
 
 import { Button } from "@/shared/presentation/ui/button";
 import { cn } from "@/shared/application/utils/cn";
 import { tid } from "@/shared/application/utils/tid";
 import { WavePattern } from "../components/WavePattern";
-import { SECTION_IDS } from "@/features/convention/domain/constants";
-
-const EXPERIMENT_ID = "hero-bath-layout";
-const EXPERIMENT_KEY = `experiment:${EXPERIMENT_ID}`;
-const VARIANTS = ["control", "treatment", "pattern"] as const;
-type HeroVariant = (typeof VARIANTS)[number];
 
 function FooterCrescent() {
   return (
@@ -47,57 +39,6 @@ function FooterCrescent() {
         mask="url(#footer-crescent-mask)"
       />
     </svg>
-  );
-}
-
-function ExperimentToggle() {
-  const navigate = useNavigate();
-  const [variant, setVariant] = useState<HeroVariant>(() => {
-    const stored = localStorage.getItem(EXPERIMENT_KEY);
-    if (stored === "treatment" || stored === "pattern") {
-      return stored;
-    }
-    return "control";
-  });
-
-  const toggle = (next: HeroVariant) => {
-    localStorage.setItem(EXPERIMENT_KEY, next);
-    setVariant(next);
-    window.dispatchEvent(
-      new CustomEvent("experiment:change", {
-        detail: { experimentId: EXPERIMENT_ID, variant: next },
-      })
-    );
-    void navigate(`?section=${SECTION_IDS.HERO}`);
-    document
-      .getElementById(SECTION_IDS.HERO)
-      ?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  return (
-    <div className="mt-6 flex flex-col items-center gap-1.5">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground/50">
-        Hero A/B/C
-      </p>
-      <div className="flex overflow-hidden rounded-full border border-white/10 bg-black/30 p-0.5">
-        {VARIANTS.map((v) => (
-          <button
-            key={v}
-            onClick={() => {
-              toggle(v);
-            }}
-            className={cn(
-              "rounded-full px-3 py-1 text-[11px] font-medium capitalize transition-all duration-200",
-              variant === v
-                ? "bg-accent/80 text-white"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            {v}
-          </button>
-        ))}
-      </div>
-    </div>
   );
 }
 
@@ -251,8 +192,6 @@ export function FooterSection() {
                 {t("convention.footer.version", { version: appVersion })}
               </p>
             </div>
-
-            <ExperimentToggle />
           </div>
         </div>
       </div>

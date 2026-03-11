@@ -6,13 +6,8 @@ import { Button } from "@/shared/presentation/ui/button";
 import { tid } from "@/shared/application/utils/tid";
 import { SECTION_IDS } from "@/features/convention/domain/constants";
 import { useIsMobileViewport } from "@/shared/application/hooks/useIsMobileViewport";
-import { useExperiment } from "@/shared/application/hooks/useExperiment";
 
 const heroBathSingle = "/hero-bath-preview.webp";
-
-const EXPERIMENT_ID = "hero-bath-layout";
-const VARIANTS = ["control", "treatment", "pattern"] as const;
-type HeroVariant = (typeof VARIANTS)[number];
 
 const heroTextShadow = {
   textShadow: "0 2px 4px rgba(0,0,0,0.95), 0 4px 16px rgba(0,0,0,0.75)",
@@ -136,7 +131,7 @@ function HeroSparkles() {
   );
 }
 
-function HeroTextContent({ showCrescent }: { readonly showCrescent: boolean }) {
+function HeroTextContent() {
   const { t } = useTranslation();
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -150,7 +145,7 @@ function HeroTextContent({ showCrescent }: { readonly showCrescent: boolean }) {
           {t("convention.hero.eyebrow")}
         </p>
         <div className="relative inline-block">
-          {showCrescent && <HeroCrescent />}
+          <HeroCrescent />
           <h1
             className="hero-title relative z-[1] text-[4.5rem] leading-none text-white md:text-[7rem] lg:text-[9rem] xl:text-[10rem] 2xl:text-[12rem]"
             style={heroTextShadow}
@@ -196,11 +191,6 @@ function HeroTextContent({ showCrescent }: { readonly showCrescent: boolean }) {
  */
 export function HeroSection() {
   const isMobileViewport = useIsMobileViewport();
-  const variant = useExperiment(
-    EXPERIMENT_ID,
-    VARIANTS,
-    "pattern"
-  ) as HeroVariant;
 
   return (
     <section
@@ -217,7 +207,7 @@ export function HeroSection() {
         </div>
       </div>
 
-      <HeroTextContent showCrescent={variant !== "control"} />
+      <HeroTextContent />
     </section>
   );
 }
