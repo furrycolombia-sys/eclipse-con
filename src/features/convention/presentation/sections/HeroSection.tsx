@@ -8,6 +8,7 @@ import { SECTION_IDS } from "@/features/convention/domain/constants";
 import { useIsMobileViewport } from "@/shared/application/hooks/useIsMobileViewport";
 
 const heroBathSingle = "/hero-bath-preview.webp";
+const crescentMoonAsset = "/crescent-moon.svg";
 
 const heroTextShadow = {
   textShadow: "0 2px 4px rgba(0,0,0,0.95), 0 4px 16px rgba(0,0,0,0.75)",
@@ -31,11 +32,10 @@ function HeroBathPicture({ className = "" }: { readonly className?: string }) {
 
 function HeroCrescent() {
   return (
-    <svg
+    <img
+      src={crescentMoonAsset}
+      alt=""
       aria-hidden="true"
-      viewBox="0 0 500 500"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
       className="pointer-events-none absolute"
       style={{
         height: "250%",
@@ -44,23 +44,9 @@ function HeroCrescent() {
         top: "50%",
         transform: "translateY(-43%)",
         zIndex: 0,
+        opacity: 0.5,
       }}
-    >
-      <defs>
-        <mask id="hero-crescent-mask">
-          <circle cx="250" cy="250" r="220" fill="white" />
-          <circle cx="285" cy="238" r="190" fill="black" />
-        </mask>
-      </defs>
-      <circle
-        cx="250"
-        cy="250"
-        r="220"
-        fill="white"
-        opacity="0.5"
-        mask="url(#hero-crescent-mask)"
-      />
-    </svg>
+    />
   );
 }
 
@@ -165,9 +151,9 @@ function HeroTextContent() {
       <Button
         ref={buttonRef}
         asChild
-        variant="glow"
+        variant="ghost"
         size="lg"
-        className="mt-14 h-auto px-10 py-3.5 text-base md:mt-16"
+        className="relative mt-14 h-auto overflow-hidden rounded-full bg-accent px-10 py-3.5 text-base font-black uppercase tracking-[0.22em] text-accent-foreground transition-all duration-300 before:absolute before:inset-0 before:-translate-x-full before:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)] before:transition-transform before:duration-700 hover:scale-[1.015] hover:bg-accent hover:brightness-110 hover:text-accent-foreground hover:before:translate-x-full focus-visible:ring-accent/90 md:mt-16"
       >
         <Link
           to={`?section=${encodeURIComponent(SECTION_IDS.REGISTRATION)}`}

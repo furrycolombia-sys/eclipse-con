@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" fill="none">
+  <defs>
+    <mask id="crescent-mask">
+      <rect width="500" height="500" fill="#000" />
+      <circle cx="250" cy="250" r="220" fill="#fff" />
+      <circle cx="285" cy="238" r="190" fill="#000" />
+    </mask>
+  </defs>
+  <rect width="500" height="500" fill="#fff" mask="url(#crescent-mask)" />
+</svg>

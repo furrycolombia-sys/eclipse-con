@@ -179,8 +179,13 @@ export function HeroCanvasSky({
         return;
       }
 
-      const startX = width * (0.05 + Math.random() * 0.55);
-      const startY = height * (0.08 + Math.random() * 0.45);
+      // Keep trails away from the hero moon lockup so they do not cut through it.
+      const startX = isMobileViewport
+        ? width * (0.62 + Math.random() * 0.2)
+        : width * (0.58 + Math.random() * 0.24);
+      const startY = isMobileViewport
+        ? height * (0.14 + Math.random() * 0.16)
+        : height * (0.08 + Math.random() * 0.24);
       const speed = isMobileViewport ? 260 : 340;
       const angle = (-25 * Math.PI) / 180;
       const vx = Math.cos(angle) * speed;
@@ -605,7 +610,6 @@ export function HeroCanvasSky({
         background:
           "linear-gradient(to bottom, #01020a 0%, #040824 18%, #09133a 44%, #060c26 72%, #02040d 100%)",
         willChange: "transform",
-        contain: "strict",
       }}
       aria-hidden="true"
     />
