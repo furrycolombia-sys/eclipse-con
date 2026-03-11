@@ -1,6 +1,6 @@
 import { tid } from "@/shared/application/utils/tid";
 import { SECTION_IDS } from "@/features/convention/domain/constants";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
 import { NavigationBar } from "./components/NavigationBar";
@@ -299,15 +299,8 @@ function useSectionUrlSync() {
  * Exported as `Component` for React Router's `lazy` route loader.
  */
 export function Component() {
-  const [effectsReady, setEffectsReady] = useState(false);
+  const effectsReady = typeof window !== "undefined";
   useSectionUrlSync();
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    setEffectsReady(true);
-  }, []);
 
   return (
     <div className="relative isolate" {...tid("convention-page")}>

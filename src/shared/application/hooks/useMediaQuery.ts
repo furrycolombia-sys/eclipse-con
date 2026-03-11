@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+const noop = () => undefined;
 
 function getMatches(query: string) {
   if (typeof window === "undefined") {
@@ -14,26 +16,20 @@ function getMatches(query: string) {
  * @returns `true` while the media query matches, `false` otherwise.
  */
 export function useMediaQuery(query: string) {
-  const [matches, setMatches] = useState(() => getMatches(query));
+  return useSyncExternalStore(
+    (onStoreChange) => {
+      if (typeof window === "undefined") {
+        return noop;
+      }
 
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return undefined;
-    }
+      const mediaQuery = window.matchMedia(query);
+      mediaQuery.addEventListener("change", onStoreChange);
 
-    const mediaQuery = window.matchMedia(query);
-    const handleChange = (event: MediaQueryListEvent) => {
-      setMatches(event.matches);
-    };
-
-    setMatches(mediaQuery.matches);
-
-    mediaQuery.addEventListener("change", handleChange);
-
-    return () => {
-      mediaQuery.removeEventListener("change", handleChange);
-    };
-  }, [query]);
-
-  return matches;
+      return () => {
+        mediaQuery.removeEventListener("change", onStoreChange);
+      };
+    },
+    () => getMatches(query),
+    () => false
+  );
 }

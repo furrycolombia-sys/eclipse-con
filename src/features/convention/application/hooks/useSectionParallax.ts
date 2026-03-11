@@ -17,7 +17,6 @@ export function useSectionParallax(
 
   useEffect(() => {
     if (!enabled) {
-      setOffset(0);
       return;
     }
 
@@ -57,5 +56,5 @@ export function useSectionParallax(
     };
   }, [enabled, ref, speed]);
 
-  return offset;
+  return enabled ? offset : 0;
 }

@@ -16,7 +16,6 @@ export function useParallax(speed = 0.3) {
 
   useEffect(() => {
     if (prefersReducedMotion || isMobileViewport) {
-      setOffset(0);
       return undefined;
     }
 
@@ -41,5 +40,5 @@ export function useParallax(speed = 0.3) {
     };
   }, [speed, prefersReducedMotion, isMobileViewport]);
 
-  return offset;
+  return prefersReducedMotion || isMobileViewport ? 0 : offset;
 }

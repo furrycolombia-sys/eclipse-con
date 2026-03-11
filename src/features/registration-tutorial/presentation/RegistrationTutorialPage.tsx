@@ -76,9 +76,6 @@ function StepIllustration({ step }: Readonly<{ step: StepNumber }>) {
 
 const useTutorialStepState = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [activeStep, setActiveStep] = useState<StepNumber>(() =>
-    parseStepParameter(searchParams.get("step"))
-  );
   const [completedSteps, setCompletedSteps] = useState<
     Record<StepNumber, boolean>
   >({
@@ -86,6 +83,7 @@ const useTutorialStepState = () => {
     2: false,
     3: false,
   });
+  const activeStep = parseStepParameter(searchParams.get("step"));
 
   const progress = useMemo(() => {
     const total = STEPS.length;
@@ -130,7 +128,9 @@ const useTutorialStepState = () => {
       stepNumber: previousStep,
       origin: "prev_button",
     });
-    setActiveStep(previousStep);
+    const nextSearch = new URLSearchParams(searchParams);
+    nextSearch.set("step", String(previousStep));
+    setSearchParams(nextSearch, { replace: true });
   };
 
   const goToNextStep = () => {
@@ -139,15 +139,10 @@ const useTutorialStepState = () => {
     }
     const nextStep = (activeStep + 1) as StepNumber;
     trackTutorialStepSelected({ stepNumber: nextStep, origin: "next_button" });
-    setActiveStep(nextStep);
+    const nextSearch = new URLSearchParams(searchParams);
+    nextSearch.set("step", String(nextStep));
+    setSearchParams(nextSearch, { replace: true });
   };
-
-  useEffect(() => {
-    const stepFromUrl = parseStepParameter(searchParams.get("step"));
-    setActiveStep((currentStep) =>
-      currentStep === stepFromUrl ? currentStep : stepFromUrl
-    );
-  }, [searchParams]);
 
   useEffect(() => {
     const stepInUrl = searchParams.get("step");
@@ -167,7 +162,11 @@ const useTutorialStepState = () => {
     progress,
     goToNextStep,
     goToPreviousStep,
-    setActiveStep,
+    setActiveStep: (step: StepNumber) => {
+      const nextSearch = new URLSearchParams(searchParams);
+      nextSearch.set("step", String(step));
+      setSearchParams(nextSearch, { replace: true });
+    },
     toggleStepDone,
   };
 };
