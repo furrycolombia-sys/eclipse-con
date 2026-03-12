@@ -47,6 +47,12 @@ const COMMUNITY_LINKS: {
     iconUrl: "https://cdn.simpleicons.org/telegram/26a5e4?viewbox=auto",
   },
   {
+    label: "Bluesky",
+    href: "https://bsky.app/profile/furrycolombia.bsky.social",
+    icon: { type: "brand", slug: "bluesky" },
+    iconUrl: "https://cdn.simpleicons.org/bluesky/1185fe?viewbox=auto",
+  },
+  {
     label: "Twitter",
     href: "https://twitter.com/FurryColombia",
     icon: { type: "brand", slug: "x" },
