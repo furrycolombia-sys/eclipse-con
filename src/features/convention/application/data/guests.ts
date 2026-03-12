@@ -34,4 +34,12 @@ export const GUESTS: readonly Guest[] = [
     initials: "NL",
     imageSrc: "/assets/organizers/nell.webp",
   },
+  {
+    id: "guest5",
+    nameKey: "convention.guests.guest5.name",
+    roleKey: "convention.guests.guest5.role",
+    bioKey: "convention.guests.guest5.bio",
+    initials: "VA",
+    imageSrc: "/assets/organizers/vaoan.jpg",
+  },
 ];

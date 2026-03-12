@@ -469,6 +469,11 @@
         "name": "Nell",
         "role": "Artista",
         "bio": "Crea las piezas visuales y el arte que le dan identidad creativa a Moonfest."
+      },
+      "guest5": {
+        "name": "Vaoan",
+        "role": "Tecnología y web",
+        "bio": "Construye y mantiene la infraestructura digital que hace funcionar Moonfest entre bambalinas."
       }
     },
     "groups": {

@@ -1,4 +1,13 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(pnpm typecheck:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(rm -rf dist-static)",
+      "Bash(pnpm build:static)",
+      "Bash(pnpm exec:*)"
+    ]
+  },
   "enabledPlugins": {
     "commit-commands@claude-plugins-official": true
   }

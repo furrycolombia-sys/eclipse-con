@@ -53,10 +53,12 @@ export function getVenueBadges(language: string) {
     {
       key: "convention.venue.award",
       href: tripadvisorUrl,
+      icon: false,
     },
     {
       key: "convention.venue.certification",
       href: CERTIFICATIONS_URL,
+      icon: false,
     },
   ] as const;
 }

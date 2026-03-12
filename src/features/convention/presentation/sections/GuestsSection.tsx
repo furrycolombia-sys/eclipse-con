@@ -22,9 +22,14 @@ export function GuestsSection() {
           {t("convention.guests.subtitle")}
         </p>
       </div>
-      <div className="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+      <div className="-mx-4 mt-12 flex flex-wrap justify-center">
         {GUESTS.map((guest) => (
-          <GuestCard key={guest.id} guest={guest} />
+          <div
+            key={guest.id}
+            className="flex w-full flex-col px-4 pb-8 sm:w-1/2 xl:w-1/3"
+          >
+            <GuestCard guest={guest} />
+          </div>
         ))}
       </div>
     </SectionWrapper>

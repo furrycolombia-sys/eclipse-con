@@ -1,7 +1,6 @@
 {
   "recommendations": [
     // Agents
-    "GitHub.copilot",
     "anthropic.claude-code",
     "openai.chatgpt",
     // GitLens

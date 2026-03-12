@@ -469,6 +469,11 @@
         "name": "Nell",
         "role": "Artist",
         "bio": "Creates the artwork and visual pieces that shape Moonfest's creative identity."
+      },
+      "guest5": {
+        "name": "Vaoan",
+        "role": "Tech & web",
+        "bio": "Builds and maintains the digital infrastructure that keeps Moonfest running behind the scenes."
       }
     },
     "groups": {
