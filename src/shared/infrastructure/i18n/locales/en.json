@@ -474,6 +474,11 @@
         "name": "Vaoan",
         "role": "Tech & web",
         "bio": "Builds and maintains the digital infrastructure that keeps Moonfest running behind the scenes."
+      },
+      "guest6": {
+        "name": "Nax",
+        "role": "Logistics",
+        "bio": "Handles planning and coordination details so the convention runs smoothly for attendees and staff."
       }
     },
     "groups": {

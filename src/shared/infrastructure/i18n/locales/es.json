@@ -474,6 +474,11 @@
         "name": "Vaoan",
         "role": "Tecnología y web",
         "bio": "Construye y mantiene la infraestructura digital que hace funcionar Moonfest entre bambalinas."
+      },
+      "guest6": {
+        "name": "Nax",
+        "role": "Logística",
+        "bio": "Se encarga de la planificación y la coordinación para que la convención funcione sin problemas para asistentes y staff."
       }
     },
     "groups": {
