@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 
+import { TRAVEL_TIP_KEYS } from "@/features/convention/application/data/travelTips";
 import { SECTION_IDS } from "@/features/convention/domain/constants";
 import { SectionHeader } from "../components/SectionHeader";
 import { SectionWrapper } from "../components/SectionWrapper";
@@ -7,16 +8,6 @@ import { SectionWrapper } from "../components/SectionWrapper";
 /** Renders the Travel section with climate and local area tips in a two-column card grid. */
 export function TravelSection() {
   const { t } = useTranslation();
-  const tipKeys = [
-    "punctuality",
-    "weather",
-    "rain",
-    "thermals",
-    "lago",
-    "pantano",
-    "salitre",
-    "food",
-  ] as const;
 
   return (
     <SectionWrapper
@@ -45,7 +36,7 @@ export function TravelSection() {
         </p>
       </div>
       <div className="mt-10 grid gap-6 md:grid-cols-2">
-        {tipKeys.map((key) => (
+        {TRAVEL_TIP_KEYS.map((key) => (
           <div
             key={key}
             className="rounded-2xl border border-white/10 bg-surface/70 p-5"

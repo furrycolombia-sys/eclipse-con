@@ -456,34 +456,19 @@
         "bio": "Welcomes attendees and leads key event communications, including reservation updates and community announcements."
       },
       "guest2": {
-        "name": "Ash Coyote",
-        "role": "Operations & logistics",
-        "bio": "Experienced in convention planning and large‑team coordination."
-      },
-      "guest3": {
-        "name": "Majira Stark",
-        "role": "Community & artists",
-        "bio": "Global event presence and direct connection with the furry community."
-      },
-      "guest4": {
-        "name": "Luna Nova",
-        "role": "Art & experience",
-        "bio": "Visual curation, ambiance, and detail‑oriented experience design."
-      },
-      "guest5": {
         "name": "Nacho",
         "role": "Community host",
         "bio": "Coordinates social moments and on-site support so attendees feel welcomed throughout the convention."
       },
-      "guest6": {
-        "name": "Ranita",
+      "guest3": {
+        "name": "Lucia Fur",
         "role": "Creative producer",
         "bio": "Shapes visual storytelling and activity flow to keep every organizer experience cohesive and memorable."
       },
-      "guest7": {
-        "name": "Jecht Howl (Gau)",
-        "role": "Event host",
-        "bio": "Welcomes attendees and leads key event communications, including reservation updates and community announcements."
+      "guest4": {
+        "name": "Nell",
+        "role": "Artist",
+        "bio": "Creates the artwork and visual pieces that shape Moonfest's creative identity."
       }
     },
     "groups": {

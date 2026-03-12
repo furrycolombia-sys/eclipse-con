@@ -16,6 +16,35 @@ export interface Guest {
   readonly imageSrc: string;
 }
 
+/** Union of all available display mode identifiers for the News section. */
+export type NewsLayoutMode =
+  | "focus"
+  | "drawer"
+  | "accordion"
+  | "zoom"
+  | "spotlight"
+  | "carouselThumbs"
+  | "masonry"
+  | "timeline"
+  | "magazine"
+  | "mosaic"
+  | "index"
+  | "billboard"
+  | "poster"
+  | "gallery"
+  | "split"
+  | "rail"
+  | "zigzag"
+  | "diagonal"
+  | "wall"
+  | "table"
+  | "banner"
+  | "email"
+  | "slanted"
+  | "polaroid"
+  | "polaroidReadmore"
+  | "readmore";
+
 /** Represents a registration package tier with pricing and included features. */
 export interface TicketTier {
   readonly id: string;

@@ -7,6 +7,7 @@ import unicorn from "eslint-plugin-unicorn";
 import unusedImports from "eslint-plugin-unused-imports";
 import tseslint from "typescript-eslint";
 import globals from "globals";
+import { presentationNoInlineDataRule } from "./eslint-rules/presentation-no-inline-data.mjs";
 
 export default tseslint.config(
   {
@@ -20,6 +21,7 @@ export default tseslint.config(
       "test-results/**",
       "scripts/**",
       ".claude/**",
+      "eslint-rules/**",
       ".lh-profile/**",
       "eslint.config.mjs",
       "stylelint.config.mjs",
@@ -167,6 +169,21 @@ export default tseslint.config(
           format: ["PascalCase"],
         },
       ],
+    },
+  },
+
+  // Clean architecture boundary: no inline datasets in presentation
+  {
+    files: ["src/features/**/presentation/**/*.{ts,tsx}"],
+    plugins: {
+      architecture: {
+        rules: {
+          "presentation-no-inline-data": presentationNoInlineDataRule,
+        },
+      },
+    },
+    rules: {
+      "architecture/presentation-no-inline-data": "error",
     },
   },
 

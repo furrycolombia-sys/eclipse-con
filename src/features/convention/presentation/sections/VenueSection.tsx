@@ -13,6 +13,11 @@ import {
   Globe,
 } from "lucide-react";
 
+import {
+  VENUE_FEATURE_KEYS,
+  getVenueBadges,
+  getVenueSources,
+} from "@/features/convention/application/data/venue";
 import { Badge } from "@/shared/presentation/ui/badge";
 import { Button } from "@/shared/presentation/ui/button";
 import { Card, CardContent } from "@/shared/presentation/ui/card";
@@ -25,64 +30,28 @@ import { SECTION_IDS } from "@/features/convention/domain/constants";
 import { SectionHeader } from "../components/SectionHeader";
 import { SectionWrapper } from "../components/SectionWrapper";
 
-const VENUE_FEATURES = [
-  { key: "convention.venue.feature1", icon: CalendarDays },
-  { key: "convention.venue.feature2", icon: Sparkles },
-  { key: "convention.venue.feature3", icon: Trees },
-  { key: "convention.venue.feature4", icon: Utensils },
-  { key: "convention.venue.feature5", icon: Building2 },
-  { key: "convention.venue.feature6", icon: PawPrint },
-  { key: "convention.venue.feature7", icon: Wifi },
-  { key: "convention.venue.feature8", icon: Bike },
-  { key: "convention.venue.feature9", icon: Globe },
-] as const;
-
-const TRIPADVISOR_URLS = {
-  en: "https://www.tripadvisor.com/Hotel_Review-g312856-d603709-Reviews-Estelar_Paipa_Hotel_Convention_Center-Paipa_Boyaca_Department.html",
-  es: "https://www.tripadvisor.es/Hotel_Review-g312856-d603709-Reviews-Estelar_Paipa_Hotel_Convention_Center-Paipa_Boyaca_Department.html",
+const VENUE_FEATURE_ICONS = {
+  "convention.venue.feature1": CalendarDays,
+  "convention.venue.feature2": Sparkles,
+  "convention.venue.feature3": Trees,
+  "convention.venue.feature4": Utensils,
+  "convention.venue.feature5": Building2,
+  "convention.venue.feature6": PawPrint,
+  "convention.venue.feature7": Wifi,
+  "convention.venue.feature8": Bike,
+  "convention.venue.feature9": Globe,
 } as const;
-
-const SERVICES_URLS = {
-  en: "https://www.estelarpaipa.com/en/services/",
-  es: "https://www.estelarpaipa.com/es/servicios/",
-} as const;
-
-const EVENTS_URL = "https://www.estelarpaipa.com/eventos/";
-const CLIMATE_URL =
-  "https://www.weather-atlas.com/en/colombia/paipa-weather-july";
-const CERTIFICATIONS_URL =
-  "https://es.travel2latam.com/news-62140-hoteles-estelar-obtiene-sellos-safe-guard-y-check-in-certificado";
 
 /** Renders the Venue section with hotel details, feature list, badge links, and photos. */
 // eslint-disable-next-line max-lines-per-function
 export function VenueSection() {
   const { t, i18n } = useTranslation();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const isSpanish = i18n.language.startsWith("es");
-  const tripadvisorUrl = isSpanish ? TRIPADVISOR_URLS.es : TRIPADVISOR_URLS.en;
-  const servicesUrl = isSpanish ? SERVICES_URLS.es : SERVICES_URLS.en;
-  const venueBadges: {
-    key:
-      | "convention.venue.rating"
-      | "convention.venue.award"
-      | "convention.venue.certification";
-    href: string;
-    icon?: boolean;
-  }[] = [
-    { key: "convention.venue.rating", href: tripadvisorUrl, icon: true },
-    { key: "convention.venue.award", href: tripadvisorUrl },
-    { key: "convention.venue.certification", href: CERTIFICATIONS_URL },
-  ];
-  const venueSources = [
-    { key: "convention.venue.sourceTripadvisor", href: tripadvisorUrl },
-    { key: "convention.venue.sourceServices", href: servicesUrl },
-    { key: "convention.venue.sourceEvents", href: EVENTS_URL },
-    { key: "convention.venue.sourceClimate", href: CLIMATE_URL },
-    { key: "convention.venue.sourceCertifications", href: CERTIFICATIONS_URL },
-  ] as const;
+  const venueBadges = getVenueBadges(i18n.language);
+  const venueSources = getVenueSources(i18n.language);
 
-  const primaryFeatures = VENUE_FEATURES.slice(0, 6);
-  const extraFeatures = VENUE_FEATURES.slice(6);
+  const primaryFeatures = VENUE_FEATURE_KEYS.slice(0, 6);
+  const extraFeatures = VENUE_FEATURE_KEYS.slice(6);
 
   return (
     <SectionWrapper id={SECTION_IDS.VENUE} surfaceTone="deep">
@@ -133,12 +102,15 @@ export function VenueSection() {
             <p>{t("convention.venue.description2")}</p>
           </div>
           <ul className="mt-6 grid gap-3 text-sm text-foreground/85 sm:grid-cols-2">
-            {primaryFeatures.map(({ key, icon: Icon }) => (
-              <li key={key} className="flex items-start gap-2">
-                <Icon size={16} className="mt-0.5 text-accent" />
-                <span>{t(key)}</span>
-              </li>
-            ))}
+            {primaryFeatures.map((key) => {
+              const Icon = VENUE_FEATURE_ICONS[key];
+              return (
+                <li key={key} className="flex items-start gap-2">
+                  <Icon size={16} className="mt-0.5 text-accent" />
+                  <span>{t(key)}</span>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
@@ -192,12 +164,15 @@ export function VenueSection() {
                 <CollapsibleContent className="mt-4 space-y-3 text-sm text-muted-foreground">
                   <p>{t("convention.venue.description3")}</p>
                   <ul className="grid gap-3 text-foreground/85 sm:grid-cols-2">
-                    {extraFeatures.map(({ key, icon: Icon }) => (
-                      <li key={key} className="flex items-start gap-2">
-                        <Icon size={16} className="mt-0.5 text-accent" />
-                        <span>{t(key)}</span>
-                      </li>
-                    ))}
+                    {extraFeatures.map((key) => {
+                      const Icon = VENUE_FEATURE_ICONS[key];
+                      return (
+                        <li key={key} className="flex items-start gap-2">
+                          <Icon size={16} className="mt-0.5 text-accent" />
+                          <span>{t(key)}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                   <div className="flex flex-wrap items-center gap-2 text-xs text-foreground/70">
                     <span className="uppercase tracking-wide text-foreground/50">

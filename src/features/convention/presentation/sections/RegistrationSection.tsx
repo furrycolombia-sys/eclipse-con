@@ -3,6 +3,10 @@ import { useTranslation } from "react-i18next";
 
 import { Check } from "lucide-react";
 
+import {
+  PACKAGE_FEATURE_KEYS,
+  PRICE_TIERS,
+} from "@/features/convention/application/data/registration";
 import { Button } from "@/shared/presentation/ui/button";
 import {
   Card,
@@ -18,31 +22,6 @@ import {
 import { tid } from "@/shared/application/utils/tid";
 import { SectionHeader } from "../components/SectionHeader";
 import { SectionWrapper } from "../components/SectionWrapper";
-
-const PACKAGE_FEATURES = [
-  "convention.registration.package.feature1",
-  "convention.registration.package.feature2",
-  "convention.registration.package.feature5",
-] as const;
-
-const PRICE_TIERS = [
-  {
-    nameKey: "convention.registration.quad.name",
-    priceKey: "convention.registration.quad.price",
-  },
-  {
-    nameKey: "convention.registration.trio.name",
-    priceKey: "convention.registration.trio.price",
-  },
-  {
-    nameKey: "convention.registration.duo.name",
-    priceKey: "convention.registration.duo.price",
-  },
-  {
-    nameKey: "convention.registration.solo.name",
-    priceKey: "convention.registration.solo.price",
-  },
-] as const;
 
 /** Renders the Registration section with a single consolidated pricing card and CTA links. */
 export function RegistrationSection() {
@@ -67,7 +46,7 @@ export function RegistrationSection() {
           </CardHeader>
           <CardContent className="space-y-6">
             <ul className="space-y-3">
-              {PACKAGE_FEATURES.map((key) => (
+              {PACKAGE_FEATURE_KEYS.map((key) => (
                 <li
                   key={key}
                   className="flex items-center gap-2 text-sm text-muted-foreground"

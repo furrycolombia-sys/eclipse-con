@@ -24,6 +24,10 @@ import {
   SelectValue,
 } from "@/shared/presentation/ui/select";
 import { SECTION_IDS } from "@/features/convention/domain/constants";
+import {
+  DEFAULT_NEWS_LAYOUT,
+  NEWS_LAYOUT_MODES,
+} from "@/features/convention/application/data/newsLayouts";
 import { cn } from "@/shared/application/utils/cn";
 import { SectionHeader } from "../components/SectionHeader";
 import { SectionWrapper } from "../components/SectionWrapper";
@@ -32,8 +36,6 @@ import {
   embeddedTelegramEs,
 } from "@/features/convention/infrastructure/telegram/embedded";
 import {
-  DEFAULT_NEWS_LAYOUT,
-  NEWS_LAYOUT_MODES,
   type NewsLayoutMode,
   type TelegramArchive,
   type TelegramMessage,
