@@ -6,7 +6,6 @@ import { Button } from "@/shared/presentation/ui/button";
 import { tid } from "@/shared/application/utils/tid";
 import { SECTION_IDS } from "@/features/convention/domain/constants";
 import { useIsMobileViewport } from "@/shared/application/hooks/useIsMobileViewport";
-import { CrescentMoon } from "@/features/convention/presentation/components/CrescentMoon";
 
 const heroBathSingle = "/hero-bath-preview.webp";
 
@@ -30,89 +29,8 @@ function HeroBathPicture({ className = "" }: { readonly className?: string }) {
   );
 }
 
-function HeroCrescent() {
-  return (
-    <CrescentMoon
-      className="pointer-events-none absolute text-white"
-      style={{
-        height: "250%",
-        aspectRatio: "1",
-        left: "12%",
-        top: "50%",
-        transform: "translateY(-43%)",
-        zIndex: 0,
-        opacity: 0.5,
-      }}
-    />
-  );
-}
-
-/** SVG path for a 4-pointed star sparkle centred in a 24×24 viewBox. */
-const SPARKLE_PATH =
-  "M12 0Q13.2 10.8 24 12Q13.2 13.2 12 24Q10.8 13.2 0 12Q10.8 10.8 12 0Z";
-
-function Sparkle({
-  size,
-  className,
-  style,
-}: Readonly<{
-  size: number;
-  className?: string;
-  style?: React.CSSProperties;
-}>) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
-      className={className}
-      style={style}
-    >
-      <path d={SPARKLE_PATH} />
-    </svg>
-  );
-}
-
-function HeroSparkles() {
-  return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute z-[1]"
-      style={{
-        right: "clamp(-1rem, -1.8vw, -0.5rem)",
-        top: "clamp(0.5rem, 1vw, 1rem)",
-      }}
-    >
-      {/* Large sparkle — sits just above-right of the "t" crossbar */}
-      <Sparkle
-        size={0}
-        className="absolute text-white/90"
-        style={{
-          width: "clamp(1.1rem, 2.6vw, 2.2rem)",
-          height: "clamp(1.1rem, 2.6vw, 2.2rem)",
-          right: 0,
-          top: 0,
-          filter: "drop-shadow(0 0 6px rgba(255,255,255,0.6))",
-        }}
-      />
-      {/* Small sparkle — further up and to the right */}
-      <Sparkle
-        size={0}
-        className="absolute text-white/60"
-        style={{
-          width: "clamp(0.55rem, 1.1vw, 0.95rem)",
-          height: "clamp(0.55rem, 1.1vw, 0.95rem)",
-          right: "clamp(-0.9rem, -1.6vw, -0.4rem)",
-          top: "clamp(1.2rem, 2.8vw, 2.4rem)",
-          filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
-        }}
-      />
-    </div>
-  );
-}
+/** Path to the Moonfest logo SVG in /public. */
+const MOONFEST_LOGO_SRC = "/Moonfest_Logo_01.svg";
 
 function HeroTextContent() {
   const { t } = useTranslation();
@@ -121,25 +39,19 @@ function HeroTextContent() {
   return (
     <div className="relative z-30 px-4 text-center">
       <div>
+        <img
+          src={MOONFEST_LOGO_SRC}
+          alt={`${t("convention.hero.eyebrow")} ${t("convention.hero.title")}`}
+          className="hero-title w-[20rem] md:w-[32rem] lg:w-[42rem] xl:w-[48rem] 2xl:w-[56rem]"
+          style={{
+            filter:
+              "drop-shadow(0 2px 4px rgba(0,0,0,0.95)) drop-shadow(0 4px 16px rgba(0,0,0,0.75))",
+          }}
+          loading="eager"
+          draggable={false}
+        />
         <p
-          className="-mb-4 text-xl font-bold italic uppercase tracking-[0.35em] text-white/90 md:-mb-6 md:text-2xl lg:-mb-8 lg:text-3xl"
-          style={heroTextShadow}
-        >
-          {t("convention.hero.eyebrow")}
-        </p>
-        <div className="relative inline-block">
-          <HeroCrescent />
-          <h1
-            className="hero-title relative z-[1] text-[4.5rem] leading-none text-white md:text-[7rem] lg:text-[9rem] xl:text-[10rem] 2xl:text-[12rem]"
-            style={heroTextShadow}
-          >
-            {t("convention.hero.title")}
-          </h1>
-          {/* Sparkle decorations — two 4-pointed stars near the "t" */}
-          <HeroSparkles />
-        </div>
-        <p
-          className="mt-24 text-base font-semibold uppercase tracking-[0.35em] text-white/90 md:mt-32 md:text-lg lg:mt-40 lg:text-xl"
+          className="mt-6 text-base font-semibold uppercase tracking-[0.35em] text-white/90 md:mt-8 md:text-lg lg:mt-10 lg:text-xl"
           style={heroTextShadow}
         >
           {t("convention.hero.date")}
@@ -150,7 +62,7 @@ function HeroTextContent() {
         asChild
         variant="ghost"
         size="lg"
-        className="relative mt-14 h-auto overflow-hidden rounded-full bg-accent px-10 py-3.5 text-base font-black uppercase tracking-[0.22em] text-accent-foreground transition-all duration-300 before:absolute before:inset-0 before:-translate-x-full before:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)] before:transition-transform before:duration-700 hover:scale-[1.015] hover:bg-accent hover:brightness-110 hover:text-accent-foreground hover:before:translate-x-full focus-visible:ring-accent/90 md:mt-16"
+        className="relative mt-6 h-auto overflow-hidden rounded-full bg-accent px-10 py-3.5 text-base font-black uppercase tracking-[0.22em] text-accent-foreground transition-all duration-300 before:absolute before:inset-0 before:-translate-x-full before:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)] before:transition-transform before:duration-700 hover:scale-[1.015] hover:bg-accent hover:brightness-110 hover:text-accent-foreground hover:before:translate-x-full focus-visible:ring-accent/90 md:mt-8"
       >
         <Link
           to={`?section=${encodeURIComponent(SECTION_IDS.REGISTRATION)}`}

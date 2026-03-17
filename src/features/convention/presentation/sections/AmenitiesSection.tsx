@@ -66,60 +66,144 @@ const BulletList = ({
   </ul>
 );
 
+/** Bullet-item threshold: cards with this many or more items get the wide tile treatment. */
+const WIDE_TILE_THRESHOLD = 4;
+
+/** Shared hover-glow overlay used by every amenity tile. */
+function TileGlow() {
+  return (
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(224,117,58,0.12),_transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+  );
+}
+
+/** Wide mosaic tile — spans 2 columns, horizontal image-left / content-right layout. */
+function WideTile({
+  item,
+  t,
+  eager,
+}: Readonly<{
+  item: ReturnType<typeof buildAmenityCard>;
+  t: TFunction;
+  eager: boolean;
+}>) {
+  return (
+    <article className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-surface shadow-[0_20px_45px_-30px_rgba(15,23,42,0.9)] lg:col-span-2 lg:flex-row lg:p-5">
+      <TileGlow />
+      <div className="relative flex flex-1 flex-col gap-4 lg:flex-row lg:items-stretch">
+        <div className="relative h-48 w-full shrink-0 overflow-hidden border-white/10 bg-black/20 lg:h-auto lg:w-[240px] lg:rounded-2xl lg:border">
+          <img
+            src={AMENITY_IMAGE_BY_KEY[item.key]}
+            alt={item.imageAlt}
+            className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+            loading={eager ? "eager" : "lazy"}
+          />
+        </div>
+        <div className="flex min-w-0 flex-1 flex-col gap-2 p-5 lg:p-0">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h3 className="font-display text-xl font-semibold text-foreground">
+              {item.title}
+            </h3>
+            <span className="shrink-0 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-accent">
+              {item.price}
+            </span>
+          </div>
+          <p className="text-sm text-foreground/70">{item.description}</p>
+          <div className="mt-auto flex flex-col gap-1.5 pt-2">
+            <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+              {t("convention.amenities.priceLabel")}
+            </div>
+            <BulletList
+              value={item.priceApprox}
+              className="text-sm font-semibold text-foreground/80 lg:columns-2 lg:gap-x-6"
+            />
+            {item.priceNote ? (
+              <p className="text-xs text-foreground/55">{item.priceNote}</p>
+            ) : null}
+            <a
+              href={item.linkUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-1 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent underline decoration-dashed underline-offset-4 transition hover:text-accent-glow"
+              data-content-section="amenities"
+              data-content-id={item.key}
+            >
+              {item.linkLabel}
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+/** Compact mosaic tile — single column, vertical image-top / content-bottom layout. */
+function CompactTile({
+  item,
+  t,
+  eager,
+}: Readonly<{
+  item: ReturnType<typeof buildAmenityCard>;
+  t: TFunction;
+  eager: boolean;
+}>) {
+  return (
+    <article className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-surface shadow-[0_20px_45px_-30px_rgba(15,23,42,0.9)]">
+      <TileGlow />
+      <div className="relative h-40 w-full shrink-0 overflow-hidden">
+        <img
+          src={AMENITY_IMAGE_BY_KEY[item.key]}
+          alt={item.imageAlt}
+          className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+          loading={eager ? "eager" : "lazy"}
+        />
+      </div>
+      <div className="relative flex flex-1 flex-col gap-2 p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="font-display text-lg font-semibold text-foreground">
+            {item.title}
+          </h3>
+          <span className="shrink-0 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-accent">
+            {item.price}
+          </span>
+        </div>
+        <p className="text-sm text-foreground/70">{item.description}</p>
+        <div className="mt-auto flex flex-col gap-1.5 pt-2">
+          <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+            {t("convention.amenities.priceLabel")}
+          </div>
+          <BulletList value={item.priceApprox} />
+          {item.priceNote ? (
+            <p className="text-xs text-foreground/55">{item.priceNote}</p>
+          ) : null}
+          <a
+            href={item.linkUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-1 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent underline decoration-dashed underline-offset-4 transition hover:text-accent-glow"
+            data-content-section="amenities"
+            data-content-id={item.key}
+          >
+            {item.linkLabel}
+          </a>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+/** Mosaic grid of amenity cards — content-heavy cards auto-span two columns. */
 const AmenityCards = ({ t }: Readonly<{ t: TFunction }>) => (
-  <div className="mt-10 grid gap-6 lg:grid-cols-2">
+  <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:[grid-auto-flow:dense]">
     {AMENITY_CARD_KEYS.map((key, index) => {
       const item = buildAmenityCard(t, key);
-      return (
-        <article
-          key={item.key}
-          className="group relative flex overflow-hidden rounded-3xl border border-white/10 bg-surface p-5 shadow-[0_20px_45px_-30px_rgba(15,23,42,0.9)]"
-        >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(224,117,58,0.12),_transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          <div className="relative flex flex-1 flex-col gap-4 md:flex-row md:items-stretch">
-            {/* Image — fixed dimensions, same on all cards */}
-            <div className="relative h-32 w-full shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-black/20 md:h-auto md:w-[180px]">
-              <img
-                src={AMENITY_IMAGE_BY_KEY[item.key]}
-                alt={item.imageAlt}
-                className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
-                loading={index < 2 ? "eager" : "lazy"}
-              />
-            </div>
-            {/* Content — flex column so the link anchors to the bottom */}
-            <div className="flex min-w-0 flex-1 flex-col gap-2">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <h3 className="font-display text-xl font-semibold text-foreground">
-                  {item.title}
-                </h3>
-                <span className="shrink-0 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-accent">
-                  {item.price}
-                </span>
-              </div>
-              <p className="text-sm text-foreground/70">{item.description}</p>
-              {/* Price block */}
-              <div className="mt-auto flex flex-col gap-1.5 pt-2">
-                <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                  {t("convention.amenities.priceLabel")}
-                </div>
-                <BulletList value={item.priceApprox} />
-                {item.priceNote ? (
-                  <p className="text-xs text-foreground/55">{item.priceNote}</p>
-                ) : null}
-                <a
-                  href={item.linkUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-1 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent underline decoration-dashed underline-offset-4 transition hover:text-accent-glow"
-                  data-content-section="amenities"
-                  data-content-id={item.key}
-                >
-                  {item.linkLabel}
-                </a>
-              </div>
-            </div>
-          </div>
-        </article>
+      const isWide =
+        toBulletItems(item.priceApprox).length >= WIDE_TILE_THRESHOLD;
+      const eager = index < 3;
+
+      return isWide ? (
+        <WideTile key={item.key} item={item} t={t} eager={eager} />
+      ) : (
+        <CompactTile key={item.key} item={item} t={t} eager={eager} />
       );
     })}
   </div>
