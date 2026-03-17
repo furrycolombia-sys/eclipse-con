@@ -55,6 +55,7 @@ const NECESSARY_EVENTS = new Set<TrackedEventName>([
 
 interface TrackingRuntimeState {
   queue: AnalyticsEvent[];
+  pendingConsentQueue: AnalyticsEvent[];
   maxScrollDepth: number;
   currentPage: string;
   clickTimes: number[];
@@ -85,10 +86,32 @@ interface TrackContext {
 }
 
 let analyticsConsentGranted = false;
+const activeTrackContexts = new Set<TrackContext>();
 
 /** Updates the module-level consent flag that gates event delivery to remote endpoints. */
 export function setAnalyticsConsentGranted(granted: boolean): void {
   analyticsConsentGranted = granted;
+
+  for (const context of activeTrackContexts) {
+    if (!granted) {
+      context.state.pendingConsentQueue = [];
+      continue;
+    }
+
+    if (context.state.pendingConsentQueue.length === 0) {
+      continue;
+    }
+
+    context.state.queue.push(...context.state.pendingConsentQueue);
+    if (context.state.queue.length > EVENT_QUEUE_LIMIT) {
+      context.state.queue.splice(
+        0,
+        context.state.queue.length - EVENT_QUEUE_LIMIT
+      );
+    }
+    context.state.pendingConsentQueue = [];
+    flush(context, false);
+  }
 }
 
 function createId(): string {
@@ -169,10 +192,6 @@ function track(
   name: TrackedEventName,
   data: Record<string, Primitive> = {}
 ): void {
-  if (!analyticsConsentGranted && !NECESSARY_EVENTS.has(name)) {
-    return;
-  }
-
   const event: AnalyticsEvent = {
     name,
     timestamp: Date.now(),
@@ -183,9 +202,14 @@ function track(
     data: sanitizeEventData(name, data, context.baseData),
   };
 
-  context.state.queue.push(event);
-  if (context.state.queue.length > EVENT_QUEUE_LIMIT) {
-    context.state.queue.shift();
+  const targetQueue =
+    analyticsConsentGranted || NECESSARY_EVENTS.has(name)
+      ? context.state.queue
+      : context.state.pendingConsentQueue;
+
+  targetQueue.push(event);
+  if (targetQueue.length > EVENT_QUEUE_LIMIT) {
+    targetQueue.shift();
   }
 
   if (context.options.debug) {
@@ -984,6 +1008,7 @@ export function initExtremeTracking(options: TrackingOptions): void {
     options,
     state: {
       queue: [],
+      pendingConsentQueue: [],
       maxScrollDepth: 0,
       currentPage: getPath(),
       clickTimes: [],
@@ -1013,6 +1038,7 @@ export function initExtremeTracking(options: TrackingOptions): void {
       anonymousId,
     },
   };
+  activeTrackContexts.add(context);
 
   track(context, "session_start", getContextSignals());
   track(context, "device_performance_class", {
