@@ -49,3 +49,4 @@ scripts/telegram.session-journal
 lighthouse-report.report.html
 lighthouse-report.report.json
 /artifacts
+/.chrome-profile
