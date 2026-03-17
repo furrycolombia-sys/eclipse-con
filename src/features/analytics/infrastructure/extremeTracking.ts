@@ -93,12 +93,7 @@ export function setAnalyticsConsentGranted(granted: boolean): void {
   analyticsConsentGranted = granted;
 
   for (const context of activeTrackContexts) {
-    if (!granted) {
-      context.state.pendingConsentQueue = [];
-      continue;
-    }
-
-    if (context.state.pendingConsentQueue.length === 0) {
+    if (!granted || context.state.pendingConsentQueue.length === 0) {
       continue;
     }
 
@@ -111,6 +106,13 @@ export function setAnalyticsConsentGranted(granted: boolean): void {
     }
     context.state.pendingConsentQueue = [];
     flush(context, false);
+  }
+}
+
+/** Drops buffered optional analytics events that were collected before consent was rejected. */
+export function discardPendingAnalyticsEvents(): void {
+  for (const context of activeTrackContexts) {
+    context.state.pendingConsentQueue = [];
   }
 }
 

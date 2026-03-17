@@ -1,10 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import {
-  getStoredTrackingConsent,
-  TRACKING_CONSENT_UPDATED_EVENT,
-  type TrackingConsentState,
-} from "@/features/analytics/domain/consent";
 import { environment } from "@/shared/infrastructure/config/environment";
 
 declare global {
@@ -16,6 +11,10 @@ declare global {
 
 const GOOGLE_TAG_SCRIPT_ID = "google-analytics-gtag";
 const GOOGLE_TAG_INLINE_SCRIPT_ID = "google-analytics-inline";
+
+interface GoogleAnalyticsProps {
+  readonly hasAnalyticsConsent: boolean;
+}
 
 function removeGoogleAnalyticsScripts() {
   document.getElementById(GOOGLE_TAG_SCRIPT_ID)?.remove();
@@ -33,26 +32,10 @@ function sendPageView(measurementId: string) {
 }
 
 /** Loads GA4 only after analytics consent and tracks hash-router page views manually. */
-export function GoogleAnalytics() {
-  const [consent, setConsent] = useState<TrackingConsentState | null>(() =>
-    getStoredTrackingConsent()
-  );
-
-  useEffect(() => {
-    const syncConsent = () => {
-      setConsent(getStoredTrackingConsent());
-    };
-
-    window.addEventListener(TRACKING_CONSENT_UPDATED_EVENT, syncConsent);
-    return () => {
-      window.removeEventListener(TRACKING_CONSENT_UPDATED_EVENT, syncConsent);
-    };
-  }, []);
-
+export function GoogleAnalytics({ hasAnalyticsConsent }: GoogleAnalyticsProps) {
   useEffect(() => {
     const hasMeasurementId =
       environment.analyticsEnabled && environment.gaMeasurementId.length > 0;
-    const hasAnalyticsConsent = Boolean(consent?.categories.analytics);
 
     if (!hasMeasurementId || !hasAnalyticsConsent) {
       removeGoogleAnalyticsScripts();
@@ -121,7 +104,7 @@ export function GoogleAnalytics() {
       window.removeEventListener("load", onWindowLoad);
       window.removeEventListener("hashchange", onRouteChange);
     };
-  }, [consent]);
+  }, [hasAnalyticsConsent]);
 
   return null;
 }

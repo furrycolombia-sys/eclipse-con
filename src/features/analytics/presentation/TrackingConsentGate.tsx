@@ -10,6 +10,7 @@ import {
   type TrackingConsentState,
 } from "@/features/analytics/domain/consent";
 import {
+  discardPendingAnalyticsEvents,
   setAnalyticsConsentGranted,
   trackConsentPreference,
 } from "@/features/analytics/infrastructure/extremeTracking";
@@ -89,9 +90,8 @@ function useConsentState(blockingEnabled: boolean) {
   const [savedConsent, setSavedConsent] = useState<TrackingConsentState | null>(
     initialValue
   );
-  const [isModalOpen, setModalOpen] = useState<boolean>(
-    blockingEnabled && !initialValue
-  );
+  const [isModalManuallyOpen, setModalOpen] = useState<boolean>(false);
+  const isModalOpen = isModalManuallyOpen || (blockingEnabled && !savedConsent);
 
   useEffect(() => {
     setAnalyticsConsentGranted(Boolean(savedConsent?.categories.analytics));
@@ -114,6 +114,10 @@ function useConsentState(blockingEnabled: boolean) {
     source: TrackingConsentState["source"]
   ) => {
     const savedValue = saveTrackingConsent(categories, source);
+    if (!savedValue.categories.analytics) {
+      discardPendingAnalyticsEvents();
+    }
+    setAnalyticsConsentGranted(savedValue.categories.analytics);
     trackConsentPreference({
       source: savedValue.source,
       analytics: savedValue.categories.analytics,
