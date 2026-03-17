@@ -19,7 +19,7 @@ const COMMUNITY_LINKS: {
 }[] = [
   {
     label: "Website",
-    href: "https://moonfest-b63fa.web.app/",
+    href: "https://moonfest.furrycolombia.com/",
     icon: { type: "lucide", component: Globe },
   },
   {

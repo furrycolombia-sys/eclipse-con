@@ -334,20 +334,8 @@ const TutorialChecklist = ({ t }: Readonly<{ t: TFunction }>) => (
       </ul>
     </div>
     <div className="flex flex-col gap-3">
-      <Button asChild variant="outline" className="border-white/15">
-        <a
-          href="https://moonfest-b63fa.web.app/page/moonfest/soon.html"
-          target="_blank"
-          rel="noreferrer"
-          data-funnel-step="start_checkout"
-          data-cta-id="registration_tutorial_ticket"
-          data-cta-variant="tutorial_secondary"
-          data-content-section="registration_tutorial"
-          data-content-id="buy_ticket_link"
-          data-content-interaction="open"
-        >
-          {t("convention.registrationTutorial.actions.ticket")}
-        </a>
+      <Button disabled variant="outline" className="border-white/15">
+        {t("convention.registrationTutorial.actions.ticket")}
       </Button>
       <p className="text-xs text-muted-foreground">
         {t("convention.registrationTutorial.actions.note")}

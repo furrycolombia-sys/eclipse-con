@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://moonfest-b63fa.web.app/sitemap.xml
+Sitemap: https://moonfest.furrycolombia.com/sitemap.xml

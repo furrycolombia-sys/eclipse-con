@@ -4,7 +4,7 @@
 
 `Moonfest 2026 • official event website • bilingual static-first SPA`
 
-[Live site](https://filedn.com/leGgCrrYIXV0YvzNNKbdzBb/index.html)
+[Live site](https://moonfest.furrycolombia.com/)
 
 [![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react&logoColor=61dafb&labelColor=0b1020)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript&logoColor=3178c6&labelColor=0b1020)](https://www.typescriptlang.org/)
@@ -269,6 +269,8 @@ Primary scripts:
 pnpm dev
 pnpm build
 pnpm build:static
+pnpm deploy:cloudflare:dry-run
+pnpm deploy:cloudflare
 pnpm preview
 pnpm typecheck
 pnpm lint
@@ -303,6 +305,29 @@ pnpm typecheck && pnpm lint && pnpm build
 ```
 
 The repo also uses Husky and `lint-staged` to enforce checks during commit.
+
+## Cloudflare Deployment
+
+The production deployment target is a Cloudflare Worker with static assets served from `dist/`.
+
+- Config lives in `wrangler.toml`
+- Build artifact for Cloudflare is `dist/`
+- Route is `moonfest.furrycolombia.com/*`
+- Hash routing avoids SPA fallback issues on static asset hosting
+
+Recommended release flow:
+
+```bash
+pnpm typecheck
+pnpm lint
+pnpm build
+pnpm deploy:cloudflare:dry-run
+pnpm deploy:cloudflare
+```
+
+Notes:
+
+- `public/robots.txt`, `public/sitemap.xml`, and social metadata in `index.html` all point at the live production domain
 
 ## Testing
 
