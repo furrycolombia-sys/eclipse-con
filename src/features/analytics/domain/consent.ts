@@ -4,6 +4,8 @@ export interface ConsentCategories {
   analytics: boolean;
 }
 
+export const TRACKING_CONSENT_UPDATED_EVENT = "tracking-consent:updated";
+
 /** Persisted consent record including the version, source action, and category choices. */
 export interface TrackingConsentState {
   version: number;
@@ -88,6 +90,11 @@ export function saveTrackingConsent(
 
   if (typeof window !== "undefined") {
     window.localStorage.setItem(CONSENT_KEY, JSON.stringify(state));
+    window.dispatchEvent(
+      new CustomEvent<TrackingConsentState>(TRACKING_CONSENT_UPDATED_EVENT, {
+        detail: state,
+      })
+    );
   }
 
   return state;

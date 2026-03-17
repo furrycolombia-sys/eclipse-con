@@ -3,6 +3,8 @@ import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 import { TooltipProvider } from "@/shared/presentation/ui/tooltip";
+import { CloudflareWebAnalytics } from "@/features/analytics/presentation/CloudflareWebAnalytics";
+import { GoogleAnalytics } from "@/features/analytics/presentation/GoogleAnalytics";
 import { TrackingConsentGate } from "@/features/analytics/presentation/TrackingConsentGate";
 import { environment } from "@/shared/infrastructure/config/environment";
 
@@ -13,11 +15,16 @@ interface AppProvidersProps {
 /** Wraps the application with global UI providers: `TooltipProvider`, `TrackingConsentGate`, and the i18n language sync effect. */
 export function AppProviders({ children }: AppProvidersProps) {
   const { i18n } = useTranslation();
+  const hasCloudflareWebAnalytics = environment.cfWebAnalyticsToken.length > 0;
+  const hasGoogleAnalytics = environment.gaMeasurementId.length > 0;
   const hasPosthog =
     environment.posthogApiKey.length > 0 && environment.posthogHost.length > 0;
   const isAnalyticsConfigured =
     environment.analyticsEnabled &&
-    (environment.analyticsEndpoint.length > 0 || hasPosthog);
+    (environment.analyticsEndpoint.length > 0 ||
+      hasCloudflareWebAnalytics ||
+      hasGoogleAnalytics ||
+      hasPosthog);
 
   useEffect(() => {
     const language = i18n.language || "es";
@@ -27,6 +34,8 @@ export function AppProviders({ children }: AppProvidersProps) {
   return (
     <TooltipProvider>
       {children}
+      <CloudflareWebAnalytics />
+      <GoogleAnalytics />
       <TrackingConsentGate blockingEnabled={isAnalyticsConfigured} />
     </TooltipProvider>
   );

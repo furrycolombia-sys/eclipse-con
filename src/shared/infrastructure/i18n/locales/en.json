@@ -741,11 +741,11 @@
       "categories": {
         "necessary": {
           "title": "Strictly necessary (always on)",
-          "description": "Core service operations — error monitoring, session reliability, and consent audit trail. Never used for profiling."
+          "description": "Technical diagnostics needed to keep the site stable, such as error and asset-load failures. Your consent choice is stored locally and never used for profiling."
         },
         "analytics": {
           "title": "Analytics",
-          "description": "Enables behavioral profiling: navigation path patterns, exit intent signals, A/B test assignments, and voluntary demographic data. All other usage data is collected anonymously without this flag."
+          "description": "Enables optional measurement of page visits, section views, clicks, funnels, language changes, performance trends, and voluntary demographic responses across our analytics providers."
         }
       }
     },
@@ -755,7 +755,7 @@
       "communityTitle": "Furry Colombia",
       "communityHashtag": "#SomosFurryColombia",
       "credits": "Organized by Furry Colombia",
-      "copyright": "© 2025 Furry Colombia. All rights reserved.",
+      "copyright": "© 2026 Furry Colombia. All rights reserved.",
       "version": "Version: {{version}}"
     }
   }

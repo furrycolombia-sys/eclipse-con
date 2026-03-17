@@ -45,11 +45,12 @@ const FLUSH_INTERVAL_MS = 5000;
 const SESSION_KEY = "analytics_session_id";
 const ANON_KEY = "analytics_anon_id";
 const RESERVATION_EVENT_DATE = "2026-07-10T00:00:00.000Z";
-const ANALYTICS_ONLY_EVENTS = new Set<TrackedEventName>([
-  "demographics_submitted",
-  "nav_path_cluster",
-  "return_intent",
-  "experiment_exposure",
+const NECESSARY_EVENTS = new Set<TrackedEventName>([
+  "page_load_failure",
+  "media_load_health",
+  "js_error",
+  "unhandled_rejection",
+  "error_recovery",
 ]);
 
 interface TrackingRuntimeState {
@@ -168,7 +169,7 @@ function track(
   name: TrackedEventName,
   data: Record<string, Primitive> = {}
 ): void {
-  if (!analyticsConsentGranted && ANALYTICS_ONLY_EVENTS.has(name)) {
+  if (!analyticsConsentGranted && !NECESSARY_EVENTS.has(name)) {
     return;
   }
 

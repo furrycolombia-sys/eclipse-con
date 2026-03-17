@@ -741,11 +741,11 @@
       "categories": {
         "necessary": {
           "title": "Necesario (siempre activo)",
-          "description": "Operaciones esenciales: detección de errores, estabilidad de sesión y registro de consentimiento. Nunca se usa para crear perfiles de usuario."
+          "description": "Diagnósticos técnicos necesarios para mantener el sitio estable, como errores y fallos de carga de recursos. Tu elección de consentimiento se guarda localmente y nunca se usa para crear perfiles."
         },
         "analytics": {
           "title": "Analítica",
-          "description": "Activa el análisis de patrones de navegación, señales de abandono, pruebas A/B y datos demográficos voluntarios. Todo lo demás se recopila de forma anónima sin necesitar esta opción."
+          "description": "Activa la medición opcional de visitas, secciones vistas, clics, embudos, cambios de idioma, tendencias de rendimiento y respuestas demográficas voluntarias en nuestros proveedores de analítica."
         }
       }
     },
@@ -755,7 +755,7 @@
       "communityTitle": "Furry Colombia",
       "communityHashtag": "#SomosFurryColombia",
       "credits": "Organizado por Furry Colombia",
-      "copyright": "© 2025 Furry Colombia. Todos los derechos reservados.",
+      "copyright": "© 2026 Furry Colombia. Todos los derechos reservados.",
       "version": "Versión: {{version}}"
     }
   }
