@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import type { LucideIcon } from "lucide-react";
-import { Globe } from "lucide-react";
 
 import { Button } from "@/shared/presentation/ui/button";
 import { cn } from "@/shared/application/utils/cn";
@@ -17,17 +16,6 @@ const COMMUNITY_LINKS: {
   icon: LinkIcon;
   iconUrl?: string;
 }[] = [
-  {
-    label: "Website",
-    href: "https://moonfest.furrycolombia.com/",
-    icon: { type: "lucide", component: Globe },
-  },
-  {
-    label: "Carrd",
-    href: "https://furrycolombia.carrd.co/",
-    icon: { type: "brand", slug: "carrd" },
-    iconUrl: "https://cdn.simpleicons.org/carrd/596cdf?viewbox=auto",
-  },
   {
     label: "Facebook",
     href: "https://www.facebook.com/furry.colombia",
