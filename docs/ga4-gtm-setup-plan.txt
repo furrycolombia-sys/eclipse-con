@@ -1,0 +1,292 @@
+Moonfest GA4 + GTM Setup Plan
+
+Current IDs
+- GA4 Measurement ID: G-QBKJDK4KGP
+- GTM Container ID: GTM-NXGDDQT9
+
+Goal
+- Keep PostHog for deep product analytics
+- Use GA4 for free marketing/acquisition reporting
+- Use GTM for free tag management and event routing
+- Stay inside free tiers and avoid duplicate low-signal tracking
+
+1. GTM built-in variables
+- Enable:
+  - Page URL
+  - Page Path
+  - Page Hostname
+  - Click URL
+  - Click Text
+  - History New URL
+  - History Old URL
+
+2. GTM Data Layer variables
+- Create:
+  - dlv_event_name -> event_name
+  - dlv_page_path -> page_path
+  - dlv_locale -> locale
+  - dlv_viewport -> viewport
+  - dlv_cta_id -> ctaId
+  - dlv_cta_variant -> ctaVariant
+  - dlv_cta_position -> ctaPosition
+  - dlv_section_id -> sectionId
+  - dlv_content_id -> contentId
+  - dlv_interaction_type -> interactionType
+  - dlv_step -> step
+  - dlv_browser_language -> browserLanguage
+  - dlv_browser_language_raw -> browserLanguageRaw
+  - dlv_browser_language_supported -> browserLanguageSupported
+  - dlv_defaulted_locale_reason -> defaultedLocaleReason
+  - dlv_referrer_bucket -> referrerBucket
+  - dlv_device_bucket -> deviceBucket
+  - dlv_age_range -> ageRange
+  - dlv_region_bucket -> regionBucket
+  - dlv_attendee_type -> attendeeType
+  - dlv_country -> country
+
+3. GTM Trigger
+- Create one custom event trigger:
+  - Name: CE - Moonfest Analytics Events
+  - Event name regex:
+    ^(session_start|page_view|cta_interaction|content_interaction|funnel_step|locale_switch|demographics_submitted|outbound_link_click|faq_interaction|reserve_ticket_handoff)$
+
+4. GA4 Configuration Tag
+- Tag type: Google Analytics: GA4 Configuration
+- Measurement ID: G-QBKJDK4KGP
+- Trigger: Initialization - All Pages
+- Field to set:
+  - send_page_view = false
+
+Reason
+- The app already sends manual page_view events.
+
+5. Main GA4 Event Tag
+- Name: GA4 - Moonfest Event
+- Configuration tag: GA4 Configuration tag
+- Event name: {{dlv_event_name}}
+- Trigger: CE - Moonfest Analytics Events
+
+Event parameters
+- page_path -> {{dlv_page_path}}
+- locale -> {{dlv_locale}}
+- viewport -> {{dlv_viewport}}
+- cta_id -> {{dlv_cta_id}}
+- cta_variant -> {{dlv_cta_variant}}
+- cta_position -> {{dlv_cta_position}}
+- section_id -> {{dlv_section_id}}
+- content_id -> {{dlv_content_id}}
+- interaction_type -> {{dlv_interaction_type}}
+- step -> {{dlv_step}}
+- browser_language -> {{dlv_browser_language}}
+- browser_language_raw -> {{dlv_browser_language_raw}}
+- browser_language_supported -> {{dlv_browser_language_supported}}
+- defaulted_locale_reason -> {{dlv_defaulted_locale_reason}}
+- referrer_bucket -> {{dlv_referrer_bucket}}
+- device_bucket -> {{dlv_device_bucket}}
+- age_range -> {{dlv_age_range}}
+- region_bucket -> {{dlv_region_bucket}}
+- attendee_type -> {{dlv_attendee_type}}
+- country -> {{dlv_country}}
+
+6. Consent Settings
+- Keep:
+  - analytics storage enabled according to site consent behavior
+  - ad storage denied
+  - ad personalization denied
+  - ad user data denied
+- Do not add ad tags.
+
+7. GA4 Custom Dimensions
+- Create event-scoped custom dimensions for:
+  - locale
+  - browser_language
+  - browser_language_raw
+  - browser_language_supported
+  - defaulted_locale_reason
+  - cta_id
+  - cta_variant
+  - cta_position
+  - section_id
+  - content_id
+  - interaction_type
+  - step
+  - referrer_bucket
+  - device_bucket
+  - age_range
+  - region_bucket
+  - attendee_type
+  - country
+
+8. GA4 Conversions
+- Mark as conversions:
+  - cta_interaction
+  - reserve_ticket_handoff
+
+Optional conversions
+- demographics_submitted
+- locale_switch
+
+9. Free GA4 Reports / Explorations
+- Landing page by cta_interaction
+- Country by cta_interaction
+- Browser language by locale
+- Hour of day by cta_interaction
+- Age range by cta_interaction
+- Funnel step breakdown
+- Referrer bucket by conversion
+
+10. Avoid
+- Do not enable duplicate auto pageviews.
+- Do not add generic click triggers for everything.
+- Do not recreate PostHog full clickstream inside GTM.
+
+11. Validation Checklist
+- In GTM Preview, verify:
+  - session_start
+  - page_view
+  - cta_interaction
+  - locale_switch
+  - demographics_submitted
+- In GA4 Realtime, verify incoming events after publish.
+
+12. MCP Follow-up
+- If a Google Analytics / GTM MCP is installed later, use this plan to:
+  - create or verify the GTM variables
+  - create triggers and GA4 tags
+  - register GA4 custom dimensions
+  - mark conversions
+  - build marketing-friendly reports
+
+13. GA4 Custom Dimensions Copy-Paste Table
+
+Use event scope for all of these.
+
+| Display name | Parameter name | Scope | Description |
+| --- | --- | --- | --- |
+| Locale | locale | Event | Active UI locale used on the page when the event fired. |
+| Browser Language | browser_language | Event | Normalized browser language preference, for example `en` or `es`. |
+| Browser Language Raw | browser_language_raw | Event | Raw browser language value, for example `es-419` or `pt-BR`. |
+| Browser Language Supported | browser_language_supported | Event | Whether the browser language matched a supported site locale. |
+| Defaulted Locale Reason | defaulted_locale_reason | Event | Why the site fell back to the default locale. |
+| CTA ID | cta_id | Event | Stable identifier for the clicked CTA. |
+| CTA Variant | cta_variant | Event | Variant or style bucket for the CTA. |
+| CTA Position | cta_position | Event | Placement bucket of the CTA on the page. |
+| Section ID | section_id | Event | Stable page section identifier tied to the interaction. |
+| Content ID | content_id | Event | Stable content block identifier tied to the interaction. |
+| Interaction Type | interaction_type | Event | Type of content interaction, such as open, close, expand, or play. |
+| Funnel Step | step | Event | Named funnel step for reservation and conversion flow analysis. |
+| Referrer Bucket | referrer_bucket | Event | Normalized source bucket for inbound traffic analysis. |
+| Device Bucket | device_bucket | Event | Normalized device class or bucket. |
+| Age Range | age_range | Event | Self-reported attendee age-range bucket. |
+| Region Bucket | region_bucket | Event | Self-reported attendee region bucket. |
+| Attendee Type | attendee_type | Event | Whether the attendee is new or returning. |
+| Country | country | Event | Self-reported attendee country code where available. |
+
+14. Current Implementation Status
+
+- GTM container `GTM-NXGDDQT9` is live with:
+  - `GA4 - Moonfest Config`
+  - `GA4 - Moonfest Event`
+  - `PV - All Pages`
+  - `CE - Moonfest Analytics Events`
+  - 21 `dataLayer` variables
+- GTM now forwards these event names to GA4:
+  - `session_start`
+  - `page_view`
+  - `cta_interaction`
+  - `content_interaction`
+  - `funnel_step`
+  - `locale_switch`
+  - `demographics_submitted`
+  - `outbound_link_click`
+  - `faq_interaction`
+  - `reserve_ticket_handoff`
+- GA4 property:
+  - property ID: `528973849`
+  - measurement ID: `G-QBKJDK4KGP`
+
+15. What Still Requires Manual GA4 Admin Setup
+
+- Register all custom dimensions from the table above in:
+  - GA4 Admin -> Custom definitions
+- Mark conversions in:
+  - GA4 Admin -> Events
+- Wait for new events to populate standard reports and explorations.
+- The current MCP can query GA4 data but does not create GA4 admin objects.
+
+16. Best Native GA4 Reports For Marketing
+
+- Acquisition overview
+  - dimensions: `sessionSourceMedium`, `sessionDefaultChannelGroup`
+  - metrics: `sessions`, `totalUsers`
+- Landing page performance
+  - dimensions: `landingPage`, `landingPagePlusQueryString`
+  - metrics: `sessions`, `totalUsers`
+- Geography
+  - dimensions: `country`, `city`, `region`
+  - metrics: `sessions`, `totalUsers`
+- Language and localization
+  - dimensions: `language`
+  - metrics: `sessions`, `totalUsers`
+- Time of day
+  - dimensions: `hour`, `dayOfWeekName`
+  - metrics: `sessions`, `eventCount`
+- Event mix
+  - dimensions: `eventName`
+  - metrics: `eventCount`
+
+17. Best GA4 Explorations To Build
+
+- Landing page to CTA
+  - free-form table with `landingPage` and `eventName`
+- Source vs conversion intent
+  - `sessionSourceMedium` by `cta_interaction`
+- Country vs conversion intent
+  - `country` by `cta_interaction`
+- Browser language vs locale
+  - once custom dimensions are registered
+  - `browser_language`, `locale`
+- Hour of day performance
+  - `hour` by `cta_interaction`
+- Age-range performance
+  - once `age_range` is registered and populated
+
+18. Best Shareable Dashboard Option
+
+- Use Looker Studio as the shareable dashboard layer for marketing.
+- Connect it to the Moonfest GA4 property.
+- This is the closest free Google equivalent to PostHog dashboards with shareable links.
+
+19. Recommended Looker Studio Dashboard Tabs
+
+- Executive Overview
+  - scorecards: users, sessions, CTA events, key events
+  - charts: sessions trend, top countries, top sources
+- Acquisition
+  - source / medium
+  - default channel group
+  - landing page
+- Audience
+  - country
+  - city
+  - device category
+  - language
+- Localization
+  - browser language
+  - locale
+  - unsupported-language fallback
+- Conversion
+  - CTA events
+  - reserve handoff
+  - funnel step mix
+- Timing
+  - hour of day
+  - day of week
+
+20. Manual Build Order
+
+1. Register GA4 custom dimensions.
+2. Mark conversions.
+3. Verify events in GA4 Realtime and DebugView.
+4. Build native GA4 explorations.
+5. Build the shareable Looker Studio dashboard.

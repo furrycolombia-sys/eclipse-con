@@ -14,6 +14,7 @@ import {
   setAnalyticsConsentGranted,
   trackConsentPreference,
 } from "@/features/analytics/infrastructure/extremeTracking";
+import { updateGoogleAnalyticsConsent } from "@/features/analytics/presentation/googleConsent";
 import { LanguageToggle } from "@/features/convention/presentation/components/LanguageToggle";
 import moonfestLogo from "@/shared/presentation/assets/moonfest-logo.svg";
 
@@ -118,6 +119,7 @@ function useConsentState(blockingEnabled: boolean) {
       discardPendingAnalyticsEvents();
     }
     setAnalyticsConsentGranted(savedValue.categories.analytics);
+    updateGoogleAnalyticsConsent(savedValue.categories.analytics);
     trackConsentPreference({
       source: savedValue.source,
       analytics: savedValue.categories.analytics,

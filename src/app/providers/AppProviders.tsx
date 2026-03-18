@@ -69,12 +69,12 @@ export function AppProviders({ children }: AppProvidersProps) {
   return (
     <TooltipProvider>
       {children}
-      <GoogleTagManager />
-      <CloudflareWebAnalytics hasAnalyticsConsent={hasAnalyticsConsent} />
       <GoogleAnalytics
         hasAnalyticsConsent={hasAnalyticsConsent}
         hasConsentDecision={consent !== null}
       />
+      <GoogleTagManager />
+      <CloudflareWebAnalytics hasAnalyticsConsent={hasAnalyticsConsent} />
       <TrackingConsentGate blockingEnabled={isAnalyticsConfigured} />
     </TooltipProvider>
   );

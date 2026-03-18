@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import { environment } from "@/shared/infrastructure/config/environment";
+import { updateGoogleAnalyticsConsent } from "@/features/analytics/presentation/googleConsent";
 
 declare global {
   interface Window {
@@ -123,12 +124,7 @@ export function GoogleAnalytics({
     }
 
     if (hasConsentDecision) {
-      window.gtag?.("consent", "update", {
-        analytics_storage: hasAnalyticsConsent ? "granted" : "denied",
-        ad_storage: "denied",
-        ad_user_data: "denied",
-        ad_personalization: "denied",
-      });
+      updateGoogleAnalyticsConsent(hasAnalyticsConsent);
     }
 
     const onRouteChange = () => {
