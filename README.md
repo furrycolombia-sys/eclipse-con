@@ -138,7 +138,9 @@ That makes the embedded news archive and section deep-linking materially importa
 - Sanitized event payloads, allowlists, and privacy filters
 - Disabled by default unless explicitly enabled through env overrides
 - Lean analytics profile by default so PostHog captures page, funnel, CTA, content, consent, and diagnostics without high-volume clickstream noise
-- Google Analytics and Cloudflare Web Analytics are explicit opt-ins and do not activate merely because a token is present
+- Cloudflare Web Analytics remains an explicit opt-in
+- Google Analytics 4 activates when `VITE_GA_MEASUREMENT_ID` is present unless `VITE_GA_MEASUREMENT_ENABLED=false` is set explicitly
+- GA4 uses regional consent defaults: analytics starts denied in EEA/UK/CH and granted elsewhere until the visitor updates the consent banner; ads-related storage stays denied everywhere
 
 ## Technical Architecture
 
@@ -250,6 +252,8 @@ Important current rules:
 | `VITE_APP_VERSION`            | Build/version label used in the footer |
 | `VITE_ANALYTICS_ENABLED`      | Master analytics switch                |
 | `VITE_ANALYTICS_ENDPOINT`     | Optional custom ingest endpoint        |
+| `VITE_GA_MEASUREMENT_ENABLED` | Optional GA4 override, default on      |
+| `VITE_GA_MEASUREMENT_ID`      | Optional GA4 measurement ID            |
 | `VITE_POSTHOG_API_KEY`        | Optional PostHog project key           |
 | `VITE_POSTHOG_HOST`           | Optional PostHog host                  |
 | `VITE_CF_WEB_ANALYTICS_TOKEN` | Optional Cloudflare token              |

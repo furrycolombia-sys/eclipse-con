@@ -9,7 +9,7 @@ const analyticsProfile =
 const cloudflareWebAnalyticsEnabled =
   import.meta.env.VITE_CF_WEB_ANALYTICS_ENABLED === "true";
 const googleAnalyticsEnabled =
-  import.meta.env.VITE_GA_MEASUREMENT_ENABLED === "true";
+  import.meta.env.VITE_GA_MEASUREMENT_ENABLED !== "false";
 
 /** Centralized runtime configuration derived from Vite environment variables. */
 export const environment = {

@@ -69,7 +69,10 @@ export function AppProviders({ children }: AppProvidersProps) {
     <TooltipProvider>
       {children}
       <CloudflareWebAnalytics hasAnalyticsConsent={hasAnalyticsConsent} />
-      <GoogleAnalytics hasAnalyticsConsent={hasAnalyticsConsent} />
+      <GoogleAnalytics
+        hasAnalyticsConsent={hasAnalyticsConsent}
+        hasConsentDecision={consent !== null}
+      />
       <TrackingConsentGate blockingEnabled={isAnalyticsConfigured} />
     </TooltipProvider>
   );

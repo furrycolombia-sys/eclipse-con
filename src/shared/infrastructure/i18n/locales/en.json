@@ -745,7 +745,7 @@
         },
         "analytics": {
           "title": "Analytics",
-          "description": "Enables optional measurement of page visits, section views, clicks, funnels, language changes, performance trends, and voluntary demographic responses across our analytics providers."
+          "description": "Measures page visits, section views, clicks, funnels, language changes, performance trends, and voluntary demographic responses. In some regions, anonymous analytics may start with a regional default until you update your choice here."
         }
       }
     },

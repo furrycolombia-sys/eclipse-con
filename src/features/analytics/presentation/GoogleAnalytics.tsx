@@ -11,9 +11,44 @@ declare global {
 
 const GOOGLE_TAG_SCRIPT_ID = "google-analytics-gtag";
 const GOOGLE_TAG_INLINE_SCRIPT_ID = "google-analytics-inline";
+const EEA_UK_CH_REGION_CODES = [
+  "AT",
+  "BE",
+  "BG",
+  "CH",
+  "CY",
+  "CZ",
+  "DE",
+  "DK",
+  "EE",
+  "ES",
+  "FI",
+  "FR",
+  "GB",
+  "GR",
+  "HR",
+  "HU",
+  "IE",
+  "IS",
+  "IT",
+  "LI",
+  "LT",
+  "LU",
+  "LV",
+  "MT",
+  "NL",
+  "NO",
+  "PL",
+  "PT",
+  "RO",
+  "SE",
+  "SI",
+  "SK",
+] as const;
 
 interface GoogleAnalyticsProps {
   readonly hasAnalyticsConsent: boolean;
+  readonly hasConsentDecision: boolean;
 }
 
 function removeGoogleAnalyticsScripts() {
@@ -31,15 +66,22 @@ function sendPageView(measurementId: string) {
   });
 }
 
-/** Loads GA4 only after analytics consent and tracks hash-router page views manually. */
-export function GoogleAnalytics({ hasAnalyticsConsent }: GoogleAnalyticsProps) {
+/**
+ * Loads GA4 with regional consent defaults.
+ * EEA/UK/CH start denied, while other regions start analytics-granted.
+ * Ads-related storage stays denied everywhere.
+ */
+export function GoogleAnalytics({
+  hasAnalyticsConsent,
+  hasConsentDecision,
+}: GoogleAnalyticsProps) {
   useEffect(() => {
     const hasMeasurementId =
       environment.analyticsEnabled &&
       environment.googleAnalyticsEnabled &&
       environment.gaMeasurementId.length > 0;
 
-    if (!hasMeasurementId || !hasAnalyticsConsent) {
+    if (!hasMeasurementId) {
       removeGoogleAnalyticsScripts();
       return;
     }
@@ -61,25 +103,28 @@ export function GoogleAnalytics({ hasAnalyticsConsent }: GoogleAnalyticsProps) {
         window.gtag = gtag;
         gtag('js', new Date());
         gtag('consent', 'default', {
-          analytics_storage: 'denied',
-          ad_storage: 'denied',
-          ad_user_data: 'denied',
-          ad_personalization: 'denied'
-        });
-        gtag('consent', 'update', {
           analytics_storage: 'granted',
           ad_storage: 'denied',
           ad_user_data: 'denied',
           ad_personalization: 'denied'
+        });
+        gtag('consent', 'default', {
+          analytics_storage: 'denied',
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          region: ${JSON.stringify(EEA_UK_CH_REGION_CODES)}
         });
         gtag('config', '${environment.gaMeasurementId}', {
           send_page_view: false
         });
       `;
       document.head.append(inlineScript);
-    } else {
+    }
+
+    if (hasConsentDecision) {
       window.gtag?.("consent", "update", {
-        analytics_storage: "granted",
+        analytics_storage: hasAnalyticsConsent ? "granted" : "denied",
         ad_storage: "denied",
         ad_user_data: "denied",
         ad_personalization: "denied",
@@ -106,7 +151,7 @@ export function GoogleAnalytics({ hasAnalyticsConsent }: GoogleAnalyticsProps) {
       window.removeEventListener("load", onWindowLoad);
       window.removeEventListener("hashchange", onRouteChange);
     };
-  }, [hasAnalyticsConsent]);
+  }, [hasAnalyticsConsent, hasConsentDecision]);
 
   return null;
 }

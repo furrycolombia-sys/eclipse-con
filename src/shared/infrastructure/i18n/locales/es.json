@@ -745,7 +745,7 @@
         },
         "analytics": {
           "title": "Analítica",
-          "description": "Activa la medición opcional de visitas, secciones vistas, clics, embudos, cambios de idioma, tendencias de rendimiento y respuestas demográficas voluntarias en nuestros proveedores de analítica."
+          "description": "Mide visitas, secciones vistas, clics, embudos, cambios de idioma, tendencias de rendimiento y respuestas demográficas voluntarias. En algunas regiones, la analítica anónima puede iniciar con una configuración regional por defecto hasta que actualices tu elección aquí."
         }
       }
     },
