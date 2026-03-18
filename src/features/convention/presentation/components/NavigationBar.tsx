@@ -88,6 +88,10 @@ function getGroupAnchorId(group: NavGroup) {
   return anchorId ?? firstItem.id;
 }
 
+function buildNavTestId(prefix: string, to: string) {
+  return `${prefix}-${to.replace(/[?=]/g, "-").replace(/[^a-zA-Z0-9-_]/g, "-")}`;
+}
+
 function useCanHover() {
   const [canHover, setCanHover] = useState(false);
 
@@ -110,6 +114,7 @@ function useCanHover() {
 }
 
 function NavLinkButton({ label, to }: Readonly<{ label: string; to: string }>) {
+  const testId = buildNavTestId("nav-link", to);
   return (
     <Button asChild variant="ghost" className={NAV_BUTTON_CLASS}>
       <Link
@@ -119,6 +124,7 @@ function NavLinkButton({ label, to }: Readonly<{ label: string; to: string }>) {
         data-content-section="navigation"
         data-content-id={to.split("#").pop() ?? to}
         data-cta-id={`nav_${to.split("#").pop() ?? to}`}
+        {...tid(testId)}
       >
         <span className="relative">
           {label}
@@ -144,6 +150,7 @@ function NavDropdownItem({
   showMarker?: boolean;
   isHighlighted?: boolean;
 }>) {
+  const testId = buildNavTestId("nav-dropdown", to);
   return (
     <DropdownMenuItem
       asChild
@@ -161,6 +168,7 @@ function NavDropdownItem({
         data-content-section="navigation"
         data-content-id={to.split("#").pop() ?? to}
         data-cta-id={`nav_dropdown_${to.split("#").pop() ?? to}`}
+        {...tid(testId)}
       >
         <span>{label}</span>
         {showMarker ? (
@@ -319,6 +327,7 @@ function MobileNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
           side="right"
           showCloseButton={false}
           className="w-full border-white/10 bg-gradient-to-b from-background/95 via-background/92 to-background/95 backdrop-blur sm:max-w-md"
+          {...tid("mobile-menu-sheet")}
         >
           <div className="relative flex h-full flex-col">
             <div className="relative overflow-hidden border-b border-white/10 px-6 pb-6 pt-7">
@@ -342,6 +351,7 @@ function MobileNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
                       className="h-9 w-9 rounded-full border border-white/10 bg-surface/40 text-foreground/70 hover:bg-surface/70 hover:text-foreground"
                       aria-label={t("convention.nav.mobileToggle")}
                       data-nav-menu-action="close"
+                      {...tid("mobile-menu-close")}
                     >
                       <X size={16} />
                     </Button>
@@ -369,6 +379,7 @@ function MobileNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
                               .pop() ?? ""
                           }
                           data-cta-id={`nav_mobile_${getSectionHref(group.items[0].id).split("#").pop() ?? ""}`}
+                          {...tid(`nav-mobile-${group.items[0].id}`)}
                         >
                           {" "}
                           {t(group.items[0].key)}
@@ -404,6 +415,7 @@ function MobileNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
                                   getSectionHref(item.id).split("#").pop() ?? ""
                                 }
                                 data-cta-id={`nav_mobile_${getSectionHref(item.id).split("#").pop() ?? ""}`}
+                                {...tid(`nav-mobile-${item.id}`)}
                               >
                                 <span>{t(item.key)}</span>
                               </Link>
@@ -441,6 +453,7 @@ export function NavigationBar() {
           data-cta-id="nav_logo"
           data-content-id="logo"
           data-content-section="navigation"
+          {...tid("nav-logo")}
           onClick={() => {
             document
               .getElementById(SECTION_IDS.HERO)

@@ -124,6 +124,7 @@ function RegistrationCta({ t }: Readonly<{ t: TFunction }>) {
           data-content-section="registration"
           data-content-id="registration_tutorial_link"
           data-content-interaction="open"
+          {...tid("registration-tutorial-link")}
         >
           {t("convention.registration.tutorialLink")}
         </Link>

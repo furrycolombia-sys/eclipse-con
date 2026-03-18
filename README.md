@@ -323,6 +323,7 @@ The production deployment target is a Cloudflare Worker with static assets serve
 - Config lives in `wrangler.toml`
 - Build artifact for Cloudflare is `dist/`
 - Route is `moonfest.furrycolombia.com/*`
+- Apex domain `furrycolombia.com` is attached as a Worker Custom Domain
 - Cloudflare SPA fallback handles browser-history routes for direct deep links
 
 Recommended release flow:
@@ -353,6 +354,8 @@ Notes:
 - `pnpm deploy:cloudflare:staging` now deploys first and then runs the staging browser-routing E2E against `https://eclipse-con-staging.furrycolombia.workers.dev` by default
 - `pnpm deploy:cloudflare:staging` also runs the same browser-routing E2E locally before deployment, then reruns it against staging after deployment
 - override the E2E target with `PLAYWRIGHT_BASE_URL` if you want to validate the custom staging hostname instead
+- `furrycolombia.com` is intentionally configured as a Worker Custom Domain instead of a plain Worker route because that allowed Cloudflare to provision the hostname directly from `wrangler deploy`
+- if `furrycolombia.com` appears broken locally while public resolvers already answer it, the usual issue is stale local DNS; test with `nslookup furrycolombia.com 1.1.1.1` or flush the local DNS cache
 
 ## Testing
 

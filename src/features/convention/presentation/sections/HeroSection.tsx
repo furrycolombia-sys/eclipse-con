@@ -73,6 +73,7 @@ function HeroTextContent() {
           data-content-section="hero"
           data-content-id="hero_primary_cta"
           data-content-interaction="open"
+          {...tid("hero-primary-cta")}
         >
           {t("convention.hero.cta")}
         </Link>

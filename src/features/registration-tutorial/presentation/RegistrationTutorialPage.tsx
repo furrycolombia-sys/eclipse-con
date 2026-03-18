@@ -366,7 +366,10 @@ export function Component() {
   } = useTutorialStepState();
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
+    <div
+      className="relative min-h-screen overflow-hidden bg-background text-foreground"
+      {...tid("registration-tutorial-page")}
+    >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,168,76,0.16),transparent_58%)]" />
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-10 px-4 py-12 md:py-16">
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -376,6 +379,7 @@ export function Component() {
               data-content-section="registration_tutorial"
               data-content-id="back_to_registration"
               data-content-interaction="open"
+              {...tid("tutorial-back-to-registration")}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
               {t("convention.registrationTutorial.back")}
@@ -415,7 +419,6 @@ export function Component() {
         />
         <TutorialChecklist t={t} />
       </div>
-      <div {...tid("registration-tutorial-page")} />
     </div>
   );
 }

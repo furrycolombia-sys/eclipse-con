@@ -9,7 +9,7 @@ test.describe("static build (file:// protocol)", () => {
       window.localStorage.setItem(
         "tracking_consent_v1",
         JSON.stringify({
-          version: 1,
+          version: 2,
           updatedAt: new Date().toISOString(),
           source: "accept_all",
           categories: {
@@ -31,11 +31,15 @@ test.describe("static build (file:// protocol)", () => {
       waitUntil: "networkidle",
     });
     await expect(page).toHaveURL(/#\/registration-tutorial(\?.*)?$/);
-    await expect(page.getByRole("link", { name: /Back to landing|Volver al landing/i })).toBeVisible();
+    await expect(
+      page.getByTestId("tutorial-back-to-registration")
+    ).toBeVisible();
 
     await page.reload({ waitUntil: "networkidle" });
     await expect(page).toHaveURL(/#\/registration-tutorial(\?.*)?$/);
-    await expect(page.getByRole("link", { name: /Back to landing|Volver al landing/i })).toBeVisible();
+    await expect(
+      page.getByTestId("tutorial-back-to-registration")
+    ).toBeVisible();
 
     await page.goto(`${baseFileUrl}#/?section=registration`, {
       waitUntil: "networkidle",
@@ -62,9 +66,7 @@ test.describe("static build (file:// protocol)", () => {
     });
     await page.waitForTimeout(800);
 
-    const tutorialLink = page.locator("#registration").getByRole("link", {
-      name: /Open registration tutorial|Abrir tutorial de registro/i,
-    });
+    const tutorialLink = page.getByTestId("registration-tutorial-link");
     await tutorialLink.scrollIntoViewIfNeeded();
     await expect(tutorialLink).toBeVisible();
     await tutorialLink.click();

@@ -1,12 +1,9 @@
 /**
- * Returns a `data-testid` attribute object in development; returns an empty object in production.
+ * Returns a `data-testid` attribute object for stable E2E selectors.
  * @param id - The test identifier to attach.
  * @example
  * <div {...tid("submit-button")} />
  */
 export function tid(id: string) {
-  if (import.meta.env.PROD) {
-    return {};
-  }
   return { "data-testid": id };
 }

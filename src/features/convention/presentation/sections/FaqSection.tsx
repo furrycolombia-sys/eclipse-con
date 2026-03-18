@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Accordion } from "@/shared/presentation/ui/accordion";
 import { SECTION_IDS } from "@/features/convention/domain/constants";
 import { FAQ_ITEMS } from "@/features/convention/application/data/faqItems";
+import { tid } from "@/shared/application/utils/tid";
 import { FaqAccordionItem } from "../components/FaqAccordionItem";
 import { SectionHeader } from "../components/SectionHeader";
 import { SectionWrapper } from "../components/SectionWrapper";
@@ -57,6 +58,7 @@ export function FaqSection() {
             data-content-section="faq"
             data-content-id="faq_tutorial_callout"
             data-content-interaction="open"
+            {...tid("faq-registration-tutorial-link")}
           >
             {t("convention.faq.tutorialCallout.cta")}
           </Link>

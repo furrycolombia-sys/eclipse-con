@@ -9,13 +9,12 @@ async function dismissConsentGate(page: Page) {
   }
 }
 
-async function expectSectionNearTop(page: Page, headingPattern: RegExp) {
-  const heading = page.getByRole("heading", { name: headingPattern }).first();
-  await expect(heading).toBeVisible();
+async function expectSectionNearTop(page: Page, testId: string) {
+  const section = page.getByTestId(testId);
+  await expect(section).toBeVisible();
   await expect
     .poll(
-      async () =>
-        (await heading.boundingBox())?.y ?? Number.POSITIVE_INFINITY
+      async () => (await section.boundingBox())?.y ?? Number.POSITIVE_INFINITY
     )
     .toBeLessThan(180);
 }
@@ -28,7 +27,7 @@ test.describe("browser routing", () => {
       window.localStorage.setItem(
         key,
         JSON.stringify({
-          version: 1,
+          version: 2,
           updatedAt: new Date().toISOString(),
           source: "reject_optional",
           categories: {
@@ -45,56 +44,46 @@ test.describe("browser routing", () => {
   test("browser back from the registration tutorial CTA returns to registration", async ({
     page,
   }) => {
-    await page.goto("/?section=registration", { waitUntil: "networkidle" });
+    await page.goto("/?section=registration", { waitUntil: "domcontentloaded" });
     await dismissConsentGate(page);
     await expect(page).toHaveURL(/\/\?section=registration$/);
-    await expectSectionNearTop(page, /Reservations|Reservas/i);
+    await expectSectionNearTop(page, "section-registration");
 
-    await page.locator('[data-cta-id="registration_tutorial_interest"]').click();
+    await page.getByTestId("registration-tutorial-link").click();
     await expect(page).toHaveURL(/\/registration-tutorial\?step=1$/);
-    await expect(
-      page.getByRole("heading", { name: /How registration works/i })
-    ).toBeVisible();
+    await expect(page.getByTestId("registration-tutorial-page")).toBeVisible();
 
-    await page.goBack({ waitUntil: "networkidle" });
+    await page.goBack({ waitUntil: "domcontentloaded" });
     await expect(page).toHaveURL(/\/\?section=registration$/);
-    await expectSectionNearTop(page, /Reservations|Reservas/i);
+    await expectSectionNearTop(page, "section-registration");
   });
 
   test("browser back from the FAQ tutorial CTA returns to FAQ", async ({
     page,
   }) => {
-    await page.goto("/?section=faq", { waitUntil: "networkidle" });
+    await page.goto("/?section=faq", { waitUntil: "domcontentloaded" });
     await dismissConsentGate(page);
     await expect(page).toHaveURL(/\/\?section=faq$/);
-    await expectSectionNearTop(
-      page,
-      /Frequently asked questions|Preguntas frecuentes/i
-    );
+    await expectSectionNearTop(page, "section-faq");
 
-    await page.locator('[data-cta-id="faq_registration_tutorial_interest"]').click();
+    await page.getByTestId("faq-registration-tutorial-link").click();
     await expect(page).toHaveURL(/\/registration-tutorial\?step=1$/);
-    await expect(
-      page.getByRole("heading", { name: /How registration works/i })
-    ).toBeVisible();
+    await expect(page.getByTestId("registration-tutorial-page")).toBeVisible();
 
-    await page.goBack({ waitUntil: "networkidle" });
+    await page.goBack({ waitUntil: "domcontentloaded" });
     await expect(page).toHaveURL(/\/\?section=faq$/);
-    await expectSectionNearTop(
-      page,
-      /Frequently asked questions|Preguntas frecuentes/i
-    );
+    await expectSectionNearTop(page, "section-faq");
   });
 
   test("tutorial back button always goes to registration", async ({ page }) => {
-    await page.goto("/?section=faq", { waitUntil: "networkidle" });
+    await page.goto("/?section=faq", { waitUntil: "domcontentloaded" });
     await dismissConsentGate(page);
 
-    await page.locator('[data-cta-id="faq_registration_tutorial_interest"]').click();
+    await page.getByTestId("faq-registration-tutorial-link").click();
     await expect(page).toHaveURL(/\/registration-tutorial\?step=1$/);
 
-    await page.locator('[data-content-id="back_to_registration"]').click();
+    await page.getByTestId("tutorial-back-to-registration").click();
     await expect(page).toHaveURL(/\/\?section=registration$/);
-    await expectSectionNearTop(page, /Reservations|Reservas/i);
+    await expectSectionNearTop(page, "section-registration");
   });
 });
