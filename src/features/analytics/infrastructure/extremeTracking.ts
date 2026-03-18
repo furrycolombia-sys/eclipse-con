@@ -40,6 +40,12 @@ import {
   getSectionIdFromTarget,
 } from "@/features/analytics/infrastructure/trackingInteractionSignals";
 
+declare global {
+  interface Window {
+    gtag?: (...arguments_: unknown[]) => void;
+  }
+}
+
 const EVENT_QUEUE_LIMIT = 200;
 const FLUSH_INTERVAL_MS = 5000;
 const SESSION_KEY = "analytics_session_id";
@@ -113,6 +119,23 @@ interface TrackContext {
 let analyticsConsentGranted = false;
 const activeTrackContexts = new Set<TrackContext>();
 
+function pushGoogleAnalyticsEvent(event: AnalyticsEvent): void {
+  if (typeof window === "undefined" || typeof window.gtag !== "function") {
+    return;
+  }
+
+  if (!analyticsConsentGranted || event.name === "page_view") {
+    return;
+  }
+
+  window.gtag("event", event.name, {
+    page_path: event.path,
+    locale: event.locale,
+    viewport: event.viewport,
+    ...event.data,
+  });
+}
+
 function pushDataLayerEvent(event: AnalyticsEvent): void {
   if (typeof window === "undefined") {
     return;
@@ -128,6 +151,8 @@ function pushDataLayerEvent(event: AnalyticsEvent): void {
     viewport: event.viewport,
     ...event.data,
   });
+
+  pushGoogleAnalyticsEvent(event);
 }
 
 /** Updates the module-level consent flag that gates event delivery to remote endpoints. */
