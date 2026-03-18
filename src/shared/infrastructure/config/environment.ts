@@ -1,3 +1,12 @@
+import type { AnalyticsProfile } from "@/features/analytics/infrastructure/trackingSchema";
+
+const analyticsProfile =
+  String(import.meta.env.VITE_ANALYTICS_PROFILE ?? "lean")
+    .trim()
+    .toLowerCase() === "full"
+    ? "full"
+    : "lean";
+
 /** Centralized runtime configuration derived from Vite environment variables. */
 export const environment = {
   appName: String(import.meta.env.VITE_APP_NAME ?? "Moonfest 2026"),
@@ -18,6 +27,7 @@ export const environment = {
   posthogHost: String(
     import.meta.env.VITE_POSTHOG_HOST ?? "https://us.i.posthog.com"
   ).trim(),
+  analyticsProfile: analyticsProfile as AnalyticsProfile,
   isDev: import.meta.env.DEV,
   isProd: import.meta.env.PROD,
 } as const;

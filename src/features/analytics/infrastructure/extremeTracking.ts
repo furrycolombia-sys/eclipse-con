@@ -52,6 +52,31 @@ const NECESSARY_EVENTS = new Set<TrackedEventName>([
   "unhandled_rejection",
   "error_recovery",
 ]);
+const LEAN_PROFILE_EVENTS = new Set<TrackedEventName>([
+  "session_start",
+  "session_end",
+  "page_view",
+  "outbound_link_click",
+  "form_error_type",
+  "performance_snapshot",
+  "demographics_submitted",
+  "cta_interaction",
+  "faq_interaction",
+  "content_interaction",
+  "funnel_step",
+  "experiment_exposure",
+  "consent_preference_updated",
+  "time_to_first_interaction",
+  "locale_switch",
+  "faq_blocker_theme",
+  "reserve_ticket_handoff",
+  "network_quality_impact",
+  "reservation_lead_time_bucket",
+  "form_submit",
+  "registration_tutorial_step_selected",
+  "registration_tutorial_step_toggled",
+  "registration_tutorial_progress_bucket",
+]);
 
 interface TrackingRuntimeState {
   queue: AnalyticsEvent[];
@@ -194,6 +219,14 @@ function track(
   name: TrackedEventName,
   data: Record<string, Primitive> = {}
 ): void {
+  if (
+    context.options.profile !== "full" &&
+    !LEAN_PROFILE_EVENTS.has(name) &&
+    !NECESSARY_EVENTS.has(name)
+  ) {
+    return;
+  }
+
   const event: AnalyticsEvent = {
     name,
     timestamp: Date.now(),
@@ -794,7 +827,10 @@ function attachListeners(context: TrackContext): void {
         return;
       }
       const tag = target.tagName.toLowerCase();
-      if (tag === "img" || tag === "video" || tag === "audio") {
+      if (
+        context.options.profile === "full" &&
+        (tag === "img" || tag === "video" || tag === "audio")
+      ) {
         track(context, "media_load_health", {
           mediaType: tag,
           status: "loaded",

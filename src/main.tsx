@@ -30,6 +30,7 @@ initExtremeTracking({
   debug: environment.debug,
   posthogApiKey: environment.posthogApiKey,
   posthogHost: environment.posthogHost,
+  profile: environment.analyticsProfile,
 });
 
 createRoot(root).render(

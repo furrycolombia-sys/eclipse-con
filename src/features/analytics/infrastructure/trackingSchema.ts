@@ -1,10 +1,14 @@
 /** Configuration options for initializing the extreme tracking system. */
+export type AnalyticsProfile = "lean" | "full";
+
+/** Configuration options for initializing the extreme tracking system. */
 export interface TrackingOptions {
   endpoint: string;
   enabled: boolean;
   debug: boolean;
   posthogApiKey: string;
   posthogHost: string;
+  profile: AnalyticsProfile;
 }
 
 /** Scalar value type used throughout the analytics event payload maps. */
