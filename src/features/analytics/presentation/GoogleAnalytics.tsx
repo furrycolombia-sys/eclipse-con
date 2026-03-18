@@ -58,7 +58,7 @@ function removeGoogleAnalyticsScripts() {
 }
 
 function sendPageView(measurementId: string) {
-  const pagePath = `${window.location.pathname}${window.location.hash || ""}`;
+  const pagePath = `${window.location.pathname}${window.location.search}`;
   window.gtag?.("event", "page_view", {
     send_to: measurementId,
     page_title: document.title,
@@ -141,11 +141,13 @@ export function GoogleAnalytics({
       window.addEventListener("load", onWindowLoad, { once: true });
     }
 
-    window.addEventListener("hashchange", onRouteChange);
+    window.addEventListener("analytics:navigation", onRouteChange);
+    window.addEventListener("popstate", onRouteChange);
 
     return () => {
       window.removeEventListener("load", onWindowLoad);
-      window.removeEventListener("hashchange", onRouteChange);
+      window.removeEventListener("analytics:navigation", onRouteChange);
+      window.removeEventListener("popstate", onRouteChange);
     };
   }, [hasAnalyticsConsent, hasConsentDecision]);
 

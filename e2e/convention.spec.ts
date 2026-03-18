@@ -4,7 +4,7 @@ test("convention page loads all sections with content visible after scroll", asy
   page,
 }) => {
   await page.goto("/");
-  await expect(page).toHaveTitle("Moonfest 2026");
+  await expect(page).toHaveTitle("moonfest 2026");
 
   // Hero should be visible immediately (no scroll-reveal)
   const hero = page.getByTestId("section-hero");
@@ -44,7 +44,7 @@ test("convention page loads all sections with content visible after scroll", asy
   const footer = page.getByTestId("section-footer");
   await footer.scrollIntoViewIfNeeded();
   await page.waitForTimeout(800);
-  const footerHeading = footer.getByRole("heading", { name: "Moonfest 2026" });
+  const footerHeading = footer.getByRole("heading", { name: "moonfest" });
   await expect(footerHeading).toBeVisible();
   await page.screenshot({
     path: "e2e/screenshots/section-footer.png",

@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { CircleAlert } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { Accordion } from "@/shared/presentation/ui/accordion";
 import { SECTION_IDS } from "@/features/convention/domain/constants";
@@ -47,20 +48,18 @@ export function FaqSection() {
           <p className="mt-3 max-w-2xl text-sm text-foreground/90 sm:text-base">
             {t("convention.faq.tutorialCallout.description")}
           </p>
-          <span
-            role="button"
-            aria-disabled="true"
-            tabIndex={0}
-            className="mt-4 inline-flex h-9 cursor-default items-center justify-center rounded-md border border-accent/60 bg-accent/15 px-4 py-2 text-sm font-medium text-foreground/50 opacity-70 shadow-[0_0_0_1px_rgba(255,255,255,0.06)]"
+          <Link
+            to="/registration-tutorial"
+            className="mt-4 inline-flex h-9 items-center justify-center rounded-md border border-accent/60 bg-accent/15 px-4 py-2 text-sm font-medium text-foreground shadow-[0_0_0_1px_rgba(255,255,255,0.06)] transition-colors hover:bg-accent/25"
             data-funnel-step="faq_tutorial_open"
             data-cta-id="faq_registration_tutorial_interest"
-            data-cta-variant="coming_soon"
+            data-cta-variant="primary"
             data-content-section="faq"
             data-content-id="faq_tutorial_callout"
-            data-content-interaction="interest"
+            data-content-interaction="open"
           >
             {t("convention.faq.tutorialCallout.cta")}
-          </span>
+          </Link>
         </div>
       </div>
     </SectionWrapper>

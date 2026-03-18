@@ -90,7 +90,7 @@ const useAnchorNavigation = (
           pathname: location.pathname,
           search: `?${nextSearch.toString()}`,
         },
-        { replace: false }
+        { replace: true }
       );
       scrollToSection(id, "smooth");
     };

@@ -16,7 +16,7 @@ test.describe("analytics instrumentation", () => {
   }) => {
     await page.goto("/", { waitUntil: "networkidle" });
 
-    await expect(page).toHaveTitle("Moonfest 2026");
+    await expect(page).toHaveTitle("moonfest 2026");
     await page.locator('[data-cta-id="consent_accept_all"]').click();
     await page.reload({ waitUntil: "networkidle" });
 

@@ -1,5 +1,6 @@
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 import { Check } from "lucide-react";
 
@@ -114,20 +115,18 @@ function RegistrationCta({ t }: Readonly<{ t: TFunction }>) {
         {t("convention.registration.highlight")}
       </p>
       <div className="flex flex-wrap items-center justify-center gap-4">
-        <span
-          role="button"
-          aria-disabled="true"
-          tabIndex={0}
-          className="inline-flex h-9 cursor-default items-center justify-center rounded-md border border-accent/60 bg-accent/15 px-4 py-2 text-sm font-medium text-foreground/50 opacity-70 shadow-[0_0_0_1px_rgba(255,255,255,0.06)]"
+        <Link
+          to="/registration-tutorial"
+          className="inline-flex h-9 items-center justify-center rounded-md border border-accent/60 bg-accent/15 px-4 py-2 text-sm font-medium text-foreground shadow-[0_0_0_1px_rgba(255,255,255,0.06)] transition-colors hover:bg-accent/25"
           data-funnel-step="registration_tutorial"
           data-cta-id="registration_tutorial_interest"
-          data-cta-variant="coming_soon"
+          data-cta-variant="primary"
           data-content-section="registration"
           data-content-id="registration_tutorial_link"
-          data-content-interaction="interest"
+          data-content-interaction="open"
         >
           {t("convention.registration.tutorialLink")}
-        </span>
+        </Link>
       </div>
       <p className="text-sm text-muted-foreground">
         {t("convention.registration.noteServices")}

@@ -9,8 +9,16 @@ preview_urls = true
 # Static assets (Vite build output)
 [assets]
 directory = "./dist"
+not_found_handling = "single-page-application"
 
 # Custom domain route
 [[routes]]
 pattern = "moonfest.furrycolombia.com/*"
+zone_name = "furrycolombia.com"
+
+[env.staging]
+name = "eclipse-con-staging"
+
+[[env.staging.routes]]
+pattern = "staging-moonfest.furrycolombia.com/*"
 zone_name = "furrycolombia.com"

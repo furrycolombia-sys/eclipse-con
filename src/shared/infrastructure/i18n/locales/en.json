@@ -561,7 +561,7 @@
       },
       "cta": "Reserve",
       "reserveLink": "Reserve hotel",
-      "tutorialLink": "Registration tutorial (coming soon)",
+      "tutorialLink": "Open registration tutorial",
       "ticketLink": "Buy ticket (coming soon)",
       "devNote": "All prices are per person.",
       "noteServices": "Additional hotel services (spa, thermal pools, bar, etc.) are not included in the package.",
@@ -684,7 +684,7 @@
       "tutorialCallout": {
         "badge": "Important: complete both payments",
         "description": "Need a quick walkthrough? Follow the registration tutorial so you reserve your room first and then buy your event ticket with the reservation code.",
-        "cta": "Registration tutorial (coming soon)"
+        "cta": "Open registration tutorial"
       },
       "q1": {
         "question": "Can I book just one night?",

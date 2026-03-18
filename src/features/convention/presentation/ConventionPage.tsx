@@ -41,11 +41,6 @@ const getSectionIdFromUrl = (
   sectionIdSet: Set<string>
 ) => {
   const querySources: string[] = [locationSearch, window.location.search];
-  const hash = window.location.hash;
-  const hashQueryIndex = hash.indexOf("?");
-  if (hashQueryIndex >= 0) {
-    querySources.push(hash.slice(hashQueryIndex));
-  }
 
   for (const source of querySources) {
     if (!source) {
@@ -169,33 +164,32 @@ const isFullPageLoad = () =>
     );
 
 /**
- * Writes the active section ID into the hash query string via `replaceState`,
- * preserving the full URL (pathname, search, and hash-router route).
+ * Writes the active section ID into the URL query via `replaceState`.
+ * The hero section is treated as the default state and clears the `section`
+ * query entirely.
  */
-const writeSectionToHash = (
+const writeSectionToUrl = (
   nextSectionId: string,
   sectionIdSet: Set<string>
 ) => {
   const currentQuerySection = getSectionIdFromUrl(
-    window.location.search + window.location.hash,
+    window.location.search,
     sectionIdSet
   );
   if (currentQuerySection === nextSectionId) {
     return;
   }
-  const rawHashPath = window.location.hash.replace(/^#/, "").split("?")[0];
-  const hashPath = rawHashPath === "" ? "/" : rawHashPath;
-  const params = new URLSearchParams(
-    window.location.hash.includes("?")
-      ? window.location.hash.slice(window.location.hash.indexOf("?"))
-      : ""
-  );
-  params.set("section", nextSectionId);
-  window.history.replaceState(
-    { __sectionSync: true },
-    "",
-    `${window.location.pathname}${window.location.search}#${hashPath}?${params.toString()}`
-  );
+  const params = new URLSearchParams(window.location.search);
+  if (nextSectionId === SECTION_IDS.HERO) {
+    params.delete("section");
+  } else {
+    params.set("section", nextSectionId);
+  }
+  const queryString = params.toString();
+  const nextUrl = queryString
+    ? `${window.location.pathname}?${queryString}`
+    : window.location.pathname;
+  window.history.replaceState({ __sectionSync: true }, "", nextUrl);
 };
 
 function useSectionUrlSync() {
@@ -231,7 +225,7 @@ function useSectionUrlSync() {
         return;
       }
       activeSectionId = nextSectionId;
-      writeSectionToHash(nextSectionId, sectionIdSet);
+      writeSectionToUrl(nextSectionId, sectionIdSet);
     };
 
     const update = () => {
@@ -265,7 +259,8 @@ function useSectionUrlSync() {
       }
     };
 
-    const initialSectionId = getSectionIdFromUrl(location.search, sectionIdSet);
+    const initialSectionId =
+      getSectionIdFromUrl(location.search, sectionIdSet) ?? SECTION_IDS.HERO;
     applyInitialSectionScroll({
       initialSectionId,
       isSectionSyncNavigation,

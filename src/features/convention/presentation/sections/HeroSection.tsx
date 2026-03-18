@@ -66,6 +66,7 @@ function HeroTextContent() {
       >
         <Link
           to={`?section=${encodeURIComponent(SECTION_IDS.REGISTRATION)}`}
+          replace
           data-funnel-step="view_pricing"
           data-cta-id="hero_primary_cta"
           data-cta-variant="hero_primary"

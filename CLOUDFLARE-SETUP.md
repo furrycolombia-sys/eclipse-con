@@ -72,9 +72,17 @@ preview_urls = true
 
 [assets]
 directory = "./dist"
+not_found_handling = "single-page-application"
 
 [[routes]]
 pattern = "moonfest.furrycolombia.com/*"
+zone_name = "furrycolombia.com"
+
+[env.staging]
+name = "eclipse-con-staging"
+
+[[env.staging.routes]]
+pattern = "staging-moonfest.furrycolombia.com/*"
 zone_name = "furrycolombia.com"
 ```
 
@@ -95,7 +103,7 @@ Results:
 - ESLint passed
 - Production build passed
 - Wrangler dry run passed
-- The app already uses `createHashRouter`, so Cloudflare does not need SPA fallback rewriting for the current route model
+- Cloudflare Worker assets are configured for SPA fallback so browser-history routes resolve to `index.html`
 
 ## Step 5.1: Verify Public Endpoints
 
@@ -134,6 +142,19 @@ The repo is in good shape for Cloudflare release:
 1. Build, lint, and typecheck all pass
 2. Wrangler config exists in the repo and matches the current Worker deployment model
 3. The main remaining operational check is whether the final ticket checkout flow exists
+
+## Staging Worker
+
+- Added a separate Wrangler environment: `staging`
+- Staging Worker name: `eclipse-con-staging`
+- Staging route: `staging-moonfest.furrycolombia.com/*`
+- Staging deploy commands:
+  - `pnpm deploy:cloudflare:staging:dry-run`
+  - `pnpm deploy:cloudflare:staging`
+- `pnpm deploy:cloudflare:staging` now runs the browser-routing Playwright suite twice: once locally before deploy, then again after deployment against `https://eclipse-con-staging.furrycolombia.workers.dev` by default
+- Set `PLAYWRIGHT_BASE_URL` to validate a different staging hostname after deploy
+- Production remains isolated on `moonfest.furrycolombia.com/*`
+- Cloudflare DNS still needs a proxied record for `staging-moonfest.furrycolombia.com`
 
 ## Remaining Follow-Up
 

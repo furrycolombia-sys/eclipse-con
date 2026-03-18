@@ -14,7 +14,7 @@ const googleTagManagerEnabled = import.meta.env.VITE_GTM_ENABLED !== "false";
 
 /** Centralized runtime configuration derived from Vite environment variables. */
 export const environment = {
-  appName: String(import.meta.env.VITE_APP_NAME ?? "Moonfest 2026"),
+  appName: String(import.meta.env.VITE_APP_NAME ?? "moonfest 2026"),
   defaultLocale: String(import.meta.env.VITE_DEFAULT_LOCALE ?? "en"),
   supportedLocales: String(
     import.meta.env.VITE_SUPPORTED_LOCALES ?? "en,es"

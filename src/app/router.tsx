@@ -1,9 +1,9 @@
-import { createHashRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { MainLayout } from "@/app/layouts/MainLayout";
 
-/** Hash-based React Router router rendering the `MainLayout` wrapper around all feature routes. */
-const router = createHashRouter([
+/** Browser-history React Router router rendering the `MainLayout` wrapper around all feature routes. */
+const router = createBrowserRouter([
   {
     element: <MainLayout />,
     children: [

@@ -23,7 +23,7 @@ The product is designed around one core constraint:
 - It must work as a polished modern web app during development.
 - It must also ship as a **self-contained static artifact** for simple hosting and archival deployment.
 
-That requirement shapes nearly everything in this codebase: hash-based routing, aggressive asset inlining, embedded Telegram content, and environment-driven runtime configuration.
+That requirement shapes nearly everything in this codebase: browser-routing plus static fallback support, aggressive asset inlining, embedded Telegram content, and environment-driven runtime configuration.
 
 ## Site Analysis
 
@@ -46,7 +46,7 @@ The main convention experience is a single long-form page composed in this order
 11. FAQ
 12. Footer
 
-There is also a separate `#/registration-tutorial` route for the two-step booking flow.
+There is also a separate `/registration-tutorial` route for the two-step booking flow.
 
 ### Product goals the site is serving
 
@@ -67,7 +67,7 @@ There is also a separate `#/registration-tutorial` route for the two-step bookin
 ### UX patterns already present in the code
 
 - Section-aware URL syncing for deep-linking into the long landing page.
-- Hash routing for static deployment compatibility.
+- Clean browser URLs with Cloudflare SPA fallback for direct deep links.
 - i18n-first UI strings through `react-i18next`.
 - Consent-gated analytics with necessary vs optional tracking categories.
 - Registration guidance split into a dedicated step-by-step tutorial instead of forcing everything into the landing page.
@@ -178,18 +178,18 @@ scripts/
 
 ## Routing and Delivery Model
 
-The application uses `createHashRouter`, not browser history routing.
+The production app uses `createBrowserRouter` with Cloudflare SPA fallback.
 
-This is intentional. The project is built to survive:
+This is intentional. The project is built to support:
 
-- static hosting
-- local file distribution
-- artifact-style deployments
+- direct deep links on the Cloudflare deployment
+- static hosting through the Worker asset fallback
+- artifact-style deployments via the separate static build flow
 
 Current top-level routes:
 
-- `#/` for the main convention page
-- `#/registration-tutorial` for the booking walkthrough
+- `/` for the main convention page
+- `/registration-tutorial` for the booking walkthrough
 
 ## Static Build Strategy
 
@@ -323,7 +323,7 @@ The production deployment target is a Cloudflare Worker with static assets serve
 - Config lives in `wrangler.toml`
 - Build artifact for Cloudflare is `dist/`
 - Route is `moonfest.furrycolombia.com/*`
-- Hash routing avoids SPA fallback issues on static asset hosting
+- Cloudflare SPA fallback handles browser-history routes for direct deep links
 
 Recommended release flow:
 
@@ -335,9 +335,24 @@ pnpm deploy:cloudflare:dry-run
 pnpm deploy:cloudflare
 ```
 
+Recommended staging validation flow:
+
+```bash
+pnpm typecheck
+pnpm lint
+pnpm build
+pnpm deploy:cloudflare:staging:dry-run
+pnpm deploy:cloudflare:staging
+```
+
 Notes:
 
 - `public/robots.txt`, `public/sitemap.xml`, and social metadata in `index.html` all point at the live production domain
+- staging uses the separate Worker environment `staging` and the hostname `staging-moonfest.furrycolombia.com`
+- the staging hostname must exist in Cloudflare DNS before the Worker route can serve traffic
+- `pnpm deploy:cloudflare:staging` now deploys first and then runs the staging browser-routing E2E against `https://eclipse-con-staging.furrycolombia.workers.dev` by default
+- `pnpm deploy:cloudflare:staging` also runs the same browser-routing E2E locally before deployment, then reruns it against staging after deployment
+- override the E2E target with `PLAYWRIGHT_BASE_URL` if you want to validate the custom staging hostname instead
 
 ## Testing
 

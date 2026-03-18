@@ -76,6 +76,9 @@ function getDesktopAccentForGroup(groupKey: string): DesktopGroupAccent {
 }
 
 function getSectionHref(sectionId: string) {
+  if (sectionId === SECTION_IDS.HERO) {
+    return "/";
+  }
   return `?section=${encodeURIComponent(sectionId)}`;
 }
 
@@ -111,6 +114,7 @@ function NavLinkButton({ label, to }: Readonly<{ label: string; to: string }>) {
     <Button asChild variant="ghost" className={NAV_BUTTON_CLASS}>
       <Link
         to={to}
+        replace
         className="hover:cursor-pointer"
         data-content-section="navigation"
         data-content-id={to.split("#").pop() ?? to}
@@ -152,6 +156,7 @@ function NavDropdownItem({
     >
       <Link
         to={to}
+        replace
         className="flex items-center justify-between text-[0.86rem] font-medium text-foreground/75 transition-all duration-200 hover:cursor-pointer"
         data-content-section="navigation"
         data-content-id={to.split("#").pop() ?? to}
@@ -228,6 +233,7 @@ function DesktopNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
                   <Button asChild variant="ghost" className={NAV_BUTTON_CLASS}>
                     <Link
                       to={getSectionHref(getGroupAnchorId(group))}
+                      replace
                       className={cn(
                         "hover:cursor-pointer rounded-md px-1",
                         accent.triggerGlow,
@@ -355,6 +361,7 @@ function MobileNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
                       >
                         <Link
                           to={getSectionHref(group.items[0].id)}
+                          replace
                           data-content-section="navigation"
                           data-content-id={
                             getSectionHref(group.items[0].id)
@@ -390,6 +397,7 @@ function MobileNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
                             >
                               <Link
                                 to={getSectionHref(item.id)}
+                                replace
                                 className="flex w-full items-center gap-3 text-[0.95rem] font-medium hover:cursor-pointer"
                                 data-content-section="navigation"
                                 data-content-id={
@@ -428,6 +436,7 @@ export function NavigationBar() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <Link
           to={getSectionHref(SECTION_IDS.HERO)}
+          replace
           className="flex items-center hover:cursor-pointer"
           data-cta-id="nav_logo"
           data-content-id="logo"
