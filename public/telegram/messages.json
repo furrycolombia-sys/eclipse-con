@@ -1,7 +1,21 @@
 {
-  "source": "t.me/FurrySunfest",
-  "fetchedAt": "2026-02-25T17:25:33.394835+00:00",
+  "source": "t.me/FurryMoonfest",
+  "fetchedAt": "2026-03-18T06:23:52.948988+00:00",
   "messages": [
+    {
+      "id": 33,
+      "date": "2026-03-18T01:06:16+00:00",
+      "text": "¡Ya puedes visitar nuestra página web oficial! \n\nAllí encontrarás toda la información del evento, podrás reservar tu habitación y próximamente comprar tu entrada al Furry Moonfest 2026.\n\n👉 https://moonfest.furrycolombia.com/\n\n¿Quieres conectar con otros asistentes? \n\nÚnete a nuestro grupo oficial de Telegram para buscar roomie, inscribirte a actividades y chatear con la comunidad. \n\n👉 https://t.me/FurryMoonfest\n\n🎨: Nell Demon",
+      "media": [
+        {
+          "type": "MessageMediaPhoto",
+          "path": "telegram/media/msg_33.jpg",
+          "name": null,
+          "mime": "image/jpeg",
+          "size": 124529
+        }
+      ]
+    },
     {
       "id": 31,
       "date": "2026-01-11T19:21:36+00:00",

@@ -54,6 +54,17 @@ def load_existing_message_ids(path: Path) -> set[int]:
         return set()
 
 
+def sort_messages(messages: list[dict]) -> list[dict]:
+    return sorted(
+        messages,
+        key=lambda message: (
+            datetime.fromisoformat(str(message["date"])),
+            int(message["id"]),
+        ),
+        reverse=True,
+    )
+
+
 async def run() -> None:
     base_dir = Path(__file__).resolve().parent.parent
     load_env_file(base_dir / ".env.local")
@@ -62,7 +73,7 @@ async def run() -> None:
     api_id = int(require_env("TELEGRAM_API_ID"))
     api_hash = require_env("TELEGRAM_API_HASH")
     phone = os.environ.get("TELEGRAM_PHONE")
-    target = os.environ.get("TELEGRAM_TARGET", "t.me/FurrySunfest")
+    target = os.environ.get("TELEGRAM_TARGET", "t.me/FurryMoonfest")
     since_raw = os.environ.get("TELEGRAM_SINCE", "").strip()
     since_dt = None
     if since_raw:
@@ -150,20 +161,21 @@ async def run() -> None:
 
         messages.append(entry)
 
-    archive = {
-        "source": target,
-        "fetchedAt": datetime.now(timezone.utc).isoformat(),
-        "messages": messages,
-    }
+    combined_messages = messages
 
     if source_path.exists():
         try:
             existing_data = json.loads(source_path.read_text(encoding="utf-8"))
             existing_messages = existing_data.get("messages", [])
-            combined = existing_messages + messages
-            archive["messages"] = combined
+            combined_messages = existing_messages + messages
         except json.JSONDecodeError:
             pass
+
+    archive = {
+        "source": target,
+        "fetchedAt": datetime.now(timezone.utc).isoformat(),
+        "messages": sort_messages(combined_messages),
+    }
 
     with source_path.open("w", encoding="utf-8") as handle:
         json.dump(archive, handle, ensure_ascii=False, indent=2)

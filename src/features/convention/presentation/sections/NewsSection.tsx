@@ -1455,7 +1455,19 @@ export function NewsSection() {
 
       {archive?.source && (
         <p className="mt-6 text-xs text-muted-foreground/70">
-          {t("convention.news.source")}: {archive.source}
+          {t("convention.news.source")}:{" "}
+          <a
+            href={
+              archive.source.startsWith("http")
+                ? archive.source
+                : `https://${archive.source}`
+            }
+            target="_blank"
+            rel="noreferrer"
+            className="underline decoration-dashed underline-offset-4 transition hover:text-foreground"
+          >
+            {archive.source}
+          </a>
           {archive.translatedBy && (
             <>
               {" "}

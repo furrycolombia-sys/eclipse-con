@@ -199,13 +199,26 @@ def build_target(
     }
 
 
+def sort_messages(messages: list[dict]) -> list[dict]:
+    return sorted(
+        messages,
+        key=lambda message: (
+            datetime.fromisoformat(str(message["date"])),
+            int(message["id"]),
+        ),
+        reverse=True,
+    )
+
+
 def write_checkpoint(
     path: Path,
     source_data: dict,
     translated_messages: list[dict],
     translated_by: str,
 ) -> None:
-    target = build_target(source_data, translated_messages, translated_by)
+    target = build_target(
+        source_data, sort_messages(translated_messages), translated_by
+    )
     path.write_text(
         json.dumps(target, ensure_ascii=False, indent=2), encoding="utf-8"
     )
@@ -360,7 +373,7 @@ def main() -> None:
     if total:
         sys.stdout.write("\n")
 
-    target = build_target(source_data, translated, translated_by)
+    target = build_target(source_data, sort_messages(translated), translated_by)
     target_path.write_text(
         json.dumps(target, ensure_ascii=False, indent=2), encoding="utf-8"
     )
