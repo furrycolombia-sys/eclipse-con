@@ -4,6 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { Button } from "@/shared/presentation/ui/button";
 import { cn } from "@/shared/application/utils/cn";
 import { tid } from "@/shared/application/utils/tid";
+import { environment } from "@/shared/infrastructure/config/environment";
 import { WavePattern } from "../components/WavePattern";
 
 type LinkIcon =
@@ -63,8 +64,6 @@ const COMMUNITY_LINKS: {
 /** Renders the page footer with branding, community social links, credits, and a debug experiment toggle. */
 export function FooterSection() {
   const { t } = useTranslation();
-  const appVersion =
-    (import.meta.env.VITE_APP_VERSION as string | undefined) ?? "dev";
 
   return (
     <footer
@@ -145,7 +144,9 @@ export function FooterSection() {
               <p>{t("convention.footer.credits")}</p>
               <p>{t("convention.footer.copyright")}</p>
               <p className="text-muted-foreground/85">
-                {t("convention.footer.version", { version: appVersion })}
+                {t("convention.footer.version", {
+                  version: environment.appVersion,
+                })}
               </p>
             </div>
           </div>

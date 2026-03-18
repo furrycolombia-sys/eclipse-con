@@ -1,42 +1,75 @@
 import type { AnalyticsProfile } from "@/features/analytics/infrastructure/trackingSchema";
 
+type RuntimeConfig = Partial<Record<`VITE_${string}`, string>>;
+type PublicEnvKey = keyof RuntimeConfig;
+
+function getRuntimeConfig(): RuntimeConfig {
+  if (typeof window === "undefined") {
+    return {};
+  }
+
+  return window.__ECLIPSE_CON_RUNTIME_CONFIG__ ?? {};
+}
+
+function readEnv(name: PublicEnvKey): string {
+  const runtimeValue = getRuntimeConfig()[name];
+  if (typeof runtimeValue === "string") {
+    return runtimeValue;
+  }
+
+  return String(import.meta.env[name] ?? "");
+}
+
+function readBooleanEnv(name: PublicEnvKey, defaultValue: boolean): boolean {
+  const value = readEnv(name).trim().toLowerCase();
+
+  if (value.length === 0) {
+    return defaultValue;
+  }
+
+  return value === "true";
+}
+
+function readListEnv(name: PublicEnvKey, fallback: string): string[] {
+  return (readEnv(name) || fallback)
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+}
+
 const analyticsProfile =
-  String(import.meta.env.VITE_ANALYTICS_PROFILE ?? "lean")
-    .trim()
-    .toLowerCase() === "full"
+  readEnv("VITE_ANALYTICS_PROFILE").trim().toLowerCase() === "full"
     ? "full"
     : "lean";
-const cloudflareWebAnalyticsEnabled =
-  import.meta.env.VITE_CF_WEB_ANALYTICS_ENABLED === "true";
+const cloudflareWebAnalyticsEnabled = readBooleanEnv(
+  "VITE_CF_WEB_ANALYTICS_ENABLED",
+  false
+);
 const googleAnalyticsEnabled =
-  import.meta.env.VITE_GA_MEASUREMENT_ENABLED !== "false";
-const googleTagManagerEnabled = import.meta.env.VITE_GTM_ENABLED !== "false";
+  readEnv("VITE_GA_MEASUREMENT_ENABLED") !== "false";
+const googleTagManagerEnabled = readEnv("VITE_GTM_ENABLED") !== "false";
 
 /** Centralized runtime configuration derived from Vite environment variables. */
 export const environment = {
-  appName: String(import.meta.env.VITE_APP_NAME ?? "moonfest 2026"),
-  defaultLocale: String(import.meta.env.VITE_DEFAULT_LOCALE ?? "en"),
-  supportedLocales: String(
-    import.meta.env.VITE_SUPPORTED_LOCALES ?? "en,es"
-  ).split(","),
-  debug: import.meta.env.VITE_DEBUG === "true",
-  analyticsEndpoint: String(
-    import.meta.env.VITE_ANALYTICS_ENDPOINT ?? ""
-  ).trim(),
-  analyticsEnabled: import.meta.env.VITE_ANALYTICS_ENABLED === "true",
+  appName: readEnv("VITE_APP_NAME") || "moonfest 2026",
+  appVersion: readEnv("VITE_APP_VERSION") || "dev",
+  defaultLocale: readEnv("VITE_DEFAULT_LOCALE") || "en",
+  supportedLocales: readListEnv("VITE_SUPPORTED_LOCALES", "en,es"),
+  debug: readBooleanEnv("VITE_DEBUG", false),
+  analyticsEndpoint: readEnv("VITE_ANALYTICS_ENDPOINT").trim(),
+  analyticsEnabled: readBooleanEnv("VITE_ANALYTICS_ENABLED", false),
   cloudflareWebAnalyticsEnabled,
-  cfWebAnalyticsToken: String(
-    import.meta.env.VITE_CF_WEB_ANALYTICS_TOKEN ?? ""
-  ).trim(),
+  cfWebAnalyticsToken: readEnv("VITE_CF_WEB_ANALYTICS_TOKEN").trim(),
   googleAnalyticsEnabled,
-  gaMeasurementId: String(import.meta.env.VITE_GA_MEASUREMENT_ID ?? "").trim(),
+  gaMeasurementId: readEnv("VITE_GA_MEASUREMENT_ID").trim(),
   googleTagManagerEnabled,
-  gtmContainerId: String(import.meta.env.VITE_GTM_CONTAINER_ID ?? "").trim(),
-  posthogApiKey: String(import.meta.env.VITE_POSTHOG_API_KEY ?? "").trim(),
-  posthogHost: String(
-    import.meta.env.VITE_POSTHOG_HOST ?? "https://us.i.posthog.com"
-  ).trim(),
+  gtmContainerId: readEnv("VITE_GTM_CONTAINER_ID").trim(),
+  posthogApiKey: readEnv("VITE_POSTHOG_API_KEY").trim(),
+  posthogHost:
+    readEnv("VITE_POSTHOG_HOST").trim() || "https://us.i.posthog.com",
   analyticsProfile: analyticsProfile as AnalyticsProfile,
+  renderTestIds:
+    import.meta.env.DEV || readBooleanEnv("VITE_ENABLE_TEST_IDS", false),
   isDev: import.meta.env.DEV,
   isProd: import.meta.env.PROD,
 } as const;

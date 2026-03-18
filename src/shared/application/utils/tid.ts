@@ -1,3 +1,5 @@
+import { environment } from "@/shared/infrastructure/config/environment";
+
 /**
  * Structured options for generating test selector attributes.
  */
@@ -8,9 +10,6 @@ export interface TidOptionProps {
 }
 
 export const TID_ATTR = "data-testid";
-
-const shouldRenderTestIds =
-  import.meta.env.DEV || import.meta.env.VITE_ENABLE_TEST_IDS === "true";
 
 /**
  * Attribute bag returned by `tid()` for stable selector metadata.
@@ -28,7 +27,7 @@ type HtmlTagAttributeProps = Record<string, string>;
 export function tid(
   idOrOptions: string | TidOptionProps
 ): HtmlTagAttributeProps {
-  if (!shouldRenderTestIds) {
+  if (!environment.renderTestIds) {
     return {};
   }
 

@@ -235,6 +235,13 @@ Safe defaults live in `.env.example`.
 
 Use `.env.local` or `.env.development` for local overrides and secrets. Both are gitignored.
 
+For release-specific overrides, the release script also supports:
+
+- `.env.production`
+- `.env.production.local`
+- `.env.staging`
+- `.env.staging.local`
+
 Important current rules:
 
 - analytics are **off by default**
@@ -279,6 +286,8 @@ Primary scripts:
 pnpm dev
 pnpm build
 pnpm build:static
+pnpm release
+pnpm release:staging
 pnpm deploy:cloudflare:dry-run
 pnpm deploy:cloudflare
 pnpm preview
@@ -329,25 +338,25 @@ The production deployment target is a Cloudflare Worker with static assets serve
 Recommended release flow:
 
 ```bash
-pnpm typecheck
-pnpm lint
-pnpm build
-pnpm deploy:cloudflare:dry-run
-pnpm deploy:cloudflare
+pnpm release
 ```
 
 Recommended staging validation flow:
 
 ```bash
-pnpm typecheck
-pnpm lint
-pnpm build
-pnpm deploy:cloudflare:staging:dry-run
-pnpm deploy:cloudflare:staging
+pnpm release:staging
 ```
 
 Notes:
 
+- `pnpm release` loads `.env.example`, then `.env.local`, then `.env.production` and `.env.production.local`, then the current shell env
+- `pnpm release` auto-commits dirty local changes with `chore: release production`, pushes the current branch to `origin`, then deploys the top-level Wrangler production environment with an explicit empty `--env` target
+- `pnpm release` promotes project env into Cloudflare too: `VITE_*` keys are sent as Worker vars, and other project keys such as `OPENAI_*`, `AZURE_*`, `TELEGRAM_*`, and `TRANSLATE_*` are uploaded as Worker secrets
+- `pnpm release:staging` keeps the existing staging safety checks by running the local browser-routing Playwright spec before deploy and the staging browser-routing check after deploy
+- `pnpm release:staging` loads `.env.example`, then `.env.local`, then `.env.staging` and `.env.staging.local`, then the current shell env
+- use `pnpm release -- --message="feat: your message"` to override the auto-generated commit message
+- use `pnpm release -- --dry-run` to run validation plus the Cloudflare dry-run without mutating git state or doing a live deploy
+- use `pnpm release -- --skip-commit` or `pnpm release -- --skip-push` when you only want the deploy orchestration
 - `public/robots.txt`, `public/sitemap.xml`, and social metadata in `index.html` all point at the live production domain
 - staging uses the separate Worker environment `staging` and the hostname `staging-moonfest.furrycolombia.com`
 - the staging hostname must exist in Cloudflare DNS before the Worker route can serve traffic
