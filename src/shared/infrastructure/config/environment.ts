@@ -6,6 +6,10 @@ const analyticsProfile =
     .toLowerCase() === "full"
     ? "full"
     : "lean";
+const cloudflareWebAnalyticsEnabled =
+  import.meta.env.VITE_CF_WEB_ANALYTICS_ENABLED === "true";
+const googleAnalyticsEnabled =
+  import.meta.env.VITE_GA_MEASUREMENT_ENABLED === "true";
 
 /** Centralized runtime configuration derived from Vite environment variables. */
 export const environment = {
@@ -19,9 +23,11 @@ export const environment = {
     import.meta.env.VITE_ANALYTICS_ENDPOINT ?? ""
   ).trim(),
   analyticsEnabled: import.meta.env.VITE_ANALYTICS_ENABLED === "true",
+  cloudflareWebAnalyticsEnabled,
   cfWebAnalyticsToken: String(
     import.meta.env.VITE_CF_WEB_ANALYTICS_TOKEN ?? ""
   ).trim(),
+  googleAnalyticsEnabled,
   gaMeasurementId: String(import.meta.env.VITE_GA_MEASUREMENT_ID ?? "").trim(),
   posthogApiKey: String(import.meta.env.VITE_POSTHOG_API_KEY ?? "").trim(),
   posthogHost: String(

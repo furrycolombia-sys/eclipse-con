@@ -338,7 +338,11 @@ function trackPageView(context: TrackContext, trigger: string): void {
     context.state.interactionPath.push(path);
   }
   context.state.maxScrollDepth = 0;
-  track(context, "page_view", { trigger, path, ...getContextSignals() });
+  track(context, "page_view", {
+    trigger,
+    path,
+    ...getContextSignals(context.options.supportedLocales),
+  });
 
   if (previousPath && previousPath !== path) {
     track(context, "navigation_transition", {
@@ -1078,7 +1082,11 @@ export function initExtremeTracking(options: TrackingOptions): void {
   };
   activeTrackContexts.add(context);
 
-  track(context, "session_start", getContextSignals());
+  track(
+    context,
+    "session_start",
+    getContextSignals(context.options.supportedLocales)
+  );
   track(context, "device_performance_class", {
     performanceClass: getDevicePerformanceClass(),
   });

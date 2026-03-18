@@ -35,7 +35,9 @@ function sendPageView(measurementId: string) {
 export function GoogleAnalytics({ hasAnalyticsConsent }: GoogleAnalyticsProps) {
   useEffect(() => {
     const hasMeasurementId =
-      environment.analyticsEnabled && environment.gaMeasurementId.length > 0;
+      environment.analyticsEnabled &&
+      environment.googleAnalyticsEnabled &&
+      environment.gaMeasurementId.length > 0;
 
     if (!hasMeasurementId || !hasAnalyticsConsent) {
       removeGoogleAnalyticsScripts();

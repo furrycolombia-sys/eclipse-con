@@ -23,8 +23,12 @@ export function AppProviders({ children }: AppProvidersProps) {
   const [consent, setConsent] = useState<TrackingConsentState | null>(() =>
     getStoredTrackingConsent()
   );
-  const hasCloudflareWebAnalytics = environment.cfWebAnalyticsToken.length > 0;
-  const hasGoogleAnalytics = environment.gaMeasurementId.length > 0;
+  const hasCloudflareWebAnalytics =
+    environment.cloudflareWebAnalyticsEnabled &&
+    environment.cfWebAnalyticsToken.length > 0;
+  const hasGoogleAnalytics =
+    environment.googleAnalyticsEnabled &&
+    environment.gaMeasurementId.length > 0;
   const hasPosthog =
     environment.posthogApiKey.length > 0 && environment.posthogHost.length > 0;
   const hasAnalyticsConsent = Boolean(consent?.categories.analytics);

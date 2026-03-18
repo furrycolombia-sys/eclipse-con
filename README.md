@@ -138,6 +138,7 @@ That makes the embedded news archive and section deep-linking materially importa
 - Sanitized event payloads, allowlists, and privacy filters
 - Disabled by default unless explicitly enabled through env overrides
 - Lean analytics profile by default so PostHog captures page, funnel, CTA, content, consent, and diagnostics without high-volume clickstream noise
+- Google Analytics and Cloudflare Web Analytics are explicit opt-ins and do not activate merely because a token is present
 
 ## Technical Architecture
 

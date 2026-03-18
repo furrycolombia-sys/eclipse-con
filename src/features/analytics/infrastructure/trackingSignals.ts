@@ -160,6 +160,17 @@ function getPrimaryLanguageTag(locale: string): string | null {
   return primaryTag;
 }
 
+function normalizeLanguageTag(locale: string): string | null {
+  const normalized = locale.trim().toLowerCase().replace(/_/g, "-");
+  if (!normalized || normalized.length > 32) {
+    return null;
+  }
+  if (!/^[a-z0-9-]+$/.test(normalized)) {
+    return null;
+  }
+  return normalized;
+}
+
 /** Returns the primary BCP 47 language tag from the browser's language preferences, or `"unknown"`. */
 export function getBrowserLanguagePreference(): string {
   const languageCandidates = [...navigator.languages, navigator.language];
@@ -174,15 +185,68 @@ export function getBrowserLanguagePreference(): string {
   return "unknown";
 }
 
+/** Returns the browser's first normalized language preference including region/script when available. */
+export function getBrowserLanguageRawPreference(): string {
+  const languageCandidates = [...navigator.languages, navigator.language];
+
+  for (const candidate of languageCandidates) {
+    const normalized = normalizeLanguageTag(candidate);
+    if (normalized) {
+      return normalized;
+    }
+  }
+
+  return "unknown";
+}
+
+function normalizeSupportedLocales(
+  supportedLocales: readonly string[]
+): string[] {
+  return supportedLocales
+    .map((locale) => getPrimaryLanguageTag(locale))
+    .filter((locale): locale is string => Boolean(locale));
+}
+
+function getDefaultedLocaleReason(
+  browserLanguage: string,
+  supportedLocales: readonly string[]
+): string | null {
+  if (browserLanguage === "unknown") {
+    return "unknown_browser_language";
+  }
+
+  const normalizedSupportedLocales =
+    normalizeSupportedLocales(supportedLocales);
+  if (normalizedSupportedLocales.includes(browserLanguage)) {
+    return null;
+  }
+
+  return "unsupported_browser_language";
+}
+
 /** Collects all browser context signals (device, OS, browser, referrer, connection, language) into a single record. */
-export function getContextSignals(): Record<string, Primitive> {
+export function getContextSignals(
+  supportedLocales: readonly string[] = []
+): Record<string, Primitive> {
+  const browserLanguage = getBrowserLanguagePreference();
+  const browserLanguageRaw = getBrowserLanguageRawPreference();
+  const browserLanguageSupported =
+    browserLanguage !== "unknown" &&
+    normalizeSupportedLocales(supportedLocales).includes(browserLanguage);
+
   return {
     deviceBucket: getDeviceBucket(),
     osFamily: getOsFamily(),
     browserFamily: getBrowserFamily(),
     referrerBucket: getReferrerBucket(),
     connectionType: getConnectionType(),
-    browserLanguage: getBrowserLanguagePreference(),
+    browserLanguage,
+    browserLanguageRaw,
+    browserLanguageSupported,
+    defaultedLocaleReason: getDefaultedLocaleReason(
+      browserLanguage,
+      supportedLocales
+    ),
   };
 }
 

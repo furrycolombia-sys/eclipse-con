@@ -31,6 +31,7 @@ initExtremeTracking({
   posthogApiKey: environment.posthogApiKey,
   posthogHost: environment.posthogHost,
   profile: environment.analyticsProfile,
+  supportedLocales: environment.supportedLocales,
 });
 
 createRoot(root).render(

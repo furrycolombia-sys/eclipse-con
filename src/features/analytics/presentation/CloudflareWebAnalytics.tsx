@@ -21,6 +21,7 @@ export function CloudflareWebAnalytics({
   useEffect(() => {
     const hasToken =
       environment.analyticsEnabled &&
+      environment.cloudflareWebAnalyticsEnabled &&
       environment.cfWebAnalyticsToken.length > 0;
 
     if (!hasToken || !hasAnalyticsConsent) {

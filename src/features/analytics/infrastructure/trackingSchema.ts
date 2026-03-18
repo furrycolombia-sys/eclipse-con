@@ -9,6 +9,7 @@ export interface TrackingOptions {
   posthogApiKey: string;
   posthogHost: string;
   profile: AnalyticsProfile;
+  supportedLocales: readonly string[];
 }
 
 /** Scalar value type used throughout the analytics event payload maps. */
@@ -179,6 +180,9 @@ export const EVENT_DATA_ALLOWLIST: Record<TrackedEventName, readonly string[]> =
       "referrerBucket",
       "connectionType",
       "browserLanguage",
+      "browserLanguageRaw",
+      "browserLanguageSupported",
+      "defaultedLocaleReason",
     ],
     session_end: [
       "durationBucket",
@@ -194,6 +198,9 @@ export const EVENT_DATA_ALLOWLIST: Record<TrackedEventName, readonly string[]> =
       "referrerBucket",
       "connectionType",
       "browserLanguage",
+      "browserLanguageRaw",
+      "browserLanguageSupported",
+      "defaultedLocaleReason",
     ],
     section_impression: ["sectionId"],
     outbound_link_click: ["domainBucket"],
