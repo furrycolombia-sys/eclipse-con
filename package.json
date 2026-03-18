@@ -23,6 +23,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "test:e2e:analytics": "playwright test --config playwright.analytics.config.js",
     "test:e2e:ui": "playwright test --ui",
     "fetch:telegram": "node scripts/fetch-telegram.mjs",
     "translate:telegram": "node scripts/translate-telegram.mjs",

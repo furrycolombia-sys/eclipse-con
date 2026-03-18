@@ -25,6 +25,7 @@ export default tseslint.config(
       ".lh-profile/**",
       "eslint.config.mjs",
       "stylelint.config.mjs",
+      "playwright.analytics.config.js",
     ],
   },
   js.configs.recommended,

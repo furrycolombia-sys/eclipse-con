@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { TooltipProvider } from "@/shared/presentation/ui/tooltip";
 import { CloudflareWebAnalytics } from "@/features/analytics/presentation/CloudflareWebAnalytics";
 import { GoogleAnalytics } from "@/features/analytics/presentation/GoogleAnalytics";
+import { GoogleTagManager } from "@/features/analytics/presentation/GoogleTagManager";
 import { TrackingConsentGate } from "@/features/analytics/presentation/TrackingConsentGate";
 import {
   getStoredTrackingConsent,
@@ -68,6 +69,7 @@ export function AppProviders({ children }: AppProvidersProps) {
   return (
     <TooltipProvider>
       {children}
+      <GoogleTagManager />
       <CloudflareWebAnalytics hasAnalyticsConsent={hasAnalyticsConsent} />
       <GoogleAnalytics
         hasAnalyticsConsent={hasAnalyticsConsent}

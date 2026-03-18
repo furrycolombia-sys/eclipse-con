@@ -113,6 +113,23 @@ interface TrackContext {
 let analyticsConsentGranted = false;
 const activeTrackContexts = new Set<TrackContext>();
 
+function pushDataLayerEvent(event: AnalyticsEvent): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.dataLayer ??= [];
+  window.dataLayer.push({
+    event: event.name,
+    event_name: event.name,
+    event_timestamp: event.timestamp,
+    page_path: event.path,
+    locale: event.locale,
+    viewport: event.viewport,
+    ...event.data,
+  });
+}
+
 /** Updates the module-level consent flag that gates event delivery to remote endpoints. */
 export function setAnalyticsConsentGranted(granted: boolean): void {
   analyticsConsentGranted = granted;
@@ -237,10 +254,16 @@ function track(
     data: sanitizeEventData(name, data, context.baseData),
   };
 
-  const targetQueue =
-    analyticsConsentGranted || NECESSARY_EVENTS.has(name)
-      ? context.state.queue
-      : context.state.pendingConsentQueue;
+  const canDeliverOptionalEvent =
+    analyticsConsentGranted || NECESSARY_EVENTS.has(name);
+
+  if (canDeliverOptionalEvent) {
+    pushDataLayerEvent(event);
+  }
+
+  const targetQueue = canDeliverOptionalEvent
+    ? context.state.queue
+    : context.state.pendingConsentQueue;
 
   targetQueue.push(event);
   if (targetQueue.length > EVENT_QUEUE_LIMIT) {

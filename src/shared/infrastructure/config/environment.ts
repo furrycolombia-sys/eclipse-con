@@ -10,6 +10,7 @@ const cloudflareWebAnalyticsEnabled =
   import.meta.env.VITE_CF_WEB_ANALYTICS_ENABLED === "true";
 const googleAnalyticsEnabled =
   import.meta.env.VITE_GA_MEASUREMENT_ENABLED !== "false";
+const googleTagManagerEnabled = import.meta.env.VITE_GTM_ENABLED !== "false";
 
 /** Centralized runtime configuration derived from Vite environment variables. */
 export const environment = {
@@ -29,6 +30,8 @@ export const environment = {
   ).trim(),
   googleAnalyticsEnabled,
   gaMeasurementId: String(import.meta.env.VITE_GA_MEASUREMENT_ID ?? "").trim(),
+  googleTagManagerEnabled,
+  gtmContainerId: String(import.meta.env.VITE_GTM_CONTAINER_ID ?? "").trim(),
   posthogApiKey: String(import.meta.env.VITE_POSTHOG_API_KEY ?? "").trim(),
   posthogHost: String(
     import.meta.env.VITE_POSTHOG_HOST ?? "https://us.i.posthog.com"

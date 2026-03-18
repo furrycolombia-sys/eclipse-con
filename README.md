@@ -140,7 +140,9 @@ That makes the embedded news archive and section deep-linking materially importa
 - Lean analytics profile by default so PostHog captures page, funnel, CTA, content, consent, and diagnostics without high-volume clickstream noise
 - Cloudflare Web Analytics remains an explicit opt-in
 - Google Analytics 4 activates when `VITE_GA_MEASUREMENT_ID` is present unless `VITE_GA_MEASUREMENT_ENABLED=false` is set explicitly
+- Google Tag Manager activates when `VITE_GTM_CONTAINER_ID` is present unless `VITE_GTM_ENABLED=false` is set explicitly
 - GA4 uses regional consent defaults: analytics starts denied in EEA/UK/CH and granted elsewhere until the visitor updates the consent banner; ads-related storage stays denied everywhere
+- High-value analytics events are also mirrored into `window.dataLayer` so GTM can build free GA4 event tags and marketing reports without duplicating low-signal clickstream noise
 
 ## Technical Architecture
 
@@ -254,6 +256,8 @@ Important current rules:
 | `VITE_ANALYTICS_ENDPOINT`     | Optional custom ingest endpoint        |
 | `VITE_GA_MEASUREMENT_ENABLED` | Optional GA4 override, default on      |
 | `VITE_GA_MEASUREMENT_ID`      | Optional GA4 measurement ID            |
+| `VITE_GTM_ENABLED`            | Optional GTM override, default on      |
+| `VITE_GTM_CONTAINER_ID`       | Optional GTM container ID              |
 | `VITE_POSTHOG_API_KEY`        | Optional PostHog project key           |
 | `VITE_POSTHOG_HOST`           | Optional PostHog host                  |
 | `VITE_CF_WEB_ANALYTICS_TOKEN` | Optional Cloudflare token              |
