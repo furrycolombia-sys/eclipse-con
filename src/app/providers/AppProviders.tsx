@@ -36,7 +36,7 @@ export function AppProviders({ children }: AppProvidersProps) {
       hasPosthog);
 
   useEffect(() => {
-    const language = i18n.resolvedLanguage;
+    const language = i18n.resolvedLanguage ?? i18n.language;
     document.documentElement.lang = language.startsWith("en") ? "en" : "es";
   }, [i18n.language, i18n.resolvedLanguage]);
 
