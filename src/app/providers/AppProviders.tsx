@@ -36,9 +36,9 @@ export function AppProviders({ children }: AppProvidersProps) {
       hasPosthog);
 
   useEffect(() => {
-    const language = i18n.language || "es";
+    const language = i18n.resolvedLanguage;
     document.documentElement.lang = language.startsWith("en") ? "en" : "es";
-  }, [i18n.language]);
+  }, [i18n.language, i18n.resolvedLanguage]);
 
   useEffect(() => {
     const syncConsent = () => {

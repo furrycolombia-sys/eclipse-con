@@ -16,13 +16,16 @@ void i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: "es",
+    fallbackLng: "en",
     supportedLngs: ["en", "es"],
+    nonExplicitSupportedLngs: true,
+    load: "languageOnly",
     interpolation: {
       escapeValue: false,
     },
     detection: {
-      order: ["localStorage", "navigator"],
+      order: ["querystring", "localStorage", "navigator", "htmlTag"],
+      lookupLocalStorage: "eclipse-con-locale-v2",
       caches: ["localStorage"],
     },
   });
