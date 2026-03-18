@@ -64,7 +64,7 @@ export function LanguageToggle() {
       <span className="absolute inset-0 z-10 flex items-center">
         <span
           className={cn(
-            "flex w-1/2 items-center justify-center font-mono text-[10px] leading-none font-black tracking-[0.12em] transition-colors duration-300",
+            "flex w-1/2 items-center justify-center font-mono text-[11px] leading-none font-black tracking-[0.16em] transition-colors duration-300 [text-shadow:0_0_0.01px_currentColor]",
             isEnglish
               ? "text-background"
               : "text-foreground/70 group-hover:text-foreground/90"
@@ -74,7 +74,7 @@ export function LanguageToggle() {
         </span>
         <span
           className={cn(
-            "flex w-1/2 items-center justify-center font-mono text-[10px] leading-none font-black tracking-[0.12em] transition-colors duration-300",
+            "flex w-1/2 items-center justify-center font-mono text-[11px] leading-none font-black tracking-[0.16em] transition-colors duration-300 [text-shadow:0_0_0.01px_currentColor]",
             !isEnglish
               ? "text-background"
               : "text-foreground/70 group-hover:text-foreground/90"
