@@ -619,7 +619,7 @@
     },
     "news": {
       "title": "News",
-      "subtitle": "Updates and media straight from the Moonfest Telegram.",
+      "subtitle": "Updates and media straight from the Moonfest <telegramLink>Telegram</telegramLink>.",
       "modeLabel": "Layout",
       "modePlaceholder": "Pick a layout",
       "modes": {

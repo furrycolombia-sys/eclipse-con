@@ -618,8 +618,8 @@
       }
     },
     "news": {
-      "title": "News",
-      "subtitle": "Actualizaciones y medios directos desde el Telegram de Moonfest.",
+      "title": "Noticias",
+      "subtitle": "Actualizaciones y medios directos desde el <telegramLink>Telegram</telegramLink> de Moonfest.",
       "modeLabel": "Vista",
       "modePlaceholder": "Elige un formato",
       "modes": {
@@ -669,7 +669,7 @@
       },
       "table": {
         "date": "Fecha",
-        "update": "Update"
+        "update": "Actualización"
       },
       "empty": "Este update no tiene texto.",
       "error": "El feed no está disponible. Ejecuta la sincronización de Telegram.",

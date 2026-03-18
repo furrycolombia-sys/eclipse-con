@@ -1,6 +1,6 @@
 /* eslint-disable max-lines, max-lines-per-function, sonarjs/cognitive-complexity, sonarjs/no-nested-conditional, @typescript-eslint/no-unnecessary-template-expression */
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 import { Badge } from "@/shared/presentation/ui/badge";
 import { Button } from "@/shared/presentation/ui/button";
@@ -308,7 +308,19 @@ export function NewsSection() {
         />
         <div className="flex flex-col items-start gap-4 md:items-end">
           <p className="max-w-md text-sm text-muted-foreground sm:text-base">
-            {t("convention.news.subtitle")}
+            <Trans
+              i18nKey="convention.news.subtitle"
+              components={{
+                telegramLink: (
+                  <a
+                    href="https://t.me/FurryMoonfest"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-foreground"
+                  />
+                ),
+              }}
+            />
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <Badge
