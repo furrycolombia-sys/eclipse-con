@@ -13,5 +13,8 @@ collab = true
 [mcp_servers.figma]
 url = "https://mcp.figma.com/mcp"
 
+[mcp_servers.posthog]
+url = "https://mcp.posthog.com/mcp?project_id=346872"
+
 [sandbox_workspace_write]
 network_access = true
