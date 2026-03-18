@@ -207,6 +207,7 @@ const main = async () => {
   const env = {
     ...process.env,
     STATIC_PUBLIC_DIR: staticPublicDir,
+    VITE_ENABLE_TEST_IDS: "true",
     ...(appVersion ? { VITE_APP_VERSION: appVersion } : {}),
   };
 
