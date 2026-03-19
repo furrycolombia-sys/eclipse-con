@@ -41,7 +41,7 @@
     },
     "ticketing": {
       "title": "Ticketing",
-      "description": "Includes merchandise, transport, and event entry.",
+      "description": "Includes merchandise and event entry.",
       "cta": "Coming soon"
     },
     "hero": {
@@ -530,13 +530,17 @@
       "logoAlt": "Hoteles Estelar logo"
     },
     "registration": {
-      "title": "Reservations",
-      "subtitle": "",
+      "title": "Registration",
+      "subtitle": "This year we've separated the lodging and registration processes. Here's how it works.",
       "popular": "Popular",
+      "step1": {
+        "label": "Step 1",
+        "title": "Hotel reservation",
+        "description": "Independent from event registration. The room cost is split among roommates and includes breakfast and access to hotel facilities."
+      },
       "package": {
-        "title": "Event package",
+        "title": "Hotel reservation",
         "feature1": "Full package: 4 days and 3 nights",
-        "feature2": "Round-trip bus transport: Bogotá -> hotel -> Bogotá",
         "feature3": "Room",
         "feature4": "Find your group for the best price",
         "feature4SoloDuo": "Enjoy full privacy for you and/or one companion",
@@ -561,10 +565,21 @@
       },
       "cta": "Reserve",
       "reserveLink": "Reserve hotel",
+      "step2": {
+        "label": "Step 2",
+        "title": "Event ticket",
+        "description": "Once you have a confirmed room reservation, you can purchase your ticket through the website when registration opens.",
+        "price": "$300,000 COP",
+        "priceNote": "(approximately 80 USD)",
+        "feature1": "Official merch package",
+        "feature2": "Access to all parties, panels, and the artist market",
+        "feature3": "And many more surprises!"
+      },
+      "ticketCta": "Buy ticket (coming soon)",
       "tutorialLink": "Open registration tutorial",
       "ticketLink": "Buy ticket (coming soon)",
       "devNote": "All prices are per person.",
-      "noteServices": "Additional hotel services (spa, thermal pools, bar, etc.) are not included in the package.",
+      "noteServices": "Additional hotel services (spa, thermal pools, bar, etc.) are not included in the hotel package.",
       "note": "Questions: furrycolombia@gmail.com",
       "highlight": "Want to attend? Reserve today and secure your place at this unforgettable event."
     },
@@ -692,7 +707,7 @@
       },
       "q2": {
         "question": "What does the entry include?",
-        "answer": "Includes event entry, bus transport from Bogotá, room, and breakfast."
+        "answer": "Includes event entry, room, and breakfast."
       },
       "q3": {
         "question": "How can I book?",
@@ -720,7 +735,7 @@
       },
       "q9": {
         "question": "Are there refunds for ticketing?",
-        "answer": "No, because this revenue is used for merchandise production and transport booking, there are no refunds. However, tickets are transferable."
+        "answer": "No, because this revenue is used for merchandise production, there are no refunds. However, tickets are transferable."
       }
     },
     "consent": {
