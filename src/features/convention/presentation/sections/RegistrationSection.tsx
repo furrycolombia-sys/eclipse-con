@@ -51,6 +51,8 @@ function HotelCard({ t }: Readonly<{ t: TFunction }>) {
   return (
     <Card
       className="flex flex-col border-accent/50 bg-surface-elevated shadow-lg shadow-accent/10"
+      data-content-section="registration"
+      data-content-id="registration_step1_hotel"
       {...tid("registration-card-hotel")}
     >
       <CardHeader className="gap-2">
@@ -126,6 +128,8 @@ function TicketCard({ t }: Readonly<{ t: TFunction }>) {
   return (
     <Card
       className="flex flex-col border-accent/50 bg-surface-elevated shadow-lg shadow-accent/10"
+      data-content-section="registration"
+      data-content-id="registration_step2_ticket"
       {...tid("registration-card-ticket")}
     >
       <CardHeader className="gap-2">
@@ -163,6 +167,12 @@ function TicketCard({ t }: Readonly<{ t: TFunction }>) {
         <Button
           disabled
           className="w-full bg-accent/50 text-accent-foreground"
+          data-funnel-step="start_checkout"
+          data-cta-id="registration_ticket"
+          data-cta-variant="step2_ticket"
+          data-content-section="registration"
+          data-content-id="registration_ticket"
+          data-content-interaction="open"
           {...tid("registration-ticket-cta")}
         >
           {t("convention.registration.ticketCta")}
