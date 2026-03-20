@@ -33,13 +33,13 @@ function ImageLightbox({ src, alt, open, onOpenChange }: ImageLightboxProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton
-        className="max-w-[95vw] border-white/10 bg-background/95 p-2 backdrop-blur-sm sm:max-w-5xl"
+        className="max-w-[98vw] border-white/10 bg-background/95 p-1 backdrop-blur-sm sm:max-w-[96vw] sm:p-2"
       >
         <DialogTitle className="sr-only">{alt}</DialogTitle>
         <img
           src={src}
           alt={alt}
-          className="h-auto max-h-[85vh] w-full rounded-lg object-contain"
+          className="h-auto max-h-[95vh] w-full rounded-lg object-contain"
         />
       </DialogContent>
     </Dialog>
@@ -125,10 +125,10 @@ function StepImagePreview({
 }: StepImagePreviewProps) {
   const activeStepKey = `convention.registrationTutorial.steps.step${activeStep}`;
   return (
-    <div className="overflow-hidden rounded-xl border border-white/10 bg-surface/40 p-3">
+    <div className="flex items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-surface/40 p-3">
       <button
         type="button"
-        className="group relative block w-full cursor-zoom-in overflow-hidden rounded-lg border border-white/10 bg-background/60"
+        className="group relative flex w-full cursor-zoom-in items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-background/60"
         onClick={onZoomImage}
         aria-label={t("convention.registrationTutorial.interactive.zoomHint")}
         data-content-section="registration_tutorial"
