@@ -1,257 +1,175 @@
 import type { TFunction } from "i18next";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import {
-  ArrowLeft,
-  BadgeAlert,
-  CheckCircle2,
-  Hotel,
-  Ticket,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft, BadgeAlert, Info, ZoomIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/shared/presentation/ui/button";
-import { tid } from "@/shared/application/utils/tid";
 import {
-  trackTutorialStepSelected,
-  trackTutorialStepToggled,
-  trackTutorialProgressBucket,
-} from "@/features/analytics/infrastructure/extremeTracking";
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@/shared/presentation/ui/dialog";
+import { tid } from "@/shared/application/utils/tid";
+import { trackTutorialStepSelected } from "@/features/analytics/infrastructure/extremeTracking";
+import type { StepNumber } from "@/features/registration-tutorial/domain/tutorialSteps";
+import {
+  LAST_STEP,
+  STEPS,
+  STEP_IMAGES,
+} from "@/features/registration-tutorial/domain/tutorialSteps";
+import { useTutorialStepState } from "@/features/registration-tutorial/application/useTutorialStepState";
 
-const STEPS = [
-  { number: 1, Icon: Hotel },
-  { number: 2, Icon: Ticket },
-  { number: 3, Icon: CheckCircle2 },
-] as const;
+interface ImageLightboxProps {
+  readonly src: string;
+  readonly alt: string;
+  readonly open: boolean;
+  readonly onOpenChange: (open: boolean) => void;
+}
 
-type StepNumber = (typeof STEPS)[number]["number"];
-
-const parseStepParameter = (value: string | null): StepNumber => {
-  if (value === "1" || value === "2" || value === "3") {
-    return Number(value) as StepNumber;
-  }
-  return 1;
-};
-
-function StepIllustration({ step }: Readonly<{ step: StepNumber }>) {
-  if (step === 1) {
-    return (
-      <svg viewBox="0 0 360 220" className="h-full w-full" aria-hidden="true">
-        <rect x="12" y="18" width="336" height="186" rx="18" fill="#171922" />
-        <rect x="40" y="44" width="280" height="130" rx="12" fill="#232736" />
-        <rect x="64" y="68" width="160" height="18" rx="9" fill="#c9a84c" />
-        <rect x="64" y="98" width="230" height="12" rx="6" fill="#8b93a9" />
-        <rect x="64" y="118" width="170" height="12" rx="6" fill="#6f768a" />
-        <rect x="64" y="142" width="120" height="20" rx="10" fill="#d87a4d" />
-      </svg>
-    );
-  }
-
-  if (step === 2) {
-    return (
-      <svg viewBox="0 0 360 220" className="h-full w-full" aria-hidden="true">
-        <rect x="12" y="18" width="336" height="186" rx="18" fill="#171922" />
-        <rect x="44" y="46" width="272" height="126" rx="12" fill="#232736" />
-        <rect x="66" y="70" width="142" height="16" rx="8" fill="#c9a84c" />
-        <rect x="66" y="96" width="224" height="12" rx="6" fill="#8b93a9" />
-        <rect x="66" y="116" width="204" height="12" rx="6" fill="#8b93a9" />
-        <rect x="66" y="136" width="114" height="20" rx="10" fill="#4fa3d1" />
-        <rect x="236" y="136" width="54" height="20" rx="10" fill="#2f3445" />
-      </svg>
-    );
-  }
-
+/** Full-screen lightbox dialog for viewing tutorial screenshots at full resolution. */
+function ImageLightbox({ src, alt, open, onOpenChange }: ImageLightboxProps) {
   return (
-    <svg viewBox="0 0 360 220" className="h-full w-full" aria-hidden="true">
-      <rect x="12" y="18" width="336" height="186" rx="18" fill="#171922" />
-      <rect x="44" y="46" width="272" height="126" rx="12" fill="#232736" />
-      <circle cx="94" cy="92" r="24" fill="#c9a84c" />
-      <path d="M84 92l8 8 14-16" stroke="#12141c" strokeWidth="4" fill="none" />
-      <rect x="132" y="78" width="152" height="12" rx="6" fill="#8b93a9" />
-      <rect x="132" y="100" width="132" height="12" rx="6" fill="#8b93a9" />
-      <rect x="66" y="136" width="224" height="20" rx="10" fill="#3f8f5d" />
-    </svg>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        showCloseButton
+        className="max-w-[95vw] border-white/10 bg-background/95 p-2 backdrop-blur-sm sm:max-w-5xl"
+      >
+        <DialogTitle className="sr-only">{alt}</DialogTitle>
+        <img
+          src={src}
+          alt={alt}
+          className="h-auto max-h-[85vh] w-full rounded-lg object-contain"
+        />
+      </DialogContent>
+    </Dialog>
   );
 }
 
-const useTutorialStepState = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [completedSteps, setCompletedSteps] = useState<
-    Record<StepNumber, boolean>
-  >({
-    1: false,
-    2: false,
-    3: false,
-  });
-  const activeStep = parseStepParameter(searchParams.get("step"));
-
-  const progress = useMemo(() => {
-    const total = STEPS.length;
-    const completed = STEPS.filter(
-      (step) => completedSteps[step.number]
-    ).length;
-    return Math.round((completed / total) * 100);
-  }, [completedSteps]);
-
-  const firedBuckets = useRef(new Set<string>());
-
-  useEffect(() => {
-    const completedCount = STEPS.filter(
-      (step) => completedSteps[step.number]
-    ).length;
-    let bucket: "33" | "66" | "100" | null = null;
-    if (completedCount === 1) {
-      bucket = "33";
-    } else if (completedCount === 2) {
-      bucket = "66";
-    } else if (completedCount === 3) {
-      bucket = "100";
-    }
-    if (bucket && !firedBuckets.current.has(bucket)) {
-      firedBuckets.current.add(bucket);
-      trackTutorialProgressBucket({ bucket, activeStep });
-    }
-  }, [completedSteps, activeStep]);
-
-  const toggleStepDone = (step: StepNumber) => {
-    const nextState = completedSteps[step] ? "pending" : "done";
-    trackTutorialStepToggled({ stepNumber: step, nextState });
-    setCompletedSteps((previous) => ({ ...previous, [step]: !previous[step] }));
-  };
-
-  const goToPreviousStep = () => {
-    if (activeStep === 1) {
-      return;
-    }
-    const previousStep = (activeStep - 1) as StepNumber;
-    trackTutorialStepSelected({
-      stepNumber: previousStep,
-      origin: "prev_button",
-    });
-    const nextSearch = new URLSearchParams(searchParams);
-    nextSearch.set("step", String(previousStep));
-    setSearchParams(nextSearch, { replace: true });
-  };
-
-  const goToNextStep = () => {
-    if (activeStep === 3) {
-      return;
-    }
-    const nextStep = (activeStep + 1) as StepNumber;
-    trackTutorialStepSelected({ stepNumber: nextStep, origin: "next_button" });
-    const nextSearch = new URLSearchParams(searchParams);
-    nextSearch.set("step", String(nextStep));
-    setSearchParams(nextSearch, { replace: true });
-  };
-
-  useEffect(() => {
-    const stepInUrl = searchParams.get("step");
-    const expectedStep = String(activeStep);
-    if (stepInUrl === expectedStep) {
-      return;
-    }
-
-    const nextSearch = new URLSearchParams(searchParams);
-    nextSearch.set("step", expectedStep);
-    setSearchParams(nextSearch, { replace: true });
-  }, [activeStep, searchParams, setSearchParams]);
-
-  return {
-    activeStep,
-    completedSteps,
-    progress,
-    goToNextStep,
-    goToPreviousStep,
-    setActiveStep: (step: StepNumber) => {
-      const nextSearch = new URLSearchParams(searchParams);
-      nextSearch.set("step", String(step));
-      setSearchParams(nextSearch, { replace: true });
-    },
-    toggleStepDone,
-  };
-};
-
 interface TutorialStepsProps {
-  activeStep: StepNumber;
-  completedSteps: Record<StepNumber, boolean>;
-  onSelectStep: (step: StepNumber) => void;
-  t: TFunction;
+  readonly activeStep: StepNumber;
+  readonly completedSteps: Record<StepNumber, boolean>;
+  readonly onSelectStep: (step: StepNumber) => void;
+  readonly t: TFunction;
 }
 
-const TutorialSteps = ({
+/** Renders the five step selector cards in a responsive grid. */
+function TutorialSteps({
   activeStep,
   completedSteps,
   onSelectStep,
   t,
-}: Readonly<TutorialStepsProps>) => (
-  <section className="grid gap-3 md:grid-cols-3">
-    {STEPS.map(({ number, Icon }) => {
-      const stepKey = `convention.registrationTutorial.steps.step${number}`;
-      const isActive = activeStep === number;
-      const isDone = completedSteps[number];
-      return (
-        <button
-          key={number}
-          type="button"
-          onClick={() => {
-            trackTutorialStepSelected({
-              stepNumber: number,
-              origin: "step_card",
-            });
-            onSelectStep(number);
-          }}
-          className={`rounded-2xl border p-4 text-left transition ${isActive ? "border-accent/70 bg-surface/55" : "border-white/10 bg-surface/25 hover:border-accent/35"}`}
-        >
-          <div className="mb-3 flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-              {t("convention.registrationTutorial.steps.label", {
-                number,
-              })}
-            </span>
-            <Icon className="h-4 w-4 text-accent/80" />
-          </div>
-          <p className="text-base font-semibold text-foreground">
-            {t(`${stepKey}.title`)}
-          </p>
-          <p className="mt-2 text-xs text-muted-foreground">
-            {isDone
-              ? t("convention.registrationTutorial.interactive.done")
-              : t("convention.registrationTutorial.interactive.pending")}
-          </p>
-        </button>
-      );
-    })}
-  </section>
-);
-
-interface TutorialInteractivePanelProps {
-  activeStep: StepNumber;
-  completedSteps: Record<StepNumber, boolean>;
-  progress: number;
-  onToggleDone: (step: StepNumber) => void;
-  onPrevious: () => void;
-  onNext: () => void;
-  t: TFunction;
+}: TutorialStepsProps) {
+  return (
+    <section className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+      {STEPS.map(({ number, Icon }) => {
+        const stepKey = `convention.registrationTutorial.steps.step${number}`;
+        const isActive = activeStep === number;
+        const isDone = completedSteps[number];
+        return (
+          <button
+            key={number}
+            type="button"
+            onClick={() => {
+              trackTutorialStepSelected({
+                stepNumber: number,
+                origin: "step_card",
+              });
+              onSelectStep(number);
+            }}
+            className={`rounded-2xl border p-4 text-left transition ${isActive ? "border-accent/70 bg-surface/55" : "border-white/10 bg-surface/25 hover:border-accent/35"}`}
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+                {t("convention.registrationTutorial.steps.label", { number })}
+              </span>
+              <Icon className="h-4 w-4 text-accent/80" />
+            </div>
+            <p className="text-sm font-semibold text-foreground">
+              {t(`${stepKey}.title`)}
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {isDone
+                ? t("convention.registrationTutorial.interactive.done")
+                : t("convention.registrationTutorial.interactive.pending")}
+            </p>
+          </button>
+        );
+      })}
+    </section>
+  );
 }
 
-const TutorialInteractivePanel = ({
+interface TutorialInteractivePanelProps {
+  readonly activeStep: StepNumber;
+  readonly completedSteps: Record<StepNumber, boolean>;
+  readonly progress: number;
+  readonly onToggleDone: (step: StepNumber) => void;
+  readonly onPrevious: () => void;
+  readonly onNext: () => void;
+  readonly onZoomImage: () => void;
+  readonly t: TFunction;
+}
+
+interface StepImagePreviewProps {
+  readonly activeStep: StepNumber;
+  readonly onZoomImage: () => void;
+  readonly t: TFunction;
+}
+
+/** Zoomable step screenshot preview with hover hint. */
+function StepImagePreview({
+  activeStep,
+  onZoomImage,
+  t,
+}: StepImagePreviewProps) {
+  const activeStepKey = `convention.registrationTutorial.steps.step${activeStep}`;
+  return (
+    <div className="overflow-hidden rounded-xl border border-white/10 bg-surface/40 p-3">
+      <button
+        type="button"
+        className="group relative block w-full cursor-zoom-in overflow-hidden rounded-lg border border-white/10 bg-background/60"
+        onClick={onZoomImage}
+        aria-label={t("convention.registrationTutorial.interactive.zoomHint")}
+        data-content-section="registration_tutorial"
+        data-content-id={`tutorial_zoom_step_${activeStep}`}
+        data-content-interaction="open"
+      >
+        <img
+          src={STEP_IMAGES[activeStep]}
+          alt={t(`${activeStepKey}.title`)}
+          className="h-auto w-full object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+          loading="lazy"
+        />
+        <span className="absolute right-2 bottom-2 flex items-center gap-1.5 rounded-lg bg-black/60 px-2.5 py-1.5 text-xs text-white/80 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
+          <ZoomIn className="h-3.5 w-3.5" />
+          {t("convention.registrationTutorial.interactive.zoomHint")}
+        </span>
+      </button>
+    </div>
+  );
+}
+
+/** Interactive panel showing the step screenshot, description, progress bar, and navigation controls. */
+function TutorialInteractivePanel({
   activeStep,
   completedSteps,
   progress,
   onToggleDone,
   onPrevious,
   onNext,
+  onZoomImage,
   t,
-}: Readonly<TutorialInteractivePanelProps>) => {
+}: TutorialInteractivePanelProps) {
   const activeStepKey = `convention.registrationTutorial.steps.step${activeStep}`;
 
   return (
     <section className="grid gap-5 rounded-2xl border border-white/10 bg-surface/20 p-5 md:grid-cols-[1.2fr_1fr] md:p-6">
-      <div className="overflow-hidden rounded-xl border border-white/10 bg-surface/40 p-3">
-        <div className="overflow-hidden rounded-lg border border-white/10 bg-background/60 p-2">
-          <StepIllustration step={activeStep} />
-        </div>
-      </div>
+      <StepImagePreview
+        activeStep={activeStep}
+        onZoomImage={onZoomImage}
+        t={t}
+      />
       <div className="space-y-4">
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-accent">
@@ -311,7 +229,7 @@ const TutorialInteractivePanel = ({
             type="button"
             className="bg-accent text-accent-foreground hover:bg-accent-glow"
             onClick={onNext}
-            disabled={activeStep === 3}
+            disabled={activeStep === LAST_STEP}
           >
             {t("convention.registrationTutorial.interactive.next")}
           </Button>
@@ -319,37 +237,69 @@ const TutorialInteractivePanel = ({
       </div>
     </section>
   );
-};
+}
 
-const TutorialChecklist = ({ t }: Readonly<{ t: TFunction }>) => (
-  <section className="grid gap-4 rounded-2xl border border-white/10 bg-surface/20 p-6 md:grid-cols-2">
-    <div>
-      <h3 className="text-lg font-semibold text-foreground">
-        {t("convention.registrationTutorial.checklist.title")}
-      </h3>
-      <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
-        <li>- {t("convention.registrationTutorial.checklist.item1")}</li>
-        <li>- {t("convention.registrationTutorial.checklist.item2")}</li>
-        <li>- {t("convention.registrationTutorial.checklist.item3")}</li>
-      </ul>
-    </div>
-    <div className="flex flex-col gap-3">
-      <Button disabled variant="outline" className="border-white/15">
-        {t("convention.registrationTutorial.actions.ticket")}
-      </Button>
-      <p className="text-xs text-muted-foreground">
-        {t("convention.registrationTutorial.actions.note")}
+/** Checklist section with important payment notes and quick summary items. */
+function TutorialChecklist({ t }: Readonly<{ t: TFunction }>) {
+  return (
+    <section className="space-y-4">
+      <div className="inline-flex items-start gap-3 rounded-2xl border border-amber-300/35 bg-amber-300/10 px-4 py-3 text-sm text-amber-100">
+        <Info className="mt-0.5 h-4 w-4 shrink-0" />
+        <p>{t("convention.registrationTutorial.paymentNote")}</p>
+      </div>
+
+      <div className="grid gap-4 rounded-2xl border border-white/10 bg-surface/20 p-6 md:grid-cols-2">
+        <div>
+          <h3 className="text-lg font-semibold text-foreground">
+            {t("convention.registrationTutorial.checklist.title")}
+          </h3>
+          <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+            <li>- {t("convention.registrationTutorial.checklist.item1")}</li>
+            <li>- {t("convention.registrationTutorial.checklist.item2")}</li>
+            <li>- {t("convention.registrationTutorial.checklist.item3")}</li>
+          </ul>
+        </div>
+        <div className="flex flex-col gap-3">
+          <Button
+            disabled
+            variant="outline"
+            className="border-white/15"
+            data-content-section="registration_tutorial"
+            data-content-id="tutorial_ticket_cta"
+            data-cta-id="tutorial_ticket_coming_soon"
+          >
+            {t("convention.registrationTutorial.actions.ticket")}
+          </Button>
+          <p className="text-xs text-muted-foreground">
+            {t("convention.registrationTutorial.actions.note")}
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** Placeholder section for Part 2 (ticket purchase), shown as coming soon. */
+function Part2ComingSoon({ t }: Readonly<{ t: TFunction }>) {
+  return (
+    <section className="rounded-2xl border border-white/10 bg-surface/20 p-6 text-center">
+      <h2 className="text-xl font-semibold text-foreground">
+        {t("convention.registrationTutorial.part2Title")}
+      </h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        {t("convention.registrationTutorial.part2Description")}
       </p>
-    </div>
-  </section>
-);
+    </section>
+  );
+}
 
 /**
- * Three-step registration tutorial page that guides users through the hotel booking and ticketing process.
+ * Five-step hotel booking tutorial page that guides users through the Estelar reservation process.
  * Exported as `Component` for React Router's `lazy` route loader.
  */
 export function Component() {
   const { t } = useTranslation();
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -364,6 +314,8 @@ export function Component() {
     setActiveStep,
     toggleStepDone,
   } = useTutorialStepState();
+
+  const activeStepKey = `convention.registrationTutorial.steps.step${activeStep}`;
 
   return (
     <div
@@ -402,6 +354,11 @@ export function Component() {
             <p>{t("convention.registrationTutorial.warning")}</p>
           </div>
         </header>
+
+        <h2 className="text-lg font-semibold uppercase tracking-[0.16em] text-accent">
+          {t("convention.registrationTutorial.part1Title")}
+        </h2>
+
         <TutorialSteps
           activeStep={activeStep}
           completedSteps={completedSteps}
@@ -415,10 +372,21 @@ export function Component() {
           onToggleDone={toggleStepDone}
           onPrevious={goToPreviousStep}
           onNext={goToNextStep}
+          onZoomImage={() => {
+            setLightboxOpen(true);
+          }}
           t={t}
         />
         <TutorialChecklist t={t} />
+        <Part2ComingSoon t={t} />
       </div>
+
+      <ImageLightbox
+        src={STEP_IMAGES[activeStep]}
+        alt={t(`${activeStepKey}.title`)}
+        open={lightboxOpen}
+        onOpenChange={setLightboxOpen}
+      />
     </div>
   );
 }

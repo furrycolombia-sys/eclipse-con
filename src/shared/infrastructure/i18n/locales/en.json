@@ -36,13 +36,7 @@
       "communityAttendees": "Special guests",
       "communityOrganizers": "Organizers",
       "mobileToggle": "Toggle navigation menu",
-      "reserve": "Reserve now",
-      "ticketing": "Ticketing"
-    },
-    "ticketing": {
-      "title": "Ticketing",
-      "description": "Includes merchandise and event entry.",
-      "cta": "Coming soon"
+      "reserve": "Reserve now"
     },
     "hero": {
       "eyebrow": "Furry",
@@ -576,7 +570,8 @@
         "feature3": "And many more surprises!"
       },
       "ticketCta": "Buy ticket (coming soon)",
-      "tutorialLink": "Open registration tutorial",
+      "tutorialLink": "See step-by-step tutorial",
+      "tutorialDescription": "New to the process? Follow our visual guide with screenshots to complete your reservation without issues.",
       "ticketLink": "Buy ticket (coming soon)",
       "devNote": "All prices are per person.",
       "noteServices": "Additional hotel services (spa, thermal pools, bar, etc.) are not included in the hotel package.",
@@ -586,35 +581,51 @@
     "registrationTutorial": {
       "badge": "Registration guide",
       "back": "Back to landing",
-      "title": "How registration works: complete both payments",
-      "subtitle": "Moonfest access requires a two-step process. First reserve your room for the event dates, then pay the event ticket using your reservation code.",
+      "title": "How to book your room and buy your ticket for Furry Moonfest",
+      "subtitle": "In this tutorial we show you step by step how to reserve your hotel room and purchase your ticket for Furry Moonfest.",
       "warning": "You must complete two separate payments: hotel reservation and event ticket. Completing only one is not enough.",
+      "part1Title": "Part 1: Hotel reservation",
+      "part2Title": "Part 2: Buy your ticket",
+      "part2Description": "Coming soon",
       "steps": {
         "label": "Step {{number}}",
         "step1": {
-          "title": "Reserve your hotel room",
-          "description": "Start with the official Estelar booking flow for July 10-13, 2026.",
-          "point1": "Complete the room payment directly with the hotel.",
-          "point2": "Save the reservation confirmation and your code."
+          "title": "Click 'Reserve' on the Moonfest page",
+          "description": "Start from the Moonfest registration section and click the 'Reserve' button under Step 1.",
+          "point1": "You'll see two cards: one for the hotel and one for the ticket.",
+          "point2": "Click the orange 'Reserve' button to go to the hotel booking site."
         },
         "step2": {
-          "title": "Buy your Moonfest ticket",
-          "description": "After hotel payment, continue with the event ticket process.",
-          "point1": "Use your reservation code in the ticket checkout.",
-          "point2": "Pay your event ticket in the official Moonfest flow."
+          "title": "Open the booking link",
+          "description": "Click the hotel reservation link to access the Estelar Hotel Paipa booking page.",
+          "point1": "The page will show the dates pre-set for July 10–13, 2026.",
+          "point2": "Look for the 'Guests' selector at the top of the page."
         },
         "step3": {
-          "title": "Keep both confirmations",
-          "description": "Your access depends on both completed records.",
-          "point1": "Have both payment proofs available before the event.",
-          "point2": "If anything is missing, contact furrycolombia@gmail.com."
+          "title": "Adjust number of guests",
+          "description": "You must set the exact number of people staying in the room.",
+          "point1": "Click on 'Guests' and select the correct number of adults.",
+          "point2": "If you skip this step, the system won't calculate the cost correctly."
+        },
+        "step4": {
+          "title": "Choose your room",
+          "description": "Select the room type that fits your group and click 'Reserve Now'.",
+          "point1": "Check the price per night including taxes.",
+          "point2": "Free cancellation is available up to 48 hours before the event."
+        },
+        "step5": {
+          "title": "Payment information",
+          "description": "Fill in your contact details and payment method to complete the reservation.",
+          "point1": "The hotel will not charge immediately — payment is processed 48 hours before the event.",
+          "point2": "You can cancel free of charge before that deadline."
         }
       },
+      "paymentNote": "The person making the reservation is responsible for canceling it if not attending. If the reservation is not canceled within the established deadline, the hotel may charge the corresponding amount.",
       "checklist": {
         "title": "Quick checklist",
-        "item1": "Hotel room reserved for the event dates",
-        "item2": "Reservation code received and saved",
-        "item3": "Event ticket paid with that code"
+        "item1": "Number of guests set correctly",
+        "item2": "Room selected and reserved",
+        "item3": "Reservation confirmation received"
       },
       "interactive": {
         "title": "Interactive tutorial",
@@ -624,7 +635,9 @@
         "previous": "Previous step",
         "next": "Next step",
         "done": "Completed",
-        "pending": "Pending"
+        "pending": "Pending",
+        "zoomHint": "Click image to enlarge",
+        "closeZoom": "Close"
       },
       "actions": {
         "reserve": "Step 1: Reserve hotel room",

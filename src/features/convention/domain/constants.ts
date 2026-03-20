@@ -18,7 +18,6 @@ export const SECTION_IDS = {
   REGISTRATION: "registration",
   FAQ: "faq",
   NEWS: "news",
-  TICKETING: "ticketing",
 } as const;
 
 /** Number of floating sakura petal particles rendered on-screen. */

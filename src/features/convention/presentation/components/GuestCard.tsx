@@ -23,6 +23,8 @@ export function GuestCard({ guest }: Readonly<GuestCardProps>) {
       className={cn(
         "group relative flex h-full flex-col overflow-hidden border-white/10 bg-surface pb-6 py-0 text-left shadow-[0_18px_45px_-30px_rgba(15,23,42,0.9)] transition-all duration-300 hover:-translate-y-1 hover:border-accent/30 hover:bg-surface-elevated"
       )}
+      data-content-section="guests"
+      data-content-id={`guest_${guest.id}`}
       {...tid(`guest-card-${guest.id}`)}
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(224,117,58,0.12),_transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

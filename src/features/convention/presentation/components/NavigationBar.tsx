@@ -247,6 +247,9 @@ function DesktopNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
                         accent.triggerGlow,
                         accent.triggerHoverText
                       )}
+                      data-content-section="navigation"
+                      data-content-id={getGroupAnchorId(group)}
+                      data-cta-id={`nav_group_${getGroupAnchorId(group)}`}
                     >
                       <span className="relative">
                         {t(group.key)}
@@ -317,6 +320,9 @@ function MobileNav({ groups }: Readonly<{ groups: readonly NavGroup[] }>) {
             className="group relative h-11 w-11 rounded-full border border-white/10 bg-surface/40 text-foreground/80 shadow-[0_10px_30px_-18px_rgba(201,168,76,0.6)] transition hover:border-white/20 hover:bg-surface/70 hover:text-foreground"
             aria-label={t("convention.nav.mobileToggle")}
             data-nav-menu-action="open"
+            data-content-section="navigation"
+            data-content-id="mobile_menu_toggle"
+            data-cta-id="nav_mobile_toggle"
             {...tid("mobile-menu-toggle")}
           >
             <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,_rgba(201,168,76,0.35),_transparent_65%)] opacity-0 transition duration-300 group-hover:opacity-100" />
