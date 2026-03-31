@@ -1,8 +1,22 @@
 {
-  "source": "t.me/FurryMoonfest",
-  "fetchedAt": "2026-03-18T20:50:56.774633+00:00",
-  "translatedBy": "Claude (manual)",
+  "source": "t.me/FurrySunfest",
+  "fetchedAt": "2026-03-30T22:47:54.877512+00:00",
+  "translatedBy": "OpenAI (gpt-4o-mini)",
   "messages": [
+    {
+      "id": 37,
+      "date": "2026-03-30T17:00:29+00:00",
+      "text": "Hello everyone!\n\nWe're here to remind you that we now have an official Telegram group for anyone interested in attending our long-awaited Moonfest!\n\nThere you can find out all the news about the event and communicate with other attendees\n\n👉 https://t.me/FurryMoonfest",
+      "media": [
+        {
+          "type": "MessageMediaPhoto",
+          "path": "telegram/media/msg_37.jpg",
+          "name": null,
+          "mime": "image/jpeg",
+          "size": 34551
+        }
+      ]
+    },
     {
       "id": 35,
       "date": "2026-03-18T20:46:48+00:00",
