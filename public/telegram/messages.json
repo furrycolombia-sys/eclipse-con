@@ -1,7 +1,21 @@
 {
-  "source": "t.me/FurryMoonfest",
-  "fetchedAt": "2026-03-18T20:50:56.774633+00:00",
+  "source": "t.me/FurrySunfest",
+  "fetchedAt": "2026-03-30T19:40:48.235560+00:00",
   "messages": [
+    {
+      "id": 37,
+      "date": "2026-03-30T17:00:29+00:00",
+      "text": "¡Hola a todos!\n\nVenimos a recordarles que ya tenemos un grupo oficial de Telegram para todo aquel que esté interesado en asistir a nuestra esperada Moonfest!\n\nAhí podrás enterarte de todas las noticias sobre el evento y comunicarte con los demás asistentes \n\n👉 https://t.me/FurryMoonfest",
+      "media": [
+        {
+          "type": "MessageMediaPhoto",
+          "path": "telegram/media/msg_37.jpg",
+          "name": null,
+          "mime": "image/jpeg",
+          "size": 34551
+        }
+      ]
+    },
     {
       "id": 35,
       "date": "2026-03-18T20:46:48+00:00",

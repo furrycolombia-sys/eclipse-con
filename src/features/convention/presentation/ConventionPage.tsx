@@ -16,7 +16,6 @@ import { AboutSection } from "./sections/AboutSection";
 import { EventsSection } from "./sections/EventsSection";
 import { VenueSection } from "./sections/VenueSection";
 import { RegistrationSection } from "./sections/RegistrationSection";
-import { TicketingSection } from "./sections/TicketingSection";
 import { FaqSection } from "./sections/FaqSection";
 import { NewsSection } from "./sections/NewsSection";
 import { GuestsSection } from "./sections/GuestsSection";
@@ -320,7 +319,6 @@ export function Component() {
           <AboutSection />
           <EventsSection />
           <RegistrationSection />
-          <TicketingSection />
           <VenueSection />
           <SectionGroupIntro
             id={SECTION_IDS.PLACE_GROUP}

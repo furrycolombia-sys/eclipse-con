@@ -2,7 +2,7 @@ import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { Check, Hotel, Ticket } from "lucide-react";
+import { ArrowRight, BookOpen, Check, Hotel, Ticket } from "lucide-react";
 
 import {
   PACKAGE_FEATURE_KEYS,
@@ -51,6 +51,8 @@ function HotelCard({ t }: Readonly<{ t: TFunction }>) {
   return (
     <Card
       className="flex flex-col border-accent/50 bg-surface-elevated shadow-lg shadow-accent/10"
+      data-content-section="registration"
+      data-content-id="registration_step1_hotel"
       {...tid("registration-card-hotel")}
     >
       <CardHeader className="gap-2">
@@ -126,6 +128,8 @@ function TicketCard({ t }: Readonly<{ t: TFunction }>) {
   return (
     <Card
       className="flex flex-col border-accent/50 bg-surface-elevated shadow-lg shadow-accent/10"
+      data-content-section="registration"
+      data-content-id="registration_step2_ticket"
       {...tid("registration-card-ticket")}
     >
       <CardHeader className="gap-2">
@@ -163,6 +167,12 @@ function TicketCard({ t }: Readonly<{ t: TFunction }>) {
         <Button
           disabled
           className="w-full bg-accent/50 text-accent-foreground"
+          data-funnel-step="start_checkout"
+          data-cta-id="registration_ticket"
+          data-cta-variant="step2_ticket"
+          data-content-section="registration"
+          data-content-id="registration_ticket"
+          data-content-interaction="open"
           {...tid("registration-ticket-cta")}
         >
           {t("convention.registration.ticketCta")}
@@ -188,21 +198,21 @@ function RegistrationCta({ t }: Readonly<{ t: TFunction }>) {
       <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
         {t("convention.registration.highlight")}
       </p>
-      <div className="flex flex-wrap items-center justify-center gap-4">
-        <Link
-          to="/registration-tutorial"
-          className="inline-flex h-9 items-center justify-center rounded-md border border-accent/60 bg-accent/15 px-4 py-2 text-sm font-medium text-foreground shadow-[0_0_0_1px_rgba(255,255,255,0.06)] transition-colors hover:bg-accent/25"
-          data-funnel-step="registration_tutorial"
-          data-cta-id="registration_tutorial_interest"
-          data-cta-variant="primary"
-          data-content-section="registration"
-          data-content-id="registration_tutorial_link"
-          data-content-interaction="open"
-          {...tid("registration-tutorial-link")}
-        >
-          {t("convention.registration.tutorialLink")}
-        </Link>
-      </div>
+      <Link
+        to="/registration-tutorial"
+        className="group inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-6 py-3 text-sm font-semibold text-accent shadow-[0_0_12px_rgba(224,117,58,0.1)] transition-all hover:border-accent/60 hover:bg-accent/20 hover:shadow-[0_0_20px_rgba(224,117,58,0.15)]"
+        data-funnel-step="registration_tutorial"
+        data-cta-id="registration_tutorial_interest"
+        data-cta-variant="secondary"
+        data-content-section="registration"
+        data-content-id="registration_tutorial_link"
+        data-content-interaction="open"
+        {...tid("registration-tutorial-link")}
+      >
+        <BookOpen className="h-4 w-4" />
+        {t("convention.registration.tutorialLink")}
+        <ArrowRight className="h-3.5 w-3.5 opacity-50 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
+      </Link>
       <p className="text-sm text-muted-foreground">
         {t("convention.registration.noteServices")}
       </p>

@@ -1,3 +1,4 @@
+import io
 import json
 import os
 import subprocess
@@ -8,6 +9,15 @@ import urllib.request
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
+
+# Ensure stdout can handle Unicode (emojis in translated text) on Windows
+if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
+    sys.stdout = io.TextIOWrapper(
+        sys.stdout.buffer, encoding="utf-8", errors="replace"
+    )
+    sys.stderr = io.TextIOWrapper(
+        sys.stderr.buffer, encoding="utf-8", errors="replace"
+    )
 
 
 def ensure_telethon() -> None:
@@ -152,19 +162,22 @@ def azure_translate(
     raise RuntimeError("Azure translation failed")
 
 
-def load_existing_translations(path: Path) -> dict[int, str]:
+def load_existing_target(path: Path) -> dict:
     if not path.exists():
         return {}
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-        messages = data.get("messages", [])
-        return {
-            int(message.get("id")): message.get("text", "")
-            for message in messages
-            if message.get("text")
-        }
+        return json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return {}
+
+
+def extract_translations(target_data: dict) -> dict[int, str]:
+    messages = target_data.get("messages", [])
+    return {
+        int(message.get("id")): message.get("text", "")
+        for message in messages
+        if message.get("text")
+    }
 
 
 def render_progress(
@@ -224,16 +237,8 @@ def write_checkpoint(
     )
 
 
-def main() -> None:
-    base_dir = Path(__file__).resolve().parent.parent
-    load_env_file(base_dir / ".env.local")
-    load_env_file(base_dir / ".env.example")
-
-    out_dir = base_dir / "public" / "telegram"
-    source_path = out_dir / "messages.json"
-    target_path = out_dir / "messages.en.json"
-
-    provider = os.environ.get("TRANSLATE_PROVIDER", "azure").strip().lower()
+def setup_provider() -> tuple:
+    provider = os.environ.get("TRANSLATE_PROVIDER", "openai").strip().lower()
     to_lang = os.environ.get("TRANSLATE_TO", "en").strip() or "en"
     translated_by = "Azure AI Translator"
     fallback_translate_text = None
@@ -285,8 +290,7 @@ def main() -> None:
         )
 
     print(
-        f"[translate] Provider={provider} target={to_lang} "
-        f"checkpoint={target_path}"
+        f"[translate] Provider={provider} target={to_lang}"
     )
     if fallback_translate_text and fallback_provider_label:
         print(
@@ -294,84 +298,126 @@ def main() -> None:
             f"{fallback_provider_label}"
         )
 
+    return translate_text, fallback_translate_text, fallback_provider_label, translated_by
+
+
+def main() -> None:
+    base_dir = Path(__file__).resolve().parent.parent
+    load_env_file(base_dir / ".env.local")
+    load_env_file(base_dir / ".env.example")
+
+    out_dir = base_dir / "public" / "telegram"
+    source_path = out_dir / "messages.json"
+    target_path = out_dir / "messages.en.json"
+
     if not source_path.exists():
         raise SystemExit("Missing messages.json. Run pnpm fetch:telegram first.")
 
     source_data = json.loads(source_path.read_text(encoding="utf-8"))
     messages = source_data.get("messages", [])
-    existing = load_existing_translations(target_path)
+    existing_target = load_existing_target(target_path)
+    existing = extract_translations(existing_target)
 
-    translated = []
-    missing_count = 0
-    total = len(messages)
-    processed = 0
+    with_text = [m for m in messages if m.get("text")]
+    no_text = [m for m in messages if not m.get("text")]
+    already_translated = [m for m in with_text if int(m["id"]) in existing]
+    needs_translation = [m for m in with_text if int(m["id"]) not in existing]
+
+    print(f"[translate] Source: {len(messages)} messages")
+    print(
+        f"[translate] Already translated: {len(already_translated)} | "
+        f"Need translation: {len(needs_translation)} | "
+        f"No text: {len(no_text)}"
+    )
+
+    if already_translated:
+        ids = ", ".join(str(m["id"]) for m in already_translated)
+        print(f"[translate] Cached IDs: {ids}")
+    if needs_translation:
+        ids = ", ".join(str(m["id"]) for m in needs_translation)
+        print(f"[translate] Missing IDs: {ids}")
+
+    if not needs_translation:
+        print("[translate] All messages already translated. Nothing to do.")
+        target = build_target(
+            source_data,
+            sort_messages([
+                {
+                    "id": m["id"],
+                    "date": m["date"],
+                    "text": existing.get(int(m["id"]), ""),
+                    "media": m.get("media", []),
+                }
+                for m in messages
+            ]),
+            existing_target.get("translatedBy", "Claude (manual)"),
+        )
+        target_path.write_text(
+            json.dumps(target, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        print(f"[translate] Synced {target_path}")
+        return
+
+    translate_text, fallback_translate_text, fallback_provider_label, \
+        translated_by = setup_provider()
+
+    total_missing = len(needs_translation)
+    missing_ids = {int(m["id"]) for m in needs_translation}
     translated_new = 0
-    cached_count = 0
-    skipped_count = 0
+    missing_count = 0
     fallback_used_count = 0
-    for message in messages:
-        text = message.get("text") or ""
-        if text:
-            cached = existing.get(int(message["id"]))
-            if cached:
-                text_en = cached
-                cached_count += 1
-                print(
-                    f"\n[translate] #{message['id']} cached "
-                    f"({len(text_en)} chars)"
-                )
-                print(f"[translate] #{message['id']} text:\n{text_en}\n")
-            else:
-                try:
-                    text_en = translate_text(text)
-                except urllib.error.HTTPError as primary_error:
-                    if fallback_translate_text:
-                        print(
-                            f"\n[translate] #{message['id']} primary failed "
-                            f"({primary_error.code}). Trying fallback..."
-                        )
-                        try:
-                            text_en = fallback_translate_text(text)
-                            fallback_used_count += 1
-                            print(
-                                f"[translate] #{message['id']} used fallback "
-                                f"{fallback_provider_label}"
-                            )
-                        except urllib.error.HTTPError:
-                            text_en = ""
-                    else:
-                        text_en = ""
-                if text_en:
-                    existing[int(message["id"])] = text_en
-                    translated_new += 1
-                    print(
-                        f"\n[translate] #{message['id']} translated "
-                        f"({len(text_en)} chars)"
-                    )
-                    print(f"[translate] #{message['id']} text:\n{text_en}\n")
-                else:
-                    missing_count += 1
-                    print(f"\n[translate] #{message['id']} no translation yet")
-        else:
-            text_en = ""
-            skipped_count += 1
-            print(f"\n[translate] #{message['id']} skipped (no text)")
-        translated.append(
-            {
-                "id": message["id"],
-                "date": message["date"],
-                "text": text_en,
-                "media": message.get("media", []),
-            }
-        )
-        write_checkpoint(target_path, source_data, translated, translated_by)
-        processed += 1
-        render_progress(
-            processed, total, translated_new, cached_count, skipped_count
-        )
 
-    if total:
+    for idx, message in enumerate(needs_translation, 1):
+        msg_id = int(message["id"])
+        text = message.get("text") or ""
+        render_progress(idx, total_missing, translated_new, 0, missing_count)
+
+        try:
+            text_en = translate_text(text)
+        except urllib.error.HTTPError as primary_error:
+            if fallback_translate_text:
+                print(
+                    f"\n[translate] #{msg_id} primary failed "
+                    f"({primary_error.code}). Trying fallback..."
+                )
+                try:
+                    text_en = fallback_translate_text(text)
+                    fallback_used_count += 1
+                    print(
+                        f"[translate] #{msg_id} used fallback "
+                        f"{fallback_provider_label}"
+                    )
+                except urllib.error.HTTPError:
+                    text_en = ""
+            else:
+                text_en = ""
+
+        if text_en:
+            existing[msg_id] = text_en
+            translated_new += 1
+            print(
+                f"\n[translate] #{msg_id} translated "
+                f"({len(text_en)} chars)"
+            )
+        else:
+            missing_count += 1
+            print(f"\n[translate] #{msg_id} no translation yet")
+
+    if total_missing:
+        render_progress(
+            total_missing, total_missing, translated_new, 0, missing_count
+        )
         sys.stdout.write("\n")
+
+    translated = [
+        {
+            "id": m["id"],
+            "date": m["date"],
+            "text": existing.get(int(m["id"]), ""),
+            "media": m.get("media", []),
+        }
+        for m in messages
+    ]
 
     target = build_target(source_data, sort_messages(translated), translated_by)
     target_path.write_text(

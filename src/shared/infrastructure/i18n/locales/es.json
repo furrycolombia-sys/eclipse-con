@@ -36,13 +36,7 @@
       "communityAttendees": "Invitados especiales",
       "communityOrganizers": "Organizadores",
       "mobileToggle": "Abrir menú de navegación",
-      "reserve": "Reservar ahora",
-      "ticketing": "Boletería"
-    },
-    "ticketing": {
-      "title": "Boletería",
-      "description": "Incluye mercancía y entrada al evento.",
-      "cta": "Próximamente"
+      "reserve": "Reservar ahora"
     },
     "hero": {
       "eyebrow": "Furry",
@@ -576,7 +570,8 @@
         "feature3": "¡Y muchas sorpresas más!"
       },
       "ticketCta": "Comprar boleta (próximamente)",
-      "tutorialLink": "Tutorial de registro (próximamente)",
+      "tutorialLink": "Ver tutorial paso a paso",
+      "tutorialDescription": "¿Primera vez? Sigue nuestra guía visual con capturas de pantalla para completar tu reserva sin problemas.",
       "ticketLink": "Comprar boleta (próximamente)",
       "devNote": "Todos los precios son por persona.",
       "noteServices": "Los servicios adicionales del hotel (spa, termales, bar, etc.) no están incluidos en el paquete del hotel.",
@@ -586,35 +581,51 @@
     "registrationTutorial": {
       "badge": "Guía de registro",
       "back": "Volver al landing",
-      "title": "Cómo funciona el registro: completa ambos pagos",
-      "subtitle": "El acceso a Moonfest requiere dos pasos. Primero reservas la habitación para las fechas del evento y luego pagas la boleta usando tu código de reserva.",
+      "title": "Cómo reservar tu habitación y comprar tu entrada para Furry Moonfest",
+      "subtitle": "En este tutorial te mostramos paso a paso cómo reservar tu habitación y comprar tu entrada para Furry Moonfest.",
       "warning": "Debes completar dos pagos separados: reserva del hotel y boleta del evento. Hacer solo uno no es suficiente.",
+      "part1Title": "Parte 1: Reserva del hotel",
+      "part2Title": "Parte 2: Compra de entrada",
+      "part2Description": "Próximamente",
       "steps": {
         "label": "Paso {{number}}",
         "step1": {
-          "title": "Reserva tu habitación de hotel",
-          "description": "Empieza en la reserva oficial de Estelar para el 10-13 de julio de 2026.",
-          "point1": "Completa el pago de la habitación directamente con el hotel.",
-          "point2": "Guarda la confirmación de reserva y tu código."
+          "title": "Haz clic en 'Reservar' en la página de Moonfest",
+          "description": "Empieza desde la sección de registro de Moonfest y haz clic en el botón 'Reservar' debajo del Paso 1.",
+          "point1": "Verás dos tarjetas: una para el hotel y otra para la entrada.",
+          "point2": "Haz clic en el botón naranja 'Reservar' para ir al sitio de reservas del hotel."
         },
         "step2": {
-          "title": "Compra tu boleta de Moonfest",
-          "description": "Después del pago del hotel, continúa con la compra de boleta del evento.",
-          "point1": "Usa tu código de reserva en el checkout de boleta.",
-          "point2": "Paga tu boleta en el flujo oficial de Moonfest."
+          "title": "Entrar al link de reserva",
+          "description": "Haz clic en el enlace de reserva para acceder a la página de reservas del Hotel Estelar Paipa.",
+          "point1": "La página mostrará las fechas preestablecidas del 10 al 13 de julio de 2026.",
+          "point2": "Busca el selector de 'Huéspedes' en la parte superior de la página."
         },
         "step3": {
-          "title": "Conserva ambas confirmaciones",
-          "description": "Tu acceso depende de tener ambos registros completos.",
-          "point1": "Ten disponibles los dos comprobantes antes del evento.",
-          "point2": "Si te falta algo, escribe a furrycolombia@gmail.com."
+          "title": "Ajustar número de personas",
+          "description": "Debes ajustar el número exacto de personas que se hospedarán en la habitación.",
+          "point1": "Haz clic en 'Huéspedes' y selecciona el número correcto de adultos.",
+          "point2": "Si no lo haces, el sistema no calculará correctamente el costo."
+        },
+        "step4": {
+          "title": "Elegir habitación",
+          "description": "Selecciona el tipo de habitación que se ajuste a tu grupo y haz clic en 'Reservar Ahora'.",
+          "point1": "Revisa el precio por noche incluyendo impuestos.",
+          "point2": "La cancelación es gratuita hasta 48 horas antes del evento."
+        },
+        "step5": {
+          "title": "Información de pago",
+          "description": "Completa tus datos de contacto y método de pago para finalizar la reserva.",
+          "point1": "El hotel no cobrará inmediatamente — el pago se realizará 48 horas antes del evento.",
+          "point2": "Puedes cancelar sin costo antes de ese plazo."
         }
       },
+      "paymentNote": "La persona que realiza la reserva es responsable de cancelarla en caso de no utilizarla. Si no se cancela dentro del tiempo establecido, el hotel podrá realizar el cobro correspondiente.",
       "checklist": {
         "title": "Checklist rápido",
-        "item1": "Habitación reservada para las fechas del evento",
-        "item2": "Código de reserva recibido y guardado",
-        "item3": "Boleta del evento pagada con ese código"
+        "item1": "Número de huéspedes configurado correctamente",
+        "item2": "Habitación seleccionada y reservada",
+        "item3": "Confirmación de reserva recibida"
       },
       "interactive": {
         "title": "Tutorial interactivo",
@@ -624,7 +635,9 @@
         "previous": "Paso anterior",
         "next": "Siguiente paso",
         "done": "Completado",
-        "pending": "Pendiente"
+        "pending": "Pendiente",
+        "zoomHint": "Haz clic en la imagen para ampliar",
+        "closeZoom": "Cerrar"
       },
       "actions": {
         "reserve": "Paso 1: Reservar habitación",
@@ -699,7 +712,7 @@
       "tutorialCallout": {
         "badge": "Importante: completa ambos pagos",
         "description": "¿Quieres una guía rápida? Sigue el tutorial de registro para reservar primero la habitación y luego comprar la boleta con el código de reserva.",
-        "cta": "Tutorial de registro (próximamente)"
+        "cta": "Ver tutorial de registro"
       },
       "q1": {
         "question": "¿Puedo reservar solo una noche?",

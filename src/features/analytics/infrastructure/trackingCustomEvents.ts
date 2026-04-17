@@ -34,7 +34,7 @@ export interface RegistrationTutorialStepToggledPayload {
 
 /** Payload shape for a tutorial step progress bucket event. */
 export interface RegistrationTutorialProgressBucketPayload {
-  bucket: "33" | "66" | "100";
+  bucket: "20" | "40" | "60" | "80" | "100";
   activeStep: number;
 }
 
@@ -218,8 +218,10 @@ export function registerCustomTrackingListeners(
       event.detail as Partial<RegistrationTutorialProgressBucketPayload>;
     if (
       typeof detail.activeStep === "number" &&
-      (detail.bucket === "33" ||
-        detail.bucket === "66" ||
+      (detail.bucket === "20" ||
+        detail.bucket === "40" ||
+        detail.bucket === "60" ||
+        detail.bucket === "80" ||
         detail.bucket === "100")
     ) {
       handlers.onTutorialProgressBucket(

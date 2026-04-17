@@ -51,7 +51,7 @@ export function FaqSection() {
           </p>
           <Link
             to="/registration-tutorial"
-            className="mt-4 inline-flex h-9 items-center justify-center rounded-md border border-accent/60 bg-accent/15 px-4 py-2 text-sm font-medium text-foreground shadow-[0_0_0_1px_rgba(255,255,255,0.06)] transition-colors hover:bg-accent/25"
+            className="mt-4 inline-flex h-10 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-[0_0_16px_rgba(224,117,58,0.2)] transition-colors hover:bg-accent-glow"
             data-funnel-step="faq_tutorial_open"
             data-cta-id="faq_registration_tutorial_interest"
             data-cta-variant="primary"

@@ -53,6 +53,9 @@ export function useNewsRenderers() {
               key={`${message.id}-media-${index}`}
               href={source}
               className="text-sm text-accent underline decoration-dashed underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+              data-content-section="news"
+              data-content-id={`news_media_download_${message.id}`}
+              data-content-interaction="open"
             >
               {item.name ?? source}
             </a>

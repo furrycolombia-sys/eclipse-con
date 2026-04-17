@@ -44,6 +44,8 @@ export function EventCard({ event }: Readonly<EventCardProps>) {
       className={cn(
         "group border-white/5 bg-surface/90 transition-all duration-300 hover:border-accent/30 hover:bg-surface-elevated"
       )}
+      data-content-section="events"
+      data-content-id={`event_${event.id}`}
       {...tid(`event-card-${event.id}`)}
     >
       <CardHeader className="gap-4 border-b border-white/5 pb-4">

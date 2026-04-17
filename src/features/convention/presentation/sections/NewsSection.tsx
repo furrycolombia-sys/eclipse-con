@@ -158,6 +158,9 @@ const renderIndexMedia = (message: TelegramMessage, fallbackLabel: string) => {
     <a
       href={source}
       className="text-xs uppercase tracking-[0.2em] text-accent underline decoration-dashed underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+      data-content-section="news"
+      data-content-id="news_media_download"
+      data-content-interaction="open"
     >
       {item.name ?? source}
     </a>
@@ -317,6 +320,9 @@ export function NewsSection() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="underline hover:text-foreground"
+                    data-content-section="news"
+                    data-content-id="news_telegram_link"
+                    data-content-interaction="open"
                   />
                 ),
               }}
@@ -1142,6 +1148,8 @@ export function NewsSection() {
                               variant="outline"
                               size="sm"
                               className="ml-auto border-white/10 bg-surface/80 px-3 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-foreground/70 hover:border-white/30 hover:text-foreground"
+                              data-news-action="index_readmore"
+                              data-news-item-id={message.id}
                             >
                               {isOpen
                                 ? t("convention.news.actions.close")
@@ -1477,6 +1485,9 @@ export function NewsSection() {
             target="_blank"
             rel="noreferrer"
             className="underline decoration-dashed underline-offset-4 transition hover:text-foreground"
+            data-content-section="news"
+            data-content-id="news_source_attribution"
+            data-content-interaction="open"
           >
             {archive.source}
           </a>

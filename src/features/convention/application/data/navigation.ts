@@ -11,7 +11,6 @@ export const NAV_GROUPS = [
     items: [
       { id: SECTION_IDS.EVENTS, key: "convention.nav.eventActivities" },
       { id: SECTION_IDS.REGISTRATION, key: "convention.nav.placePricing" },
-      { id: SECTION_IDS.TICKETING, key: "convention.nav.ticketing" },
     ],
   },
   {
