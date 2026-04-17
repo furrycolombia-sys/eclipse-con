@@ -27,6 +27,7 @@ export default tseslint.config(
       "eslint.config.mjs",
       "stylelint.config.mjs",
       "playwright.analytics.config.js",
+      "worker-configuration.d.ts",
     ],
   },
   js.configs.recommended,

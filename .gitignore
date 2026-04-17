@@ -50,3 +50,4 @@ lighthouse-report.report.html
 lighthouse-report.report.json
 /artifacts
 /.chrome-profile
+/worker-configuration.d.ts
