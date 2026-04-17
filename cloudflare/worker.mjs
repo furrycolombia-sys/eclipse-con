@@ -1,6 +1,8 @@
 const CARRD_ORIGIN = "https://furrycolombia.carrd.co";
 const CARRD_HOST = "furrycolombia.carrd.co";
 const PRIMARY_DOMAIN = "https://furrycolombia.com";
+const INTERNAL_ERROR_STATUS = 503;
+const INTERNAL_ERROR_TEXT = "Temporary worker error";
 const RUNTIME_CONFIG_KEYS = [
   "VITE_ANALYTICS_ENABLED",
   "VITE_ANALYTICS_ENDPOINT",
@@ -68,6 +70,30 @@ function injectRuntimeConfig(html, env) {
   return `${runtimeScript}${html}`;
 }
 
+function buildProxyRequestInit(request, headers) {
+  const init = {
+    method: request.method,
+    headers,
+    redirect: "manual",
+  };
+
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    init.body = request.body;
+  }
+
+  return init;
+}
+
+function buildWorkerErrorResponse(message = INTERNAL_ERROR_TEXT) {
+  return new Response(message, {
+    status: INTERNAL_ERROR_STATUS,
+    headers: {
+      "cache-control": "no-store",
+      "content-type": "text/plain; charset=utf-8",
+    },
+  });
+}
+
 async function proxyCarrdRequest(request) {
   const incomingUrl = new URL(request.url);
   const upstreamUrl = new URL(
@@ -78,12 +104,10 @@ async function proxyCarrdRequest(request) {
   upstreamHeaders.set("host", CARRD_HOST);
   upstreamHeaders.set("origin", CARRD_ORIGIN);
 
-  const upstreamRequest = new Request(upstreamUrl, {
-    method: request.method,
-    headers: upstreamHeaders,
-    body: request.body,
-    redirect: "manual",
-  });
+  const upstreamRequest = new Request(
+    upstreamUrl,
+    buildProxyRequestInit(request, upstreamHeaders)
+  );
 
   const upstreamResponse = await fetch(upstreamRequest);
   const responseHeaders = rewriteCarrdHeaders(upstreamResponse.headers);
@@ -99,7 +123,10 @@ async function proxyCarrdRequest(request) {
     });
   }
 
-  return new Response(upstreamResponse.body, {
+  // Buffer the body so stream errors stay inside the caller's try/catch
+  // instead of escaping after the handler returns (which causes Error 1101).
+  const body = await upstreamResponse.arrayBuffer();
+  return new Response(body, {
     status: upstreamResponse.status,
     statusText: upstreamResponse.statusText,
     headers: responseHeaders,
@@ -112,7 +139,14 @@ async function serveAppAsset(request, env) {
   const contentType = responseHeaders.get("content-type") ?? "";
 
   if (!contentType.includes("text/html")) {
-    return assetResponse;
+    // Buffer the body so stream errors stay inside the caller's try/catch
+    // instead of escaping after the handler returns (which causes Error 1101).
+    const body = await assetResponse.arrayBuffer();
+    return new Response(body, {
+      status: assetResponse.status,
+      statusText: assetResponse.statusText,
+      headers: responseHeaders,
+    });
   }
 
   const html = injectRuntimeConfig(await assetResponse.text(), env);
@@ -126,12 +160,37 @@ async function serveAppAsset(request, env) {
 
 export default {
   async fetch(request, env) {
-    const url = new URL(request.url);
+    try {
+      const url = new URL(request.url);
 
-    if (isCarrdProxyHost(url.hostname)) {
-      return proxyCarrdRequest(request);
+      if (isCarrdProxyHost(url.hostname)) {
+        return await proxyCarrdRequest(request);
+      }
+
+      return await serveAppAsset(request, env);
+    } catch (error) {
+      console.error("Worker request failed", {
+        message: error instanceof Error ? error.message : String(error),
+        method: request.method,
+        url: request.url,
+      });
+
+      try {
+        if (!isCarrdProxyHost(new URL(request.url).hostname)) {
+          return await env.ASSETS.fetch(request);
+        }
+      } catch (assetError) {
+        console.error("Worker asset fallback failed", {
+          message:
+            assetError instanceof Error
+              ? assetError.message
+              : String(assetError),
+          method: request.method,
+          url: request.url,
+        });
+      }
+
+      return buildWorkerErrorResponse();
     }
-
-    return serveAppAsset(request, env);
   },
 };
