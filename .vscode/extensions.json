@@ -9,6 +9,8 @@
     "mhutchie.git-graph",
     // VS Code Icons
     "vscode-icons-team.vscode-icons",
+    // VS Code Mac Icons
+    "eddieposey.vscode-icons-mac",
 
     // CSS Modules
     "clinyong.vscode-css-modules",
