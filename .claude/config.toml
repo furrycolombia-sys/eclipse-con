@@ -18,3 +18,12 @@ url = "https://mcp.posthog.com/mcp?project_id=346872"
 
 [sandbox_workspace_write]
 network_access = true
+
+[projects.'z:\github\eclipse-con']
+trust_level = "trusted"
+
+[tui.model_availability_nux]
+"gpt-5.5" = 2
+
+[windows]
+sandbox = "unelevated"
