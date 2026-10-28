@@ -1078,26 +1078,44 @@
   display: flex;
 }
 
-/* The same cream photo frame as the resort cards above, so every real photo
-   on the page reads as one printed set rather than a stack of UI tiles. */
+/* Polaroids: a square photo in a cream frame — thin and even on top and the
+   sides, wide at the bottom where the caption is written — each print set
+   down at a slight, alternating tilt that straightens on hover. */
 .amenity-card {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 0.5rem 0.5rem 0;
+  padding: clamp(0.5rem, 1.4vw, 0.75rem) clamp(0.5rem, 1.4vw, 0.75rem) 0;
   cursor: pointer;
   border: 0;
-  border-radius: 0.375rem;
+  border-radius: 0.125rem;
   background: var(--color-cream);
   box-shadow: 0 0.875rem 1.875rem -0.875rem rgba(30, 12, 58, 0.7);
   text-align: left;
+  transform: rotate(var(--polaroid-tilt, 0deg));
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease;
 }
 
+.amenities-grid > li:nth-child(4n + 1) {
+  --polaroid-tilt: -1.5deg;
+}
+
+.amenities-grid > li:nth-child(4n + 2) {
+  --polaroid-tilt: 1deg;
+}
+
+.amenities-grid > li:nth-child(4n + 3) {
+  --polaroid-tilt: 1.5deg;
+}
+
+.amenities-grid > li:nth-child(4n + 4) {
+  --polaroid-tilt: -1deg;
+}
+
 .amenity-card:hover {
-  transform: translateY(-0.25rem);
+  transform: rotate(0deg) translateY(-0.25rem) scale(1.02);
   box-shadow: 0 1.375rem 2.5rem -0.875rem rgba(30, 12, 58, 0.82);
 }
 
@@ -1109,16 +1127,15 @@
 .amenity-card-img {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
-  border-radius: 0.1875rem;
 }
 
 .amenity-card-body {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  padding: clamp(0.6rem, 1.6vw, 0.85rem) 0.25rem clamp(0.75rem, 2vw, 1rem);
+  padding: clamp(0.75rem, 2vw, 1rem) 0.25rem clamp(1.25rem, 3.5vw, 2rem);
 }
 
 /* Reserve a consistent height for the label and description so every card is
