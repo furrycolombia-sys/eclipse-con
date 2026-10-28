@@ -58,7 +58,10 @@ export function Hero() {
         </h1>
         <p className="slogan">{t("teaser.slogan")}</p>
         <p className="hero-dates">
-          <time dateTime={EVENT_DATES}>{t("teaser.dates")}</time>
+          <time dateTime={EVENT_DATES}>
+            <span className="hero-dates-part">{t("teaser.datesDays")}</span>{" "}
+            <span className="hero-dates-part">{t("teaser.datesMonth")}</span>
+          </time>
         </p>
         <FollowCta
           testId="hero-follow"
