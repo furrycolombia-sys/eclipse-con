@@ -1,5 +1,5 @@
 import { useTranslation } from "@/i18n";
-import { RECAP_COUNTRIES } from "@/flags";
+import { FLAG_WIDTH, RECAP_COUNTRIES } from "@/flags";
 import { cn } from "@/lib/cn";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 
@@ -34,7 +34,13 @@ export function FlagMarquee() {
             className="flag-item"
             aria-hidden={aria}
           >
-            <img src={country.src} alt="" className="flag-img" />
+            <img
+              src={country.src}
+              width={FLAG_WIDTH}
+              height={country.height}
+              alt=""
+              className="flag-img"
+            />
             <span className="flag-name">{t(country.nameKey)}</span>
           </span>
         ))}

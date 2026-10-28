@@ -45,6 +45,8 @@ export function HotelShowcase() {
       >
         <img
           src={SHOWCASE_FEATURE.src}
+          srcSet={`${SHOWCASE_FEATURE.thumb} 640w, ${SHOWCASE_FEATURE.src} 1200w`}
+          sizes="(max-width: 68rem) 90vw, 60rem"
           alt=""
           className="showcase-feature-img"
           loading="lazy"

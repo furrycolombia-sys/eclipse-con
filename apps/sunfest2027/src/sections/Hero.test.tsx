@@ -18,11 +18,11 @@ describe("Hero", () => {
     expect(banner).toHaveAttribute("alt", "teaser.bannerAlt");
   });
 
-  it("renders the event dates as a machine-readable range", () => {
+  it("renders the event month as a machine-readable date", () => {
     render(<Hero />);
-    expect(screen.getByText("teaser.datesMonth")).toBeInTheDocument();
-    expect(
-      screen.getByText("teaser.datesDays").closest("time")
-    ).toHaveAttribute("datetime", "2027-09-23/2027-09-26");
+    expect(screen.getByText("teaser.dates")).toHaveAttribute(
+      "datetime",
+      "2027-09"
+    );
   });
 });

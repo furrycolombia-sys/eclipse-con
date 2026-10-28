@@ -282,6 +282,12 @@ importers:
 
   apps/sunfest2027:
     dependencies:
+      "@fontsource-variable/bricolage-grotesque":
+        specifier: ^5.3.0
+        version: 5.3.0
+      "@fontsource-variable/space-grotesk":
+        specifier: ^5.3.0
+        version: 5.3.0
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -2215,6 +2221,18 @@ packages:
     resolution:
       {
         integrity: sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==,
+      }
+
+  "@fontsource-variable/bricolage-grotesque@5.3.0":
+    resolution:
+      {
+        integrity: sha512-TLi9Q4hJjS2UvoTMRSS2nHu6c4R56lAw60NR9QYtVRCHn0XtsFpiEhNffZ8Glsoxu6wEEwLKBP8lb94J52PNBA==,
+      }
+
+  "@fontsource-variable/space-grotesk@5.3.0":
+    resolution:
+      {
+        integrity: sha512-2IxmvfB08i9vnGB3Ym/AXvhRE+8XOjWMXIyDum03c+tPwH0FUoMNQfGpU8NXPxjbws0Vvss3AH0Zqt4oJBBAdw==,
       }
 
   "@formatjs/ecma402-abstract@2.3.6":
@@ -7889,10 +7907,10 @@ packages:
       "@types/node": ">=18"
       typescript: ">=5.0.4 <7"
 
-  legacy-javascript@0.0.1:
+  legacy-javascript@0.0.4:
     resolution:
       {
-        integrity: sha512-lPyntS4/aS7jpuvOlitZDFifBCb4W8L/3QU0PLbUTUj+zYah8rfVjYic88yG7ZKTxhS5h9iz7duT8oUXKszLhg==,
+        integrity: sha512-UTmeKBVxnfJcpmpOvzzNnLsQT99BXHpPlc/ZKddIRmWmrR0fw6335I3lq4+sJoP60UTbBNaYsGYVPc65YB1x3A==,
       }
 
   levn@0.4.1:
@@ -12053,6 +12071,10 @@ snapshots:
 
   "@floating-ui/utils@0.2.11": {}
 
+  "@fontsource-variable/bricolage-grotesque@5.3.0": {}
+
+  "@fontsource-variable/space-grotesk@5.3.0": {}
+
   "@formatjs/ecma402-abstract@2.3.6":
     dependencies:
       "@formatjs/fast-memoize": 2.2.7
@@ -12703,7 +12725,7 @@ snapshots:
 
   "@paulirish/trace_engine@0.0.61":
     dependencies:
-      legacy-javascript: 0.0.1
+      legacy-javascript: 0.0.4
       third-party-web: 0.30.0
 
   "@playwright/test@1.58.2":
@@ -15767,7 +15789,7 @@ snapshots:
       yaml: 2.8.2
       zod: 4.3.6
 
-  legacy-javascript@0.0.1: {}
+  legacy-javascript@0.0.4: {}
 
   levn@0.4.1:
     dependencies:

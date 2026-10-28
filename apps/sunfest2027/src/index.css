@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
-  --font-body: "Space Grotesk", system-ui, sans-serif;
+  /* Self-hosted (@fontsource-variable, imported in main.tsx) so first paint
+     doesn't wait on a third-party stylesheet. */
+  --font-display: "Bricolage Grotesque Variable", system-ui, sans-serif;
+  --font-body: "Space Grotesk Variable", system-ui, sans-serif;
 
   /* Sunfest 2027 official carnaval palette (user-provided). */
   --color-yellow: #f7d01a;
@@ -16,8 +18,9 @@
 
   /* Moonfest's own faces and text colours, used only by the recap section so
      that one beat reads as the previous event's own space. */
-  --font-moon-display: "ofelia-display", "Bricolage Grotesque", sans-serif;
-  --font-moon-body: "ofelia-text", "Space Grotesk", sans-serif;
+  --font-moon-display:
+    "ofelia-display", "Bricolage Grotesque Variable", sans-serif;
+  --font-moon-body: "ofelia-text", "Space Grotesk Variable", sans-serif;
   --color-moon-fg: #e8e4df;
   --color-moon-muted: #b8b3c7;
   --color-moon-accent: #e0753a;
@@ -328,22 +331,14 @@
   text-wrap: balance;
   text-shadow: 0 0.125rem 0.5rem rgba(20, 8, 40, 0.9);
 
-  /* Thin black outline so the dates hold up over the busy illustration;
+  /* Thin black outline so the date holds up over the busy illustration;
      painted under the fill so it thickens the edge without eating the glyph. */
   -webkit-text-stroke: 0.1875rem var(--color-black);
   paint-order: stroke fill;
 }
 
-/* Each half (days / month + year) wraps as a unit, so on phones the break
-   lands between them instead of mid-phrase. */
-.hero-dates-part {
-  display: inline-block;
-}
-
 @media (max-width: 560px) {
   .hero-dates {
-    line-height: 1.35;
-    letter-spacing: 0.05em;
     -webkit-text-stroke-width: 0.125rem;
   }
 }
