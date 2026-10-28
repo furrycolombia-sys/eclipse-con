@@ -1019,28 +1019,27 @@
 }
 
 /* ---- Amenities: photo + icon + label + description cards ------------------ */
-/* Fixed-width cards in a centered flex row: every card is the same size, and an
-   incomplete last row centers instead of leaving an orphan on the left. */
+/* A fixed column count that divides the six cards evenly — two per row on
+   phones and tablets, three from 768px — so no width leaves a short row. */
 .amenities-grid {
   list-style: none;
-  margin: clamp(1.5rem, 4vw, 2.5rem) 0 0;
+  width: 100%;
+  max-width: 48rem;
+  margin: clamp(1.5rem, 4vw, 2.5rem) auto 0;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(0.9rem, 2.5vw, 1.5rem);
+}
+
+@media (width >= 768px) {
+  .amenities-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .amenities-grid > li {
   display: flex;
-  flex: 0 0 clamp(10rem, 44vw, 14.5rem);
-}
-
-/* Two cards per row on phones. */
-@media (max-width: 560px) {
-  .amenities-grid > li {
-    flex-basis: calc(50% - 0.45rem);
-  }
 }
 
 .amenity-card {
@@ -1094,6 +1093,15 @@
   min-height: 2.6em;
 }
 
+/* Two-up cards are narrow on phones: stack the icon over the label so long
+   words like "Restaurante" get the full card width instead of clipping. */
+@media (max-width: 560px) {
+  .amenity-card-head {
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+}
+
 .amenity-card-icon {
   width: 1.375rem;
   height: 1.375rem;
@@ -1142,8 +1150,26 @@
   width: 100%;
   max-width: 52rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+
+  /* 2 → 3 → 4 columns: each divides the twelve chips evenly. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  /* Every row as tall as the tallest, so a wrapped label doesn't make one row
+     of chips taller than the rest. */
+  grid-auto-rows: 1fr;
   gap: clamp(0.5rem, 1.5vw, 0.75rem);
+}
+
+@media (width >= 600px) {
+  .amenity-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 900px) {
+  .amenity-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .amenity-list li {
