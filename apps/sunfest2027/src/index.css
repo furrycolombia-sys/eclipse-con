@@ -27,6 +27,7 @@
   --color-ground-2: #a2317f;
   --color-cream: #fdf3df;
   --color-ink: #2a0f45;
+  --color-black: #000;
 }
 
 @layer base {
@@ -302,6 +303,11 @@
   color: var(--color-yellow);
   text-wrap: balance;
   text-shadow: 0 2px 8px rgba(20, 8, 40, 0.9);
+
+  /* Thin black outline so the dates hold up over the busy illustration;
+     painted under the fill so it thickens the edge without eating the glyph. */
+  -webkit-text-stroke: 3px var(--color-black);
+  paint-order: stroke fill;
 }
 
 .subline {
