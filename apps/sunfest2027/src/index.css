@@ -1079,8 +1079,7 @@
 }
 
 /* Polaroids: a square photo in a cream frame — thin and even on top and the
-   sides, wide at the bottom where the caption is written — each print set
-   down at a slight, alternating tilt that straightens on hover. */
+   sides, wide at the bottom where the caption is written. */
 .amenity-card {
   display: flex;
   flex-direction: column;
@@ -1092,30 +1091,13 @@
   background: var(--color-cream);
   box-shadow: 0 0.875rem 1.875rem -0.875rem rgba(30, 12, 58, 0.7);
   text-align: left;
-  transform: rotate(var(--polaroid-tilt, 0deg));
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease;
 }
 
-.amenities-grid > li:nth-child(4n + 1) {
-  --polaroid-tilt: -1.5deg;
-}
-
-.amenities-grid > li:nth-child(4n + 2) {
-  --polaroid-tilt: 1deg;
-}
-
-.amenities-grid > li:nth-child(4n + 3) {
-  --polaroid-tilt: 1.5deg;
-}
-
-.amenities-grid > li:nth-child(4n + 4) {
-  --polaroid-tilt: -1deg;
-}
-
 .amenity-card:hover {
-  transform: rotate(0deg) translateY(-0.25rem) scale(1.02);
+  transform: translateY(-0.25rem);
   box-shadow: 0 1.375rem 2.5rem -0.875rem rgba(30, 12, 58, 0.82);
 }
 
