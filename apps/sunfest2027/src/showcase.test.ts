@@ -24,11 +24,10 @@ describe("showcase data", () => {
     expect(ids.size).toBe(SHOWCASE_ITEMS.length);
   });
 
-  it("exposes venue amenities with an icon, palette color and a photo", () => {
+  it("exposes venue amenities with an icon and a photo", () => {
     expect(AMENITIES.length).toBeGreaterThan(0);
     for (const a of AMENITIES) {
       expect(typeof a.icon).toBe("object");
-      expect(a.color.startsWith("var(--color-")).toBe(true);
       expect(a.src.length).toBeGreaterThan(0);
       expect(a.titleKey.startsWith("showcase.items.")).toBe(true);
     }

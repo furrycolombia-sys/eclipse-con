@@ -8,7 +8,7 @@ interface AmenityCardProps {
   readonly onOpen: () => void;
 }
 
-/** A venue amenity: photo, accent icon, label and one-line description; opens the lightbox. */
+/** A venue amenity in a cream photo frame: photo, icon, label and one-line description; opens the lightbox. */
 export function AmenityCard({ item, onOpen }: Readonly<AmenityCardProps>) {
   const { t } = useTranslation();
   const { icon: Icon } = item;
@@ -16,7 +16,6 @@ export function AmenityCard({ item, onOpen }: Readonly<AmenityCardProps>) {
     <button
       type="button"
       className="amenity-card"
-      style={{ ["--card-accent" as string]: item.color }}
       onClick={onOpen}
       aria-label={t("showcase.openItem", { title: t(item.titleKey) })}
       data-testid={tid(`amenity-${item.id}`)}

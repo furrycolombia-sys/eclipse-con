@@ -92,46 +92,32 @@ export const SHOWCASE_ITEMS: readonly ShowcaseItem[] = [
   ...SHOWCASE_ROOMS,
 ];
 
-/** A venue amenity: a showcase photo plus a lucide icon and a palette accent. */
+/** A venue amenity: a showcase photo plus a lucide icon. */
 export interface Amenity extends ShowcaseItem {
   readonly icon: LucideIcon;
-  readonly color: string;
 }
 
-/** Build an amenity from its id, photo, icon and accent color. */
+/** Build an amenity from its id, photo and icon. */
 function amenity(
   id: string,
   source: string,
   thumb: string,
-  icon: LucideIcon,
-  color: string
+  icon: LucideIcon
 ): Amenity {
-  return { ...item(id, source, thumb), icon, color };
+  return { ...item(id, source, thumb), icon };
 }
 
 /**
  * The venue amenities, each shown as a photo + icon + label + blurb card and
- * cycled through their own lightbox. Colors rotate the carnaval hues.
+ * cycled through their own lightbox.
  */
 export const AMENITIES: readonly Amenity[] = [
-  amenity("poolside", poolside, poolsideThumb, Waves, "var(--color-teal)"),
-  amenity("spa", spa, spaThumb, Sparkles, "var(--color-yellow)"),
-  amenity(
-    "restaurant",
-    restaurant,
-    restaurantThumb,
-    Coffee,
-    "var(--color-magenta)"
-  ),
-  amenity("fonda", fonda, fondaThumb, PartyPopper, "var(--color-purple-soft)"),
-  amenity("common", common, commonThumb, TreePalm, "var(--color-teal)"),
-  amenity(
-    "landscape",
-    landscape,
-    landscapeThumb,
-    Mountain,
-    "var(--color-yellow)"
-  ),
+  amenity("poolside", poolside, poolsideThumb, Waves),
+  amenity("spa", spa, spaThumb, Sparkles),
+  amenity("restaurant", restaurant, restaurantThumb, Coffee),
+  amenity("fonda", fonda, fondaThumb, PartyPopper),
+  amenity("common", common, commonThumb, TreePalm),
+  amenity("landscape", landscape, landscapeThumb, Mountain),
 ];
 
 /** An amenity shown as an icon + label in the "and much more" checklist. */
