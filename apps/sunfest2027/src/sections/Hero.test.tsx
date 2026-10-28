@@ -17,4 +17,12 @@ describe("Hero", () => {
     expect(banner).toHaveClass("hero-banner");
     expect(banner).toHaveAttribute("alt", "teaser.bannerAlt");
   });
+
+  it("renders the event dates as a machine-readable range", () => {
+    render(<Hero />);
+    expect(screen.getByText("teaser.dates")).toHaveAttribute(
+      "datetime",
+      "2027-09-23/2027-09-26"
+    );
+  });
 });

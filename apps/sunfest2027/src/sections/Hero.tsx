@@ -4,6 +4,9 @@ import bannerNarrowSrc from "@/assets/hero/banner-1280.webp";
 import { FollowCta } from "@/components/FollowCta";
 import { tid } from "@/lib/tid";
 
+/** The event runs Thursday–Sunday, 23–26 September 2027 (ISO 8601 interval). */
+const EVENT_DATES = "2027-09-23/2027-09-26";
+
 /** Split a "Brand YEAR" wordmark into its brand and trailing-year parts. */
 function splitWordmark(wordmark: string): readonly [string, string] {
   const lastSpace = wordmark.lastIndexOf(" ");
@@ -18,7 +21,7 @@ function splitWordmark(wordmark: string): readonly [string, string] {
 
 /**
  * Full-screen hero: the Sunfest 2027 illustration fills the viewport, with the
- * wordmark, slogan and CTA centered over it — the rest of the page scrolls up
+ * wordmark, slogan, event dates and CTA centered over it — the rest of the page scrolls up
  * beneath it.
  */
 export function Hero() {
@@ -54,6 +57,9 @@ export function Hero() {
           )}
         </h1>
         <p className="slogan">{t("teaser.slogan")}</p>
+        <p className="hero-dates">
+          <time dateTime={EVENT_DATES}>{t("teaser.dates")}</time>
+        </p>
         <FollowCta
           testId="hero-follow"
           contentId="hero_follow_telegram"
