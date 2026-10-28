@@ -28,6 +28,22 @@
   --color-cream: #fdf3df;
   --color-ink: #2a0f45;
   --color-black: #000;
+
+  /* Type scale: every text on the page uses one of these seven steps, so
+     sizes stay consistent from section to section. Each step grows with the
+     viewport between a phone minimum and a desktop maximum. */
+  --text-xs: clamp(0.75rem, 1.6vw, 0.8125rem); /* eyebrows, meta, legal */
+  --text-sm: clamp(0.875rem, 1.8vw, 0.9375rem); /* card copy, captions, chips */
+  --text-base: clamp(1rem, 2vw, 1.125rem); /* body, buttons, card titles */
+  --text-lg: clamp(1.125rem, 2.6vw, 1.5rem); /* subheadings, feature titles */
+  --text-xl: clamp(2rem, 6vw, 3.5rem); /* section titles, hero slogan */
+  --text-2xl: clamp(3rem, 12vw, 6rem); /* the one big stat */
+
+  /* Content width shared by every section's grids, so their edges line up. */
+  --content-max: 60rem;
+
+  /* Gap between cards in every photo-card grid. */
+  --gap-grid: clamp(0.9rem, 2.5vw, 1.5rem);
 }
 
 @layer base {
@@ -232,6 +248,10 @@
 /* The text column sits above the falling flowers, with strong shadows. */
 .hero-content {
   z-index: 1;
+
+  /* .hero already pads the sides; padding again here doubled the gutter and
+     squeezed the text on phones. */
+  padding-inline: 0;
   gap: clamp(0.9rem, 2.5vw, 1.4rem);
 }
 
@@ -256,7 +276,7 @@
   margin: 0;
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: clamp(0.66rem, 1.6vw, 0.82rem);
+  font-size: var(--text-xs);
   letter-spacing: 0.4em;
   text-transform: uppercase;
   color: var(--color-cream);
@@ -289,7 +309,7 @@
   margin: 0.12em 0 0;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.7rem, 6vw, 3.6rem);
+  font-size: var(--text-xl);
   line-height: 1;
   letter-spacing: -0.01em;
   color: var(--color-cream);
@@ -301,7 +321,7 @@
   margin: 0;
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: clamp(0.95rem, 2.4vw, 1.3rem);
+  font-size: var(--text-lg);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-yellow);
@@ -322,7 +342,6 @@
 
 @media (max-width: 560px) {
   .hero-dates {
-    font-size: 1.05rem;
     line-height: 1.35;
     letter-spacing: 0.05em;
     -webkit-text-stroke-width: 0.125rem;
@@ -333,7 +352,7 @@
   margin: 0.2em 0 0;
   max-width: 38ch;
   font-family: var(--font-body);
-  font-size: clamp(0.92rem, 2vw, 1.08rem);
+  font-size: var(--text-base);
   line-height: 1.5;
   color: var(--color-cream);
   opacity: 0.86;
@@ -349,7 +368,7 @@
   border-radius: 62.4375rem;
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  font-size: var(--text-base);
   color: var(--color-ink);
   background: var(--color-teal);
   box-shadow:
@@ -415,7 +434,7 @@
   margin-top: clamp(1.5rem, 4vw, 2.5rem);
   font-family: var(--font-body);
   font-weight: 500;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-cream);
@@ -429,7 +448,7 @@
   gap: 0.15rem;
   margin-top: clamp(1.5rem, 5vh, 3rem);
   font-family: var(--font-body);
-  font-size: 0.7rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--color-cream);
@@ -642,7 +661,7 @@
   border-radius: 62.4375rem;
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.08em;
   color: var(--color-cream);
   background: transparent;
@@ -711,7 +730,7 @@
   margin: 0 0 0.6rem;
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: clamp(0.66rem, 1.6vw, 0.8rem);
+  font-size: var(--text-xs);
   letter-spacing: 0.36em;
   text-transform: uppercase;
   color: var(--color-teal);
@@ -726,7 +745,7 @@
   text-transform: uppercase;
   line-height: 0.95;
   letter-spacing: -0.01em;
-  font-size: clamp(1.9rem, 6vw, 3.4rem);
+  font-size: var(--text-xl);
   color: var(--color-yellow);
   text-wrap: balance;
   text-shadow: 0 0.25rem 1.5rem rgba(42, 15, 69, 0.5);
@@ -736,7 +755,7 @@
   margin: 1rem auto 0;
   max-width: 52ch;
   font-family: var(--font-body);
-  font-size: clamp(0.98rem, 2vw, 1.15rem);
+  font-size: var(--text-base);
   line-height: 1.6;
   color: var(--color-cream);
   opacity: 0.9;
@@ -749,7 +768,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  font-size: var(--text-lg);
   color: var(--color-cream);
 }
 
@@ -757,6 +776,7 @@
 .showcase-feature {
   display: block;
   width: 100%;
+  max-width: var(--content-max);
   margin: clamp(1.5rem, 4vw, 2.5rem) auto 0;
   padding: 0.625rem 0.625rem 0.25rem;
   border: 0;
@@ -799,25 +819,35 @@
   font-family: var(--font-display);
   font-weight: 800;
   text-transform: uppercase;
-  font-size: clamp(1.05rem, 2.8vw, 1.5rem);
+  font-size: var(--text-lg);
   color: var(--color-ink);
 }
 
 .showcase-feature-blurb {
   font-family: var(--font-body);
-  font-size: clamp(0.82rem, 1.8vw, 0.98rem);
+  font-size: var(--text-sm);
   color: var(--color-ink);
   opacity: 0.78;
 }
 
-/* Room cards grid (tall portrait). */
+/* Room cards: three tall portraits side by side from 560px. Below that they
+   stack one per row as landscape crops, so three rooms don't cost a phone
+   three screens of scrolling. */
 .showcase-rooms {
   list-style: none;
-  margin: 0.75rem 0 0;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0.75rem auto 0;
   padding: 0;
   display: grid;
-  gap: clamp(0.75rem, 2vw, 1.25rem);
-  grid-template-columns: repeat(auto-fit, minmax(10.625rem, 1fr));
+  gap: var(--gap-grid);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (width >= 560px) {
+  .showcase-rooms {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* Clickable cream-framed photo card (polaroid language, carried from the flags). */
@@ -854,7 +884,13 @@
 }
 
 .showcase-card-tall .showcase-card-img {
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 3 / 2;
+}
+
+@media (width >= 560px) {
+  .showcase-card-tall .showcase-card-img {
+    aspect-ratio: 3 / 4;
+  }
 }
 
 .showcase-card-caption {
@@ -862,7 +898,7 @@
   margin-top: 0.375rem;
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   color: var(--color-ink);
   text-align: left;
 }
@@ -917,7 +953,7 @@
 .lightbox-count {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.16em;
   color: var(--color-teal);
 }
@@ -926,14 +962,14 @@
   font-family: var(--font-display);
   font-weight: 800;
   text-transform: uppercase;
-  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  font-size: var(--text-lg);
   color: var(--color-cream);
 }
 
 .lightbox-blurb {
   max-width: 60ch;
   font-family: var(--font-body);
-  font-size: clamp(0.85rem, 2vw, 1rem);
+  font-size: var(--text-sm);
   color: var(--color-cream);
   opacity: 0.86;
 }
@@ -1012,7 +1048,7 @@
 .site-footer-legal {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.06em;
   color: var(--color-cream);
   opacity: 0.7;
@@ -1024,12 +1060,12 @@
 .amenities-grid {
   list-style: none;
   width: 100%;
-  max-width: 48rem;
+  max-width: var(--content-max);
   margin: clamp(1.5rem, 4vw, 2.5rem) auto 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(0.9rem, 2.5vw, 1.5rem);
+  gap: var(--gap-grid);
 }
 
 @media (width >= 768px) {
@@ -1113,15 +1149,21 @@
 .amenity-card-label {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   overflow: hidden;
   font-family: var(--font-display);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.01em;
   line-height: 1.15;
-  font-size: clamp(0.92rem, 2vw, 1.05rem);
+  font-size: var(--text-base);
   color: var(--color-cream);
+
+  /* Two-up cards on the narrowest phones can't fit a long word like
+     "Restaurante" on one line; hyphenate it rather than clip it (hence room
+     for a third line). */
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
 .amenity-card-desc {
@@ -1131,7 +1173,7 @@
   overflow: hidden;
   min-height: calc(3 * 1.45em);
   font-family: var(--font-body);
-  font-size: clamp(0.82rem, 1.8vw, 0.95rem);
+  font-size: var(--text-sm);
   line-height: 1.45;
   color: var(--color-cream);
   opacity: 0.82;
@@ -1148,7 +1190,7 @@
      an `auto-fit` grid means every column at full width. An explicit width
      keeps it definite, so the auto margins only ever centre it. */
   width: 100%;
-  max-width: 52rem;
+  max-width: var(--content-max);
   display: grid;
 
   /* 2 → 3 → 4 columns: each divides the twelve chips evenly. */
@@ -1181,7 +1223,7 @@
   border: 0.0625rem solid rgba(253, 243, 223, 0.16);
   background: rgba(253, 243, 223, 0.08);
   font-family: var(--font-body);
-  font-size: clamp(0.82rem, 1.8vw, 0.95rem);
+  font-size: var(--text-sm);
   color: var(--color-cream);
   text-align: left;
 }
@@ -1304,7 +1346,7 @@
   font-family: var(--font-display);
   font-weight: 800;
   line-height: 1;
-  font-size: clamp(3rem, 12vw, 6rem);
+  font-size: var(--text-2xl);
   color: var(--color-yellow);
   text-shadow: 0 0.25rem 1.5rem rgba(42, 15, 69, 0.5);
 }
@@ -1314,7 +1356,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  font-size: clamp(0.72rem, 1.8vw, 0.9rem);
+  font-size: var(--text-xs);
   color: var(--color-cream);
   opacity: 0.85;
 }
@@ -1354,7 +1396,7 @@
   white-space: nowrap;
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: clamp(0.85rem, 2vw, 1rem);
+  font-size: var(--text-sm);
   color: var(--color-cream);
 }
 
@@ -1413,7 +1455,7 @@
   border-radius: 62.4375rem;
   font-family: var(--font-moon-body);
   font-weight: 500;
-  font-size: clamp(0.78rem, 1.7vw, 0.9rem);
+  font-size: var(--text-sm);
   letter-spacing: 0.04em;
   color: var(--color-moon-muted);
   text-decoration: none;
