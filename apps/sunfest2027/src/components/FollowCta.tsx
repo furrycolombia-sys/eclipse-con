@@ -3,8 +3,8 @@ import { useTranslation } from "@/i18n";
 import { cn } from "@/lib/cn";
 import { tid } from "@/lib/tid";
 
-/** Telegram channel for the reveal — the Furry Colombia community channel. */
-const FOLLOW_URL = "https://t.me/furrycolombia";
+/** Telegram channel for the Sunfest event — FurryColombiaFest. */
+const FOLLOW_URL = "https://t.me/FurryColombiaFest";
 
 /** Props for {@link FollowCta}. */
 interface FollowCtaProps {
