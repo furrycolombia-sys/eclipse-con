@@ -39,24 +39,15 @@ jobs:
       - name: Build sunfest site
         run: pnpm --filter sunfest2027 build
 
-      # Names only, never values: when the token is missing, show which secrets
-      # and environments this job can see so the right one can be wired in.
+      # Same key a manual deploy reads from .secrets (see sync-secrets.yml).
       - name: Check the Cloudflare token is available
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          ALL_SECRETS: ${{ toJSON(secrets) }}
-          GH_TOKEN: ${{ github.token }}
         run: |
-          if [ -n "$CLOUDFLARE_API_TOKEN" ]; then
-            echo "CLOUDFLARE_API_TOKEN is set."
-            exit 0
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::Repository secret CLOUDFLARE_API_TOKEN is not set in $GITHUB_REPOSITORY (Settings > Secrets and variables > Actions)."
+            exit 1
           fi
-          echo "Secrets visible to this job:"
-          printf '%s' "$ALL_SECRETS" | jq -r 'keys[]'
-          echo "Environments in this repo:"
-          gh api "repos/$GITHUB_REPOSITORY/environments" --jq '.environments[].name' || true
-          echo "::error::CLOUDFLARE_API_TOKEN is empty for this job."
-          exit 1
 
       - name: Deploy to Cloudflare (token from secret)
         env:
