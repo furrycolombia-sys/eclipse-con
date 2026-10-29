@@ -1,10 +1,24 @@
 name: Deploy Sunfest
 
-# Manual trigger — deploys sunfest2027, the active Furry Colombia site, to its
-# Cloudflare Worker, retrieving the Cloudflare token from the repository secret
-# at run time.
+# Deploys sunfest2027, the active Furry Colombia site, to its Cloudflare Worker,
+# retrieving the Cloudflare token from the repository secret at run time.
+# Runs on every merge to main that touches the site, and on demand.
 on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/sunfest2027/**"
+      - "cloudflare/sunfest-worker.mjs"
+      - "wrangler.sunfest.toml"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/deploy-sunfest.yml"
   workflow_dispatch:
+
+# One deploy at a time; a newer merge replaces a deploy still waiting to start.
+concurrency:
+  group: deploy-sunfest
+  cancel-in-progress: false
 
 jobs:
   deploy:

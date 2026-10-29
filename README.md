@@ -212,9 +212,12 @@ Deploy locally:
 pnpm deploy:sunfest
 ```
 
-Or run the **Deploy Sunfest** GitHub Actions workflow
-(`.github/workflows/deploy-sunfest.yml`), which builds and deploys using the
-`CLOUDFLARE_API_TOKEN` repository secret.
+Merging to `main` deploys automatically: the **Deploy Sunfest** GitHub Actions
+workflow (`.github/workflows/deploy-sunfest.yml`) runs on every push to `main`
+that touches the site, its Worker, `wrangler.sunfest.toml` or the root
+`package.json`/lockfile, and builds and deploys using the
+`CLOUDFLARE_API_TOKEN` repository secret. It can also be run by hand from the
+Actions tab.
 
 ## Testing
 
